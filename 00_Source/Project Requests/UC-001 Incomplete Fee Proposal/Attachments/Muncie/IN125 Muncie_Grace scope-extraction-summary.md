@@ -1,0 +1,111 @@
+---
+source_pdf: IN125 Muncie_Grace scope.pdf
+page_count: 1
+extraction_tool: pymupdf
+status: extracted_for_review
+---
+
+# Muncie PDF Extraction Summary
+
+## Page 1
+
+- Rendered image: `rendered-pages/IN125 Muncie_Grace scope-page-01.png`
+- Extracted text characters: 1158
+
+```text
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+PC
+LAB
+LAB
+LAB
+LAB
+RT
+RT
+RT
+Neuro
+PC/dale
+PC/dale
+PC/dale
+PC/dale
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+Neuro
+PC/dale
+Research
+PC/dale
+PC/dale
+SUBWAIT
+Research
+- Fridge/
+Freezer
+Research
+- as is
+Research
+Research - longterm
+space. 
+ENCLOSE OPENS;
+ADD DOORS;
+REMOVE
+COUNTERS
+Research
+- as is
+PC/dale
+MEETING NOTES 06/18/2026
+IMAGING 06/18/2026
+- MACHINE COMING FROM CARMEL SPECIALTY
+-AHN OWNS EQUIPMENT- WORKING WITH RSI
+WORKING WITH (ALAN)
+-RSI TO CONFIRM IF LEAD WALLS NEEDED
+- RES TO SEND CURRENT PLAN TO SAMUEL
+-LOOK AT HAVING DIRECT DRESSING
+CONNECTION
+RESEARCH 06/18/2026
+- WAITING
+-FRIDGE/ FREEZER - AS IS. EVERYTHING IN PLACE.
+-  RESEARCH SUPPLY STORAGE AND AMBIENT STUDY DRUG
+- LOCKED CABINETS- FROM FRANKLIN (2)
+- STORAGE SHELVING - NEW - TEAM TO PROVIDE PICS>> PERIMETER ROOM
+W/ SHELVING AND CABINETS IN MIDDLE
+-NO WIRE SHELVING
+-PRINTER/ COPY W/ POWER/DATA
+-POWER RACEWAY FOR CHARGING - @ COUNTER HEIGHT
+-STORING EQUIPMENT - EKG, PRINT/COPY
+-LVT
+- PUNCH DOOR SECUIRITY ON FRIDGE AND STORAGE ROOMS
+PC/dale
+VERT
+IMAGING
+RESEARCH
+Research
+- Storage
+171.12 sf
+408.62 sf
+```

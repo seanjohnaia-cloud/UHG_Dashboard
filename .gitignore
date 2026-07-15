@@ -1,0 +1,28 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+
+# Obsidian local UI state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.trash/
+
+# Visual Studio / IDE local state
+.vs/
+
+# Hermes local attachments / temp files
+.hermes/desktop-attachments/
+
+# Python / tooling caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+
+# Node caches if dashboard tooling is added later
+node_modules/
+dist/
+build/

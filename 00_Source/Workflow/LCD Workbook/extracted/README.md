@@ -1,0 +1,275 @@
+---
+record_type: workbook_access_layer
+status: extracted_for_review
+source: ../original/!_LCD Workbook.xlsx
+source_sha256: f8dbe2c0836b5c7c44c828f528c563efb83ab4e343ddd8080c04bd16618bda55
+extraction_tool: openpyxl
+---
+
+# LCD Workbook — Extracted Access Layer
+
+> Access layer only. The XLSX in `original/` remains the preserved source of record.
+
+## Sheets
+
+- `Life Cycle Data Worksheet` — 49 non-empty rows, 21 columns; [Life_Cycle_Data_Worksheet.md](Life_Cycle_Data_Worksheet.md), [Life_Cycle_Data_Worksheet.csv](Life_Cycle_Data_Worksheet.csv)
+- `Design Schedule` — 53 non-empty rows, 27 columns; [Design_Schedule.md](Design_Schedule.md), [Design_Schedule.csv](Design_Schedule.csv)
+- `Compensation` — 44 non-empty rows, 20 columns; [Compensation.md](Compensation.md), [Compensation.csv](Compensation.csv)
+- `Service Order` — 50 non-empty rows, 32 columns; [Service_Order.md](Service_Order.md), [Service_Order.csv](Service_Order.csv)
+- `Project Tracking Report` — 53 non-empty rows, 19 columns; [Project_Tracking_Report.md](Project_Tracking_Report.md), [Project_Tracking_Report.csv](Project_Tracking_Report.csv)
+
+## Candidate Labels Observed
+
+> Mechanical candidate labels only; not canonical fields.
+
+- `Life Cycle Data Worksheet` row 1: `General Project Information`
+- `Life Cycle Data Worksheet` row 1: `Project Managers`
+- `Life Cycle Data Worksheet` row 1: `Project Leaders`
+- `Life Cycle Data Worksheet` row 1: `Project Types`
+- `Life Cycle Data Worksheet` row 1: `Compensation`
+- `Life Cycle Data Worksheet` row 2: `Project Name:`
+- `Life Cycle Data Worksheet` row 2: `Project Start Date:`
+- `Life Cycle Data Worksheet` row 3: `Project Location:`
+- `Life Cycle Data Worksheet` row 3: `Project Number:`
+- `Life Cycle Data Worksheet` row 3: `(Schedule E)`
+- `Life Cycle Data Worksheet` row 4: `(Schedule F)`
+- `Life Cycle Data Worksheet` row 5: `Project Group:`
+- `Life Cycle Data Worksheet` row 5: `Project Manager:`
+- `Life Cycle Data Worksheet` row 5: `Percentage Fee`
+- `Life Cycle Data Worksheet` row 6: `Project Type:`
+- `Life Cycle Data Worksheet` row 6: `Project Leader:`
+- `Life Cycle Data Worksheet` row 6: `Stipulated Fee`
+- `Life Cycle Data Worksheet` row 7: `Special Type:`
+- `Life Cycle Data Worksheet` row 7: `UHG DE Regional Rep.:`
+- `Life Cycle Data Worksheet` row 7: `Negotiated Fee`
+- `Life Cycle Data Worksheet` row 8: `Compensation:`
+- `Life Cycle Data Worksheet` row 8: `UHG Regional PM Rep.:`
+- `Life Cycle Data Worksheet` row 9: `Current Project Status`
+- `Life Cycle Data Worksheet` row 10: `Current Phase:`
+- `Life Cycle Data Worksheet` row 10: `Issue(s):`
+- `Life Cycle Data Worksheet` row 10: `='Project Tracking Report'!F10`
+- `Life Cycle Data Worksheet` row 11: `Completion %:`
+- `Life Cycle Data Worksheet` row 11: `(Consult w/Project Leader)`
+- `Life Cycle Data Worksheet` row 12: `Completion Date:`
+- `Life Cycle Data Worksheet` row 12: `(from Design Schedule)`
+- `Life Cycle Data Worksheet` row 13: `At Risk:`
+- `Life Cycle Data Worksheet` row 15: `Architect's Supplemental Services`
+- `Life Cycle Data Worksheet` row 17: `Project Initiation`
+- `Life Cycle Data Worksheet` row 22: `On-Site Project Representation`
+- `Life Cycle Data Worksheet` row 23: `Supplemental Service Consultants`
+- `Life Cycle Data Worksheet` row 24: `Project S.F.:`
+- `Life Cycle Data Worksheet` row 24: `Existing (S.F.):`
+- `Life Cycle Data Worksheet` row 24: `(TBD)`
+- `Life Cycle Data Worksheet` row 24: `Sustainable Project Services pursuant to Section 3.1.3`
+- `Life Cycle Data Worksheet` row 25: `New (S.F.):`
+- `Life Cycle Data Worksheet` row 25: `Conditions Reused:`
+- `Life Cycle Data Worksheet` row 26: `Project Sustainability Objectives`
+- `Life Cycle Data Worksheet` row 26: `Other Services provided by Specialty Consultants`
+- `Life Cycle Data Worksheet` row 28: `Project Close-out`
+- `Life Cycle Data Worksheet` row 28: `Other Supplemental Services (Listed Below):`
+- `Life Cycle Data Worksheet` row 29: `Certification Req'd.:`
+- `Life Cycle Data Worksheet` row 30: `Project Schedule Information (Initial)`
+- `Life Cycle Data Worksheet` row 31: `Original COW:`
+- `Life Cycle Data Worksheet` row 31: `=H2`
+- `Life Cycle Data Worksheet` row 32: `DD COW:`
+- `Life Cycle Data Worksheet` row 32: `Design Start Date:`
+- `Life Cycle Data Worksheet` row 33: `CD COW:`
+- `Life Cycle Data Worksheet` row 33: `Design Completion Date:`
+- `Life Cycle Data Worksheet` row 34: `Bid Amount:`
+- `Life Cycle Data Worksheet` row 34: `Construction Start Date:`
+- `Life Cycle Data Worksheet` row 35: `Final COW:`
+- `Life Cycle Data Worksheet` row 35: `Substantial Completion Date:`
+- `Life Cycle Data Worksheet` row 37: `Design Consultants (Basic Services)`
+- `Life Cycle Data Worksheet` row 37: `Supplemental Consulting Services (if Required)`
+- `Life Cycle Data Worksheet` row 38: `Mechanical:`
+- `Life Cycle Data Worksheet` row 39: `Contact:`
+- `Life Cycle Data Worksheet` row 40: `Electrical:`
+- `Life Cycle Data Worksheet` row 42: `Structural:`
+- `Life Cycle Data Worksheet` row 44: `Food Service`
+- `Design Schedule` row 1: `Project Design Schedule`
+- `Design Schedule` row 2: `Project Name:`
+- `Design Schedule` row 2: `Project Start Date:`
+- `Design Schedule` row 2: `PROJECT PHASE`
+- `Design Schedule` row 2: `DESIGN MILESTONE DELIVERY DATE`
+- `Design Schedule` row 2: `ACTUAL DELIVERY DATE`
+- `Design Schedule` row 2: `REVISION`
+- `Design Schedule` row 3: `Project Location:`
+- `Design Schedule` row 3: `Project Number:`
+- `Design Schedule` row 5: `Project Group:`
+- `Design Schedule` row 5: `Project Manager:`
+- `Design Schedule` row 5: `Project Kick-off`
+- `Design Schedule` row 6: `Project Type:`
+- `Design Schedule` row 6: `Project Leader:`
+- `Design Schedule` row 7: `Special Type:`
+- `Design Schedule` row 7: `UHG DE Regional Rep.:`
+- `Design Schedule` row 8: `Compensation:`
+- `Design Schedule` row 8: `UHG Regional PM Rep.:`
+- `Design Schedule` row 10: `Project Initiation`
+- `Design Schedule` row 14: `Supplemental and/or Additional Services`
+- `Design Schedule` row 15: `Design Schedule`
+- `Design Schedule` row 17: `Proposed Compensation`
+- `Design Schedule` row 18: `Service Order Submittal Date`
+- `Design Schedule` row 19: `Service Order Approval Date`
+- `Design Schedule` row 20: `Site Planning Services`
+- `Design Schedule` row 23: `From SOW General Services:`
+- `Design Schedule` row 24: `Service Order Submittal DAte`
+- `Design Schedule` row 25: `50 % CD Package Review Meeting (ground up Projects only)`
+- `Design Schedule` row 26: `up Projects Only)`
+- `Design Schedule` row 29: `Feasibility Stage Services`
+- `Design Schedule` row 30: `From SOW Basic Services:`
+- `Design Schedule` row 43: `timing and success of the overall Project.`
+- `Design Schedule` row 52: `Project Completion Date`
+- `Compensation` row 1: `Project Compensation Data`
+- `Compensation` row 1: `Project Managers`
+- `Compensation` row 1: `Project Leaders`
+- `Compensation` row 1: `Project Types`
+- `Compensation` row 1: `Compensation`
+- `Compensation` row 2: `Project Name:`
+- `Compensation` row 2: `Project Start Date:`
+- `Compensation` row 3: `Project Location:`
+- `Compensation` row 3: `Project/S.O. Number:`
+- `Compensation` row 3: `(Schedule E)`
+- `Compensation` row 4: `(Schedule F)`
+- `Compensation` row 5: `Percentage Fee`
+- `Compensation` row 6: `Stipulated Fee`
+- `Compensation` row 7: `Fee for Basic Servces (Architectural and Interior Design)`
+- `Compensation` row 7: `Negotiated Fee`
+- `Compensation` row 8: `Project S.F.:`
+- `Compensation` row 11: `N/A`
+- `Compensation` row 12: `N.T.E.`
+- `Compensation` row 13: `Design Consultants Compensation`
+- `Compensation` row 14: `Basis for Compensation`
+- `Compensation` row 15: `Architect's Supplemental Services`
+- `Compensation` row 17: `Project Initiation`
+- `Compensation` row 22: `On-Site Project Representation`
+- `Compensation` row 23: `Basic Service Exception (if any)`
+- `Compensation` row 23: `Supplemental Service Consultants`
+- `Compensation` row 24: `Sustainable Project Services pursuant to Section 3.1.3`
+- `Compensation` row 26: `Supplemental Consulting Services (if Required)`
+- `Compensation` row 26: `Other Services provided by Specialty Consultants`
+- `Compensation` row 28: `Project Close-out`
+- `Compensation` row 28: `Other Supplemental Services (Listed Below):`
+- `Compensation` row 31: `Additional Services (if any)`
+- `Compensation` row 40: `Reimbursable Expenses (Travel, Permit Fees and/or Field Office)`
+- `Compensation` row 44: `Food Service`
+- `Service Order` row 1: `AIA Document B221 - Service Order`
+- `Service Order` row 2: `Service Order No.:`
+- `Service Order` row 2: `Feasibility Phase:`
+- `Service Order` row 2: `Other Supplemental Services (Listed Below):`
+- `Service Order` row 3: `Service Order Date:`
+- `Service Order` row 3: `Use Date of Project Engagement Meeting`
+- `Service Order` row 3: `through Closeout Services:`
+- `Service Order` row 3: `List Other Service(s)`
+- `Service Order` row 4: `Phase:`
+- `Service Order` row 5: `Owner:`
+- `Service Order` row 5: `United HealthCare Services, Inc.`
+- `Service Order` row 5: `Basic Services`
+- `Service Order` row 6: `Consultants:`
+- `Service Order` row 8: `Architect:`
+- `Service Order` row 9: `Work as Additional Services:`
+- `Service Order` row 10: `ARTICLE 3 DATE OF COMMENCEMENT AND SUBSTANTIAL COMPLETION`
+- `Service Order` row 11: `Commencement of Construction Date:`
+- `Service Order` row 12: `Substantial Completion Date:`
+- `Service Order` row 13: `Project Name:`
+- `Service Order` row 13: `ARTICLE 4.1 COMPENSATION`
+- `Service Order` row 14: `Location:`
+- `Service Order` row 14: `Supplemental Services`
+- `Service Order` row 15: `Compensation (From Exhibits E or F)`
+- `Service Order` row 16: `Project Description:`
+- `Service Order` row 16: `N/A`
+- `Service Order` row 21: `Master Agreement Dated:`
+- `Service Order` row 22: `ARTICLE 2 SERVICES UNDER THIS SERVICE ORDER`
+- `Service Order` row 23: `ARTICLE 1 INITIAL INFORMATION`
+- `Service Order` row 23: `Basic Services Exceptions:`
+- `Service Order` row 24: `Initial Information:`
+- `Service Order` row 24: `See Attachment "X": Project Scope Document`
+- `Service Order` row 24: `Feasibility Phase Exceptions:`
+- `Service Order` row 25: `See Attachment "X": Project Design Schedule`
+- `Service Order` row 25: `4.2 For Additional Services:`
+- `Service Order` row 26: `Sustainable Objective:`
+- `Service Order` row 26: `SD thru DD Exceptions:`
+- `Service Order` row 26: `(Basis of Compensation)`
+- `Service Order` row 26: `See Attachment "X" Additional Services and/or Reimbursable Expenses`
+- `Service Order` row 27: `Certification Required:`
+- `Service Order` row 27: `4.3 Reimbursable Expenses:`
+- `Service Order` row 28: `CD thru Closeout Exceptions:`
+- `Service Order` row 28: `(Amount of Compensation)`
+- `Service Order` row 30: `ARTICLE 5 INSURANCE`
+- `Service Order` row 31: `Supplemental and Additional Services:`
+- `Service Order` row 31: `ARTICLE 6 PARTY REPRESENTATIVES`
+- `Service Order` row 32: `Owner's Consultants:`
+- `Service Order` row 32: `UHG Design Experience Regional Representative:`
+- `Service Order` row 34: `UHG Regional Project Management Representative:`
+- `Service Order` row 36: `Architect Project Management Representative:`
+- `Service Order` row 38: `Architects Project Representative:`
+- `Service Order` row 40: `On-Site Project Representation`
+- `Service Order` row 40: `ARTICLE 7 ATTACHMENTS AND EXHIBITS`
+- `Service Order` row 41: `Other Exhibits incorporated into this Agreement:`
+- `Service Order` row 42: `Sustainable Project Services pursuant to Section 3.1.3`
+- `Service Order` row 42: `Attachment "X" - Project Scope Document`
+- `Service Order` row 43: `Attachment "X" - Project Design Schedule`
+- `Service Order` row 44: `Other Services provided by Specialty Consultants`
+- `Service Order` row 44: `Attachment "X" - Additional Services and/or Reimbursable Expenses`
+- `Service Order` row 45: `Other Documents:`
+- `Service Order` row 46: `(TBD)`
+- `Project Tracking Report` row 1: `Project Tracking Report`
+- `Project Tracking Report` row 1: `Design Fee Reporting (Quarterly)`
+- `Project Tracking Report` row 2: `Project Name:`
+- `Project Tracking Report` row 2: `Project Start Date:`
+- `Project Tracking Report` row 2: `Potential Project Risk and proposed Mitigation Strategies`
+- `Project Tracking Report` row 3: `Project Location:`
+- `Project Tracking Report` row 3: `Project/S.O. Number:`
+- `Project Tracking Report` row 4: `Proposed/Budgeted Fees vs actual Fees per project:`
+- `Project Tracking Report` row 5: `Project Group:`
+- `Project Tracking Report` row 5: `Project Manager:`
+- `Project Tracking Report` row 6: `Project Type:`
+- `Project Tracking Report` row 6: `Project Leader:`
+- `Project Tracking Report` row 7: `Special Type:`
+- `Project Tracking Report` row 7: `UHG DE Regional Rep.:`
+- `Project Tracking Report` row 8: `Compensation:`
+- `Project Tracking Report` row 8: `UHG Regional PM Rep.:`
+- `Project Tracking Report` row 9: `Current Project Status`
+- `Project Tracking Report` row 10: `Current Phase:`
+- `Project Tracking Report` row 10: `Issue(s):`
+- `Project Tracking Report` row 10: `=I11`
+- `Project Tracking Report` row 11: `Completion %:`
+- `Project Tracking Report` row 11: `Project name`
+- `Project Tracking Report` row 12: `Completion Date:`
+- `Project Tracking Report` row 13: `At Risk:`
+- `Project Tracking Report` row 14: `Scheduled Project phases`
+- `Project Tracking Report` row 15: `Project Tracking per Phase`
+- `Project Tracking Report` row 15: `Project Status`
+- `Project Tracking Report` row 16: `Project Initiation Phase:`
+- `Project Tracking Report` row 16: `Service Order requested, submittal dates and approval status`
+- `Project Tracking Report` row 17: `Design Milestone Date:`
+- `Project Tracking Report` row 17: `='Design Schedule'!F18`
+- `Project Tracking Report` row 17: `Submittal Date:`
+- `Project Tracking Report` row 17: `='Design Schedule'!H18`
+- `Project Tracking Report` row 18: `Submittal Attempts:`
+- `Project Tracking Report` row 18: `Approval Date:`
+- `Project Tracking Report` row 18: `='Design Schedule'!F19`
+- `Project Tracking Report` row 18: `Project team leader and contact point`
+- `Project Tracking Report` row 19: `Approval Deficiencies:`
+- `Project Tracking Report` row 20: `% Time spent on account:`
+- `Project Tracking Report` row 21: `Feasibility Stage:`
+- `Project Tracking Report` row 22: `='Design Schedule'!F35`
+- `Project Tracking Report` row 22: `='Design Schedule'!H35`
+- `Project Tracking Report` row 23: `='Design Schedule'!F36`
+- `Project Tracking Report` row 26: `Schematic Design Phase:`
+- `Project Tracking Report` row 27: `='Design Schedule'!F48`
+- `Project Tracking Report` row 27: `='Design Schedule'!H48`
+- `Project Tracking Report` row 28: `='Design Schedule'!F49`
+- `Project Tracking Report` row 32: `Design Development Phase:`
+- `Project Tracking Report` row 33: `='Design Schedule'!O17`
+- `Project Tracking Report` row 33: `='Design Schedule'!Q17`
+- `Project Tracking Report` row 33: `Schedule reduction (savings)`
+- `Project Tracking Report` row 34: `='Design Schedule'!O18`
+- `Project Tracking Report` row 38: `Construction Document Phase:`
+- `Project Tracking Report` row 39: `='Design Schedule'!O35`
+- `Project Tracking Report` row 39: `='Design Schedule'!Q35`
+- `Project Tracking Report` row 40: `='Design Schedule'!O36`
+- `Project Tracking Report` row 42: `Project delivered on budget:`
+- `Project Tracking Report` row 44: `Bidding and Permitting Phase:`
+- `Project Tracking Report` row 47: `(Manual Entry calculated from Approved Service Order)`
+- `Project Tracking Report` row 50: `Construction Phase:`
+- `Project Tracking Report` row 52: `Final Design Fees:`
