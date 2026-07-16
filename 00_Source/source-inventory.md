@@ -33,6 +33,15 @@ C:\Obsidian\My Projects\DIF_OS_Vault\V_UHG_Data_Core
 - Status: promoted to active source package; not extracted/canonized by promotion event
 - Contamination note: original files are preserved in `original/`; derived access layers should be separate.
 
+### SRC-PAC-WORKING-DRAFT-V1-1
+
+- Title: PAC Working Draft v1.1
+- Source type: user-provided working draft / framework source
+- Original attachment path: `.hermes/desktop-attachments/PAC_Canonical_Data_Model_v1.1.md`
+- Preserved path: `00_Source/PAC/Working Drafts/PAC_Canonical_Data_Model_v1.1.md`
+- Status: preserved working draft; canonical wording intentionally ignored per user instruction
+- Use: discussion source for PAC / Grace project-start framework review; not implemented as developmental structure without approval
+
 ### SRC-UC001-CLIENT-SENT-OUTPUTS
 
 - Title: UC-001 Client-Sent Output Artifacts

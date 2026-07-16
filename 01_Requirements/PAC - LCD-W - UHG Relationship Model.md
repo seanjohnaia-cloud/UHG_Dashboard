@@ -84,3 +84,13 @@ PAC Core
 ```
 
 But the overlay architecture should be reviewed before implementation.
+
+## Related Draft Requirement
+
+The PAC boundary holds as the origin layer. The next missing structure is the Activation gate logic:
+
+```text
+01_Requirements/Activation Gate Conditions.md
+```
+
+That draft defines blocking-by-default Activation gates and records gate overrides as Framework B signal sources.
