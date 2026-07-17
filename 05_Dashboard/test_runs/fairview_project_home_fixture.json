@@ -1,0 +1,150 @@
+{
+  "project": "Fairview Urgent Care",
+  "fixture_status": "source_extracted_draft",
+  "source_artifact": "00_Source/Fairview/PDD/Fairview Urgent Care - Project Definition Document.md",
+  "source_type": "fictional_pdd",
+  "project_home_mode": "pre_service_order_origin",
+  "origin_record": {
+    "general_project_information": {
+      "project_name": {
+        "value": "Fairview Urgent Care",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C2"
+      },
+      "project_location": {
+        "value": "4210 Preston Commons Blvd, Fairview, TX 75069",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C3-C4; Service Order!B14-B15"
+      },
+      "project_type": {
+        "value": "Remodel / Renovation",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C6"
+      },
+      "asset_type": {
+        "value": "Urgent Care",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C7"
+      },
+      "compensation_basis_anticipated": {
+        "value": "Stipulated sum",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C8"
+      },
+      "uhg_design_experience_representative": {
+        "value": "Morgan Ellis — morgan.ellis@uhg-example.com",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!H7; Service Order!X33"
+      },
+      "uhg_project_management_representative": {
+        "value": "Priya Nandakumar — priya.nandakumar@uhg-example.com",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!H8; Service Order!X35"
+      }
+    },
+    "scope_description": {
+      "scope_narrative": {
+        "value": "Interior remodel of an existing 1,800 SF retail space into a UHG-branded urgent care clinic: new exam rooms, waiting/check-in area, lab alcove, staff support space. No building footprint expansion.",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!A16; Service Order!A17"
+      }
+    },
+    "project_square_footage": {
+      "existing_sf": {
+        "value": 1800,
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C24/D24"
+      },
+      "new_sf": {
+        "value": 0,
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C25/D25"
+      },
+      "existing_conditions_reused": {
+        "value": "To be confirmed during site due diligence",
+        "truth_state": "deferred",
+        "lcdw_reference": "Life Cycle Data Worksheet!F25/H25"
+      }
+    },
+    "sustainability": {
+      "sustainable_objective": {
+        "value": "None identified (N/A)",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!A27; Service Order!C26"
+      }
+    },
+    "budget": {
+      "original_cow": {
+        "value": "$850,000",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C31"
+      }
+    },
+    "initial_schedule": {
+      "estimated_occupancy_date": {
+        "value": "2027-03-01",
+        "truth_state": "extracted",
+        "lcdw_reference": null,
+        "schema_status": "not_currently_captured"
+      },
+      "commencement_of_construction": {
+        "value": "2026-10-01",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!H34; Service Order!Y11"
+      },
+      "substantial_completion": {
+        "value": "2027-02-01",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!H35; Service Order!Y12"
+      }
+    },
+    "design_consultants_basic_services": {
+      "mechanical_electrical_structural": {
+        "value": "Not specified by Owner; Basic Services on every service order per Article 2.3; to be engaged by Architect",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!C38,C40,C42"
+      }
+    },
+    "owner_consultants": {
+      "owner_retained_consultants": {
+        "value": "None identified at this stage",
+        "truth_state": "extracted",
+        "lcdw_reference": "Life Cycle Data Worksheet!A44-A50"
+      }
+    }
+  },
+  "not_currently_captured_in_lcdw": [
+    {
+      "field": "anticipated_procurement_method",
+      "value": "Design-bid-build, single general contractor",
+      "truth_state": "extracted"
+    },
+    {
+      "field": "critical_notes_for_the_firm",
+      "value": "Adjacent tenant vacates by September 15, 2026; landlord coordination required for utility shutoffs during remodel.",
+      "truth_state": "extracted"
+    },
+    {
+      "field": "project_team_contacts_firm_side",
+      "value": "Not yet assigned — occurs during Grace's internal startup process, not as part of Initial Information.",
+      "truth_state": "not-required-at-origin"
+    }
+  ],
+  "open_items": [
+    {
+      "field": "existing_conditions_reused",
+      "status": "deferred",
+      "reason": "To be confirmed during site due diligence"
+    },
+    {
+      "field": "certificate_of_insurance",
+      "status": "missing",
+      "reason": "Not present in PDD; expected later for Service Order / insurance readiness"
+    },
+    {
+      "field": "architect_project_representative",
+      "status": "missing",
+      "reason": "Firm-side team assignment occurs during Grace startup, not Initial Information"
+    }
+  ]
+}
