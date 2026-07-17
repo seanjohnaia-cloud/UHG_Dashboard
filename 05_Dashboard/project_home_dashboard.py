@@ -495,7 +495,7 @@ def render_header(payload: dict[str, Any], page: str) -> None:
         <style>
             .stApp {{background: #d9d9d9;}}
             [data-testid="stHeader"] {{background: #8bd34b !important;}}
-            .block-container {{padding: 15.75rem 14.25rem 1rem 1rem;}}
+            .block-container {{padding: 12.25rem 14.25rem 1rem 1rem;}}
             [data-testid="stDeployButton"] {{display: none;}}
             [data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] {{display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 100000 !important;}}
             [data-testid="stSidebar"] {{z-index: 99999 !important; width: 13rem !important; min-width: 13rem !important; background: #08b5dc !important;}}
@@ -504,10 +504,10 @@ def render_header(payload: dict[str, Any], page: str) -> None:
             [data-testid="stSidebar"] label {{font-size: 1.05rem !important; color: #111827 !important;}}
             [data-testid="stSidebar"] label:has(input:checked) {{background: #020617 !important; color: white !important; margin-left: -1rem; margin-right: -1rem; padding: .55rem 1rem;}}
             [data-testid="stSidebar"] label:has(input:checked) * {{color: white !important;}}
-            .pii-green-cap {{position: fixed; top: 0; left: 0; right: 0; height: 5rem; background: #8bd34b; z-index: 99990;}}
-            .pii-top-band {{position: fixed; top: 5rem; left: 13rem; right: 13rem; z-index: 99991; background: #eaf5ff; border: 1px solid #cfe7ff; border-radius: 0; padding: .45rem .55rem .5rem .55rem; margin: 0;}}
+            .pii-green-cap {{position: fixed; top: 0; left: 0; right: 0; height: 11.25rem; background: #8bd34b; z-index: 99990;}}
+            .pii-top-band {{position: fixed; top: 2.35rem; left: 13rem; right: 13rem; z-index: 99991; background: #8bd34b; border: 0; border-radius: 0; padding: .45rem .65rem .5rem .65rem; margin: 0;}}
             .pii-band-grid {{display: grid; grid-template-columns: 9rem 1fr; gap: .55rem; align-items: stretch;}}
-            .pii-band-logo {{border-right: 1px solid #b9daf5; display: flex; flex-direction: column; justify-content: center; min-height: 6.8rem; padding-right: .55rem;}}
+            .pii-band-logo {{border-right: 1px solid rgba(2, 6, 23, .28); display: flex; flex-direction: column; justify-content: center; min-height: 6.8rem; padding-right: .55rem;}}
             .pii-band-logo-main {{font-size: 1.45rem; font-weight: 800; line-height: 1.45rem; color: #102a43;}}
             .pii-band-logo-sub {{font-size: .68rem; color: #486581; margin-top: .15rem;}}
             .pii-sheet-title {{font-size: 1.25rem; font-weight: 800; line-height: 1.35rem; margin: 0; color: #102a43;}}
@@ -515,12 +515,12 @@ def render_header(payload: dict[str, Any], page: str) -> None:
             .pii-band-row {{display: grid; gap: .25rem; margin-top: .18rem;}}
             .pii-band-project {{grid-template-columns: 1.35fr 2.2fr .9fr .9fr .65fr .65fr;}}
             .pii-band-status {{grid-template-columns: .9fr 1.45fr .65fr .9fr .6fr .65fr;}}
-            .pii-band-cell {{background: rgba(255,255,255,.62); border: 1px solid #cfe7ff; border-radius: .3rem; padding: .12rem .32rem; min-height: 1.48rem;}}
-            .pii-band-label {{font-size: .53rem; line-height: .62rem; color: #486581; text-transform: uppercase; letter-spacing: .035em;}}
+            .pii-band-cell {{background: rgba(255,255,255,.48); border: 1px solid rgba(2, 6, 23, .16); border-radius: .3rem; padding: .12rem .32rem; min-height: 1.48rem;}}
+            .pii-band-label {{font-size: .53rem; line-height: .62rem; color: rgba(2, 6, 23, .7); text-transform: uppercase; letter-spacing: .035em;}}
             .pii-band-value {{font-size: .73rem; line-height: .85rem; font-weight: 650; color: #102a43;}}
-            .pii-chipline {{font-size: .64rem; color: #486581; margin-top: .16rem;}}
+            .pii-chipline {{font-size: .64rem; color: rgba(2, 6, 23, .78); margin-top: .16rem;}}
             .grace-logo-box {{display: none;}}
-            .pii-right-rail {{position: fixed; top: 5rem; right: 0; width: 13rem; height: calc(100vh - 5rem); overflow-y: auto; z-index: 99998; background: #08b5dc; border-left: 1px solid rgba(0, 0, 0, .18); padding: 2.4rem 1rem 1rem 1rem; font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #020617;}}
+            .pii-right-rail {{position: fixed; top: 11.25rem; right: 0; width: 13rem; height: calc(100vh - 11.25rem); overflow-y: auto; z-index: 99998; background: #08b5dc; border-left: 1px solid rgba(0, 0, 0, .18); padding: 2.4rem 1rem 1rem 1rem; font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #020617;}}
             .pii-right-title {{font-size: 1.55rem; line-height: 1.9rem; font-weight: 500; color: #020617; margin: 0 0 2rem 0;}}
             .pii-right-caption {{font-size: .95rem; line-height: 1.25rem; color: rgba(2, 6, 23, .72); margin-bottom: 1rem;}}
             .pii-pending-item {{border-top: 1px solid rgba(2, 6, 23, .2); padding: .65rem 0;}}
@@ -545,7 +545,7 @@ def render_header(payload: dict[str, Any], page: str) -> None:
                 </div>
                 <div>
                     <div class="pii-sheet-title">Pii / {page}</div>
-                    <div class="pii-caption">Project Info</div>
+                    <div class="pii-caption">Project Information</div>
                     <div class="pii-band-row pii-band-project">
                         <div class="pii-band-cell"><div class="pii-band-label">Project</div><div class="pii-band-value">{field_value(record, 'general_project_information', 'project_name')}</div></div>
                         <div class="pii-band-cell"><div class="pii-band-label">Location</div><div class="pii-band-value">{field_value(record, 'general_project_information', 'project_location')}</div></div>
@@ -554,7 +554,7 @@ def render_header(payload: dict[str, Any], page: str) -> None:
                         <div class="pii-band-cell"><div class="pii-band-label">Existing SF</div><div class="pii-band-value">{field_value(record, 'project_square_footage', 'existing_sf')}</div></div>
                         <div class="pii-band-cell"><div class="pii-band-label">New SF</div><div class="pii-band-value">{field_value(record, 'project_square_footage', 'new_sf')}</div></div>
                     </div>
-                    <div class="pii-caption" style="margin-top:.22rem;">Current Status</div>
+                    <div class="pii-caption" style="margin-top:.22rem;">Current Project Status</div>
                     <div class="pii-band-row pii-band-status">{status_cells}</div>
                     <div class="pii-chipline">{" · ".join(chips)}</div>
                 </div>
