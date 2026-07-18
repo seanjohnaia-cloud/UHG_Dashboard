@@ -1,0 +1,10 @@
+{
+  "module_id": "contracts",
+  "status": "development",
+  "dashboard_types": [
+    "project"
+  ],
+  "promotion_state": "not_approved",
+  "requires_user_approval": true,
+  "notes": "Project-level Contracts branch for SOW/Service Order readiness, authorization boundaries, assumptions/exclusions, and risk routing. Distinct from Portfolio contract governance."
+}

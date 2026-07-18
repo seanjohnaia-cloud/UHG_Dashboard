@@ -79,6 +79,7 @@ class PiiLauncherArchitectureTests(unittest.TestCase):
         expected = {
             "lcd_baseline": DASHBOARD_DIR / "modules" / "development" / "lcd_baseline" / "module_status.json",
             "project_metrics": DASHBOARD_DIR / "modules" / "development" / "project_metrics" / "module_status.json",
+            "contracts": DASHBOARD_DIR / "modules" / "development" / "contracts" / "module_status.json",
         }
 
         for module_id, path in expected.items():
