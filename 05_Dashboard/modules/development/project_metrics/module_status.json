@@ -1,0 +1,10 @@
+{
+  "module_id": "project_metrics",
+  "status": "development",
+  "dashboard_types": [
+    "project"
+  ],
+  "promotion_state": "not_approved",
+  "requires_user_approval": true,
+  "notes": "Project-level metrics prototype remains separate from Portfolio cross-project metrics until reviewed."
+}

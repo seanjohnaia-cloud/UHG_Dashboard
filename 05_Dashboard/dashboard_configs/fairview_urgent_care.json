@@ -1,0 +1,20 @@
+{
+  "dashboard_id": "fairview_urgent_care",
+  "dashboard_type": "project",
+  "display_name": "Fairview Urgent Care",
+  "parent_dashboard": "uhg_portfolio",
+  "status": "development",
+  "active_modules": [
+    "project_home",
+    "lcd_baseline",
+    "project_scope",
+    "project_budget",
+    "compensation",
+    "design_schedule",
+    "consultants",
+    "alliance_partners",
+    "contracts",
+    "service_order_review",
+    "project_metrics"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "dashboard_id": "uhg_portfolio",
+  "dashboard_type": "portfolio",
+  "display_name": "UHG Portfolio Dashboard",
+  "status": "development",
+  "active_modules": [
+    "portfolio_home",
+    "project_index",
+    "cross_project_metrics",
+    "sla_kpi_reporting",
+    "contract_governance"
+  ],
+  "child_dashboards": [
+    "fairview_urgent_care"
+  ]
+}

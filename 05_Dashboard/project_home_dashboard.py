@@ -22,6 +22,7 @@ GRACE_LOGO_PATH = APP_DIR / "assets" / "grace_stacked_logo.jpg"
 
 NAV_ITEMS = [
     "Home",
+    "LCD Manual Entry",
     "Project Scope",
     "Project Budget",
     "Compensation",
@@ -249,11 +250,64 @@ SERVICE_ORDER_ARTICLES = {
     ],
 }
 
+SOW_KPI_ROWS = [
+    (
+        "Project Delivery Timeliness",
+        "Deliver projects on or ahead of project schedule with % of projects delivered on time or early based on UHG MBO.",
+    ),
+    ("Client Satisfaction", "Achieve Net Promoter Score (NPS) satisfaction based on UHG MBO"),
+    ("Design Quality & Innovation", "Maintain high design standards with limited RFIs or rework"),
+    (
+        "Regulatory Compliance",
+        "Submit permits on time with minimal feedback (not more than one round of clarifications) on 98% or more of assigned projects.",
+    ),
+    (
+        "Cost Alignment",
+        "Stay within approved construction budgets, with less than 3% variance between DD and CD milestones per project",
+    ),
+    ("Change Order Frequency", "Minimize frequency of post-approval change orders <2% per project."),
+]
+
+REQUIRED_METRIC_ROWS = [
+    ("Ongoing Performance Monitoring", "Pipeline, volume, and key initiatives", "SOW Reporting 1.0 / monthly reports"),
+    ("Ongoing Performance Monitoring", "Performance against established KPI's", "SOW Reporting 1.0"),
+    ("Ongoing Performance Monitoring", "Project tracking system compliance and data integrity", "SOW Reporting 1.0"),
+    ("Ongoing Performance Monitoring", "Consistency of Project Authorization forms", "SOW Reporting 1.0"),
+    ("Ongoing Performance Monitoring", "Comparative performance analysis and improvement recommendations", "SOW Reporting 1.0"),
+    ("Project Tracking Reporting", "Total number of requests and projects handled", "SOW Reporting 2.0"),
+    ("Project Tracking Reporting", "Percentage of requests that met expected response times", "SOW Reporting 2.0"),
+    ("Project Tracking Reporting", "Project name", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Brief description", "SOW Reporting 2.0"),
+    ("Project Tracking Reporting", "Percentage of Existing Conditions / walls reused per project", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Scheduled Project phases", "SOW Reporting 2.0 / Design Schedule"),
+    ("Project Tracking Reporting", "Project order and installation status", "SOW Reporting 2.0"),
+    ("Project Tracking Reporting", "Quote requested, received dates and approval status", "SOW Reporting 2.0"),
+    ("Project Tracking Reporting", "Potential project risk and proposed mitigation strategies", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Project team leader and contact point", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Number of Staff and percentage of time spent on Owner's account", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Deficiency report", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Delivered according to agreed-upon schedule and budget at final funding milestone", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Cost Savings and applied strategies for cost savings", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Schedule reduction (savings)", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Architectural and MEP coordination issues / misses", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Number of Change Orders per project", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Project Tracking Reporting", "Number of RFIs per project, broken down by type", "SOW Reporting 2.0 / Project Tracking Report"),
+    ("Design Fee Reporting", "Architectural and consultant fees inclusive of reimbursables and additional services", "SOW Design Fee Reporting"),
+    ("Design Fee Reporting", "Proposed / budgeted fees compared to actual costs", "SOW Design Fee Reporting"),
+    ("Business Reviews", "Cost-saving initiatives and resulting savings", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "Quarterly project summary including project risks", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "Sustainability initiatives implemented on projects", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "Pilot initiatives implemented on projects", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "Lessons Learned discovered during last quarter", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "SLA and performance measures related to Agreement terms", "SOW Business Reviews / QBR"),
+    ("Business Reviews", "Annual goals, plans, prior-year performance, Owner satisfaction surveys, and executive summary", "SOW Business Reviews / annual report"),
+]
+
 METRIC_GAUGE_ROWS = [
-    ("Schedule Health", "Design milestone / submittal / approval dates", "SOW requires approved schedule, monthly updates, and notice of delay/out-of-sequence work"),
-    ("Delivery Quality", "Deficiency report and approval deficiencies", "SOW requires deficiency tracking through resolution and owner/architect sign-off"),
-    ("Budget / Fee Health", "Original fees, approved revisions, final design fees, delivered-on-budget", "SOW and SO require compensation, scope, schedule, and budget control"),
-    ("Construction Responsiveness", "RFIs, RFCs, change orders, addenda, review letters", "SOW requires RFI responses, change records, and 5-business-day change request review"),
+    ("Schedule Health", "Project Delivery Timeliness + SLA schedule fields", "Future gauge derived from required metrics"),
+    ("Delivery Quality", "Design Quality & Innovation + deficiencies/RFIs/rework", "Future gauge derived from required metrics"),
+    ("Budget / Fee Health", "Cost Alignment + design fee reporting + budget delivery", "Future gauge derived from required metrics"),
+    ("Construction Responsiveness", "Change Order Frequency + RFIs/RFCs/addenda/review letters", "Future gauge derived from required metrics"),
 ]
 
 METRIC_LOGGING_SECTIONS = {
@@ -315,6 +369,139 @@ METRIC_CONTRACT_ALIGNMENT_ROWS = [
 TableRows = list[tuple[str, Any, str]]
 OriginRecord = dict[str, dict[str, dict[str, Any]]]
 
+MANUAL_LCD_DISABLED_COLUMNS = [
+    "Section",
+    "LCD Field",
+    "Source Default",
+    "Source State",
+    "LCD-W / Service Order Reference",
+]
+
+MANUAL_LCD_FIELD_DEFINITIONS = [
+    ("General Project Information", "Project Name", "general_project_information", "project_name"),
+    ("General Project Information", "Project Start Date", None, None),
+    ("General Project Information", "Project Location", "general_project_information", "project_location"),
+    ("General Project Information", "Project Number", None, None),
+    ("General Project Information", "Project Group", None, None),
+    ("General Project Information", "Project Manager", None, None),
+    ("General Project Information", "Project Type", "general_project_information", "project_type"),
+    ("General Project Information", "Project Leader", None, None),
+    ("General Project Information", "Special Type", "general_project_information", "asset_type"),
+    (
+        "General Project Information",
+        "UHG DE Regional Rep.",
+        "general_project_information",
+        "uhg_design_experience_representative",
+    ),
+    (
+        "General Project Information",
+        "Compensation",
+        "general_project_information",
+        "compensation_basis_anticipated",
+    ),
+    (
+        "General Project Information",
+        "UHG Regional PM Rep.",
+        "general_project_information",
+        "uhg_project_management_representative",
+    ),
+    ("Project Scope", "Scope Narrative", "scope_description", "scope_narrative"),
+    ("Project S.F.", "Existing S.F.", "project_square_footage", "existing_sf"),
+    ("Project S.F.", "% of Existing", None, None),
+    ("Project S.F.", "New S.F.", "project_square_footage", "new_sf"),
+    ("Project S.F.", "Conditions Reused", "project_square_footage", "existing_conditions_reused"),
+    ("Sustainability", "Certification Req'd.", None, None),
+    ("Sustainability", "Sustainable Objective", "sustainability", "sustainable_objective"),
+    ("Project Budget", "Original COW", "budget", "original_cow"),
+    ("Project Budget", "DD COW", None, None),
+    ("Project Budget", "CD COW", None, None),
+    ("Project Budget", "Bid Amount", None, None),
+    ("Project Budget", "Final COW", None, None),
+    ("Design Schedule", "Project Start Date", None, None),
+    ("Design Schedule", "Design Start Date", None, None),
+    ("Design Schedule", "Design Completion Date", None, None),
+    ("Design Schedule", "Construction Start Date", "initial_schedule", "commencement_of_construction"),
+    ("Design Schedule", "Substantial Completion Date", "initial_schedule", "substantial_completion"),
+    ("Design Schedule", "Estimated Occupancy", "initial_schedule", "estimated_occupancy_date"),
+    (
+        "Consultants",
+        "Mechanical / Electrical / Structural",
+        "design_consultants_basic_services",
+        "mechanical_electrical_structural",
+    ),
+    ("Consultants", "Architect's Project Representative", None, None),
+    ("Alliance Partners", "Owner-retained Consultants", "owner_consultants", "owner_retained_consultants"),
+]
+
+PROJECT_MANAGER_OPTIONS = ["Andrea Bowman, AIA", "Sean Johnson, AIA"]
+PROJECT_LEADER_OPTIONS = ["Justin Aubert, AIA"]
+PROJECT_GROUP_OPTIONS = ["Administrative", "Clinical"]
+PROJECT_TYPE_OPTIONS = [
+    "Consolidation",
+    "Contraction",
+    "Expansion",
+    "New Site",
+    "Ground Up",
+    "Tenant Build-out",
+    "Remodel/Renovation",
+    "Relocation",
+    "Split-Relocation",
+]
+SPECIAL_TYPE_OPTIONS = [
+    "(None)",
+    "Feasibility Stage",
+    "Architectural Site Plan",
+    "Preliminary Site Plan",
+    "One-off",
+    "Infrastructure/MDF",
+    "Refresh",
+]
+COMPENSATION_OPTIONS = ["(Schedule E)", "(Schedule F)", "Percentage Fee", "Stipulated Fee", "Negotiated Fee"]
+PHASE_OPTIONS = [
+    "Project Initiation",
+    "FS -Kick-off",
+    "FS_Scope Interview",
+    "FS-Preliminary Program",
+    "FS-Scenario Development",
+    "FS-Utilization Analysis",
+    "Schematic Design",
+    "Design Development",
+    "Construction Documents",
+    "Bidding/Permitting",
+    "Construction Administration",
+    "Project Close-out",
+    "Post Occupancy",
+    "Warranty Period",
+]
+OWNER_CONSULTANT_OPTIONS = [
+    "Furniture",
+    "Flooring",
+    "Sound Masking",
+    "Artwork/Branding",
+    "Security (Owner internal and Business teams)",
+    "Audio Visual",
+    "Signage",
+    "Medical Equipment",
+    "IT/Technology/Low Voltage (Owner internal and Business teams)",
+    "Storefront Systems",
+    "Food Service",
+]
+YES_NO_NA_OPTIONS = ["N/A", "Yes", "No"]
+AT_RISK_OPTIONS = ["High", "Moderate", "Low"]
+
+CONTROLLED_LCD_OPTIONS = {
+    "Project Group": PROJECT_GROUP_OPTIONS,
+    "Project Manager": PROJECT_MANAGER_OPTIONS,
+    "Project Type": PROJECT_TYPE_OPTIONS,
+    "Project Leader": PROJECT_LEADER_OPTIONS,
+    "Special Type": SPECIAL_TYPE_OPTIONS,
+    "Compensation": COMPENSATION_OPTIONS,
+    "Certification Req'd.": YES_NO_NA_OPTIONS,
+    "Current Phase": PHASE_OPTIONS,
+    "At Risk": AT_RISK_OPTIONS,
+}
+MULTI_SELECT_LCD_FIELDS = {"Owner-retained Consultants": OWNER_CONSULTANT_OPTIONS}
+
 
 def load_fixture(path: Path = FAIRVIEW_FIXTURE_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -339,6 +526,57 @@ def field_ref(record: OriginRecord, section: str, field: str, default: str = "�
 
 def row(record: OriginRecord, label: str, section: str, field: str) -> tuple[str, Any, str]:
     return label, field_value(record, section, field), field_ref(record, section, field)
+
+
+def manual_lcd_entry_rows(record: OriginRecord) -> list[dict[str, Any]]:
+    """Build the editable LCD intake grid, pre-populated from the PDD origin record."""
+    rows: list[dict[str, Any]] = []
+    for section, label, source_section, source_field in MANUAL_LCD_FIELD_DEFINITIONS:
+        if source_section and source_field:
+            source_payload = record.get(source_section, {}).get(source_field, {})
+            source_default = source_payload.get("value", "")
+            source_state = source_payload.get("truth_state", "source gap")
+            reference = source_payload.get("lcdw_reference") or "No LCD-W home / review schema"
+        else:
+            source_default = ""
+            source_state = "manual required"
+            reference = "Manual LCD entry"
+
+        rows.append(
+            {
+                "Section": section,
+                "LCD Field": label,
+                "Manual Entry": source_default,
+                "Source Default": source_default,
+                "Source State": source_state,
+                "LCD-W / Service Order Reference": reference,
+                "Entry Notes": "",
+            }
+        )
+    return rows
+
+
+def manual_lcd_entry_frame(record: OriginRecord) -> pd.DataFrame:
+    return pd.DataFrame(manual_lcd_entry_rows(record))
+
+
+def manual_lcd_entry_by_field(record: OriginRecord) -> dict[str, dict[str, Any]]:
+    return {row["LCD Field"]: row for row in manual_lcd_entry_rows(record)}
+
+
+def manual_lcd_widget_key(field: str) -> str:
+    return "lcd_manual_" + "".join(character.lower() if character.isalnum() else "_" for character in field)
+
+
+def controlled_options(field: str, current_value: str = "") -> list[str]:
+    options = ["", *CONTROLLED_LCD_OPTIONS.get(field, [])]
+    if current_value and current_value not in options:
+        options.append(current_value)
+    return options
+
+
+def source_label(value: Any) -> str:
+    return str(value) if value not in (None, "") else "manual entry"
 
 
 def render_table(rows: TableRows, columns: tuple[str, str, str] = ("Field", "Value", "State")) -> None:
@@ -682,6 +920,192 @@ def render_home(payload: dict[str, Any]) -> None:
     render_ask_pii()
 
 
+def render_lcd_manual_entry(payload: dict[str, Any]) -> None:
+    record = origin(payload)
+    entries = manual_lcd_entry_by_field(record)
+
+    st.markdown(
+        """
+        <style>
+            .lcd-sheet-note {font-size: .86rem; color: #475467; margin: -.2rem 0 1rem 0;}
+            .lcd-section-title {background: #d9ead3; border: 1px solid #2f3a27; color: #111827; font-weight: 800; padding: .28rem .45rem; margin: .6rem 0 .2rem 0;}
+            .lcd-field-label {background: #eeeeee; border: 1px solid #7a7a7a; border-right: 0; min-height: 2.15rem; padding: .38rem .42rem; font-weight: 700; font-size: .82rem; color: #111827;}
+            .lcd-phase-box {background: #f8fafc; border: 1px solid #7a7a7a; padding: .38rem .55rem; min-height: 2.1rem; font-size: .84rem;}
+            .lcd-source-chip {font-size: .68rem; color: #667085; margin: -.35rem 0 .35rem 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+            .lcd-save-strip {background: #f2f4f7; border: 1px solid #98a2b3; padding: .55rem .7rem; margin-top: .8rem; font-size: .86rem;}
+            div[data-testid="stTextInput"] input, div[data-testid="stTextArea"] textarea {border-radius: 0 !important; border: 1px solid #7a7a7a !important; background: #fff !important; color: #101828 !important; font-size: .86rem !important;}
+            div[data-testid="stTextInput"], div[data-testid="stTextArea"], div[data-testid="stSelectbox"], div[data-testid="stMultiSelect"] {margin-bottom: .1rem;}
+            div[data-testid="stSelectbox"] div[data-baseweb="select"] > div, div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div {border-radius: 0 !important; border: 1px solid #7a7a7a !important; background: #fff !important; min-height: 2.35rem; font-size: .86rem !important;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    def cell(field: str, *, area: bool = False, key_suffix: str = "") -> None:
+        entry = entries[field]
+        key = manual_lcd_widget_key(field if not key_suffix else f"{field}_{key_suffix}")
+        current = str(entry["Manual Entry"] if entry["Manual Entry"] is not None else "")
+        help_text = f"Source default: {entry['Source Default'] or 'manual required'} | {entry['Source State']} | {entry['LCD-W / Service Order Reference']}"
+        if field in MULTI_SELECT_LCD_FIELDS:
+            defaults = [] if current.lower().startswith("none identified") else [current] if current else []
+            options = [*MULTI_SELECT_LCD_FIELDS[field], *[value for value in defaults if value not in MULTI_SELECT_LCD_FIELDS[field]]]
+            st.multiselect(field, options, default=defaults, key=key, label_visibility="collapsed", help=help_text)
+        elif field in CONTROLLED_LCD_OPTIONS:
+            options = controlled_options(field, current)
+            if key not in st.session_state:
+                st.session_state[key] = current if current in options else ""
+            st.selectbox(field, options, key=key, label_visibility="collapsed", help=help_text)
+        elif area:
+            if key not in st.session_state:
+                st.session_state[key] = current
+            st.text_area(field, key=key, height=130, label_visibility="collapsed", help=help_text)
+        else:
+            if key not in st.session_state:
+                st.session_state[key] = current
+            st.text_input(field, key=key, label_visibility="collapsed", help=help_text)
+
+    def pair(label: str, field: str, *, key_suffix: str = "") -> None:
+        st.markdown(f'<div class="lcd-field-label">{html.escape(label)}</div>', unsafe_allow_html=True)
+        cell(field, key_suffix=key_suffix)
+        source = entries[field]
+        st.markdown(
+            f'<div class="lcd-source-chip">{html.escape(source["Source State"])} · {html.escape(source_label(source["Source Default"]))}</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.subheader("Life Cycle Data Worksheet")
+    st.markdown(
+        '<div class="lcd-sheet-note">Excel-style LCD page entry surface. Click white cells to enter or revise project data; PDD defaults are pre-filled where available.</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<div class="lcd-section-title">General Project Information</div>', unsafe_allow_html=True)
+    cols = st.columns([1.1, 2.4, .95, 1.55], gap="small")
+    with cols[0]:
+        pair("Project Name:", "Project Name")
+    with cols[1]:
+        pair("Project Location:", "Project Location")
+    with cols[2]:
+        pair("Project Start Date:", "Project Start Date")
+    with cols[3]:
+        pair("Project Number:", "Project Number")
+
+    cols = st.columns(4, gap="small")
+    for column, (label, field) in zip(
+        cols,
+        [
+            ("Project Group:", "Project Group"),
+            ("Project Manager:", "Project Manager"),
+            ("Project Type:", "Project Type"),
+            ("Project Leader:", "Project Leader"),
+        ],
+    ):
+        with column:
+            pair(label, field)
+
+    cols = st.columns(4, gap="small")
+    for column, (label, field) in zip(
+        cols,
+        [
+            ("Special Type:", "Special Type"),
+            ("Compensation:", "Compensation"),
+            ("UHG DE Regional Rep.:", "UHG DE Regional Rep."),
+            ("UHG Regional PM Rep.:", "UHG Regional PM Rep."),
+        ],
+    ):
+        with column:
+            pair(label, field)
+
+    st.markdown('<div class="lcd-section-title">Current Project Status</div>', unsafe_allow_html=True)
+    cols = st.columns(5, gap="small")
+    for column, (label, value, _state) in zip(cols, current_project_status_rows(payload)[:5]):
+        with column:
+            st.markdown(f'<div class="lcd-field-label">{html.escape(label)}:</div>', unsafe_allow_html=True)
+            status_key = manual_lcd_widget_key(f"status_{label}")
+            status_value = str(value)
+            if label in CONTROLLED_LCD_OPTIONS:
+                status_options = controlled_options(label, status_value)
+                st.selectbox(label, status_options, index=status_options.index(status_value), label_visibility="collapsed", key=status_key)
+            else:
+                st.text_input(label, value=status_value, label_visibility="collapsed", key=status_key)
+
+    left, right = st.columns([3, 1.1], gap="large")
+    with left:
+        st.markdown('<div class="lcd-section-title">Scope Description</div>', unsafe_allow_html=True)
+        cell("Scope Narrative", area=True)
+
+        sf_cols = st.columns(4, gap="small")
+        with sf_cols[0]:
+            pair("Existing (S.F.):", "Existing S.F.")
+        with sf_cols[1]:
+            pair("% of Existing", "% of Existing")
+        with sf_cols[2]:
+            pair("New (S.F.):", "New S.F.")
+        with sf_cols[3]:
+            pair("Conditions Reused:", "Conditions Reused")
+
+        st.markdown('<div class="lcd-section-title">Project Sustainability Objectives</div>', unsafe_allow_html=True)
+        sustain_cols = st.columns(2, gap="small")
+        with sustain_cols[0]:
+            pair("Certification Req'd.:", "Certification Req'd.")
+        with sustain_cols[1]:
+            pair("Sustainable Objective:", "Sustainable Objective")
+
+        st.markdown('<div class="lcd-section-title">Budget (Cost of the Work)</div>', unsafe_allow_html=True)
+        budget_cols = st.columns(5, gap="small")
+        for column, (label, field) in zip(
+            budget_cols,
+            [
+                ("Original COW:", "Original COW"),
+                ("DD COW:", "DD COW"),
+                ("CD COW:", "CD COW"),
+                ("Bid Amount:", "Bid Amount"),
+                ("Final COW:", "Final COW"),
+            ],
+        ):
+            with column:
+                pair(label, field)
+
+        st.markdown('<div class="lcd-section-title">Project Schedule Information (Initial)</div>', unsafe_allow_html=True)
+        schedule_cols = st.columns(5, gap="small")
+        for column, (label, field) in zip(
+            schedule_cols,
+            [
+                ("Project Start Date:", "Project Start Date"),
+                ("Design Start Date:", "Design Start Date"),
+                ("Design Completion Date:", "Design Completion Date"),
+                ("Construction Start Date:", "Construction Start Date"),
+                ("Substantial Completion Date:", "Substantial Completion Date"),
+            ],
+        ):
+            with column:
+                pair(label, field, key_suffix="schedule")
+
+    with right:
+        st.markdown('<div class="lcd-section-title">Phases</div>', unsafe_allow_html=True)
+        for phase in [
+            "Project Initiation",
+            "FS - Kick-off",
+            "Schematic Design",
+            "Design Development",
+            "Construction Documents",
+            "Bidding/Permitting",
+            "Construction Administration",
+            "Project Close-out",
+            "Post Occupancy",
+            "Warranty Period",
+        ]:
+            st.markdown(f'<div class="lcd-phase-box">{html.escape(phase)}</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="lcd-section-title">Owner\'s Consultants and Contractors</div>', unsafe_allow_html=True)
+        pair("Owner-retained:", "Owner-retained Consultants")
+
+    st.markdown(
+        '<div class="lcd-save-strip">Draft entry mode: values are held in this dashboard session. Next build step is Save LCD Draft / Apply Dialogue Update into the same record path.</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def render_project_scope(payload: dict[str, Any]) -> None:
     record = origin(payload)
     st.subheader("Project Scope")
@@ -942,25 +1366,47 @@ def render_contracts(payload: dict[str, Any]) -> None:
 def render_metrics(payload: dict[str, Any]) -> None:
     st.subheader("Metrics")
     st.caption(
-        "Full detail and logging entry point for Project Tracking Report metrics. "
-        "Project Home can later surface these as gauge summaries."
+        "Source-backed Metrics page for SOW KPIs, required reporting metrics, and Project Tracking Report logging. "
+        "Gauge visuals will come later as rollups derived from this required metric set."
     )
 
     cols = st.columns(4)
-    cols[0].metric("Gauge Families", len(METRIC_GAUGE_ROWS))
-    cols[1].metric("Logging Sections", len(METRIC_LOGGING_SECTIONS))
-    cols[2].metric("Logging Fields", sum(len(rows) for rows in METRIC_LOGGING_SECTIONS.values()))
-    cols[3].metric("Contract-Backed", "Yes")
+    cols[0].metric("SOW KPI Categories", len(SOW_KPI_ROWS))
+    cols[1].metric("Required Metrics", len(REQUIRED_METRIC_ROWS))
+    cols[2].metric("Tracking Fields", sum(len(rows) for rows in METRIC_LOGGING_SECTIONS.values()))
+    cols[3].metric("Gauge Families Later", len(METRIC_GAUGE_ROWS))
 
-    st.subheader("Gauge Summary Inputs")
-    st.info(
-        "These are the dashboard/home-page gauge families. The detailed tables below are the source entry/logging layer."
+    st.subheader('Key Performance Indicators (“KPIs”)')
+    st.caption(
+        "Displayed in the same two-column structure used by Exhibit A Scope of Work: KPI Category and Goal. "
+        "The SOW notes these are to be finalized before contract execution and reviewed at the 6-month QBRs in Q2 and Q4."
     )
-    render_table(METRIC_GAUGE_ROWS, columns=("Gauge", "Primary Inputs", "Contract / SOW Basis"))
+    st.dataframe(
+        pd.DataFrame(SOW_KPI_ROWS, columns=["KPI Category", "Goal"]).astype(str),
+        width="stretch",
+        hide_index=True,
+    )
+
+    st.subheader("Required Metrics List")
+    st.caption(
+        "All required metrics currently identified from SOW Reporting 1.0, Project Tracking Reporting, Design Fee Reporting, "
+        "Business Reviews, and the Project Tracking Report template."
+    )
+    st.dataframe(
+        pd.DataFrame(REQUIRED_METRIC_ROWS, columns=["Required Report Area", "Required Metric", "Source / Cadence"]).astype(str),
+        width="stretch",
+        hide_index=True,
+    )
 
     st.subheader("Contract / Scope of Work Alignment")
     st.success("Reviewed against Exhibit A Scope of Work: these metrics are aligned with project reporting, schedule, quality, change, deficiency, and fee/revision obligations.")
     render_table(METRIC_CONTRACT_ALIGNMENT_ROWS, columns=("Metric Area", "Evidence", "Why it belongs"))
+
+    st.subheader("Future Gauge Summary Inputs")
+    st.info(
+        "These are placeholders for the future dashboard/home-page gauges. No scoring formulas or thresholds are applied yet."
+    )
+    render_table(METRIC_GAUGE_ROWS, columns=("Future Gauge", "Required Inputs", "Current Status"))
 
     st.subheader("Metric Logging Entry Point")
     st.caption("Use these sections as the detailed logging surface; later the logs can roll up to project-home gauges.")
@@ -1046,6 +1492,8 @@ def render_dashboard() -> None:
 
     if choice == "Home":
         render_home(payload)
+    elif choice == "LCD Manual Entry":
+        render_lcd_manual_entry(payload)
     elif choice == "Project Scope":
         render_project_scope(payload)
     elif choice == "Project Budget":

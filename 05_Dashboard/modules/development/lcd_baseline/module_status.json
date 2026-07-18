@@ -1,0 +1,10 @@
+{
+  "module_id": "lcd_baseline",
+  "status": "development",
+  "dashboard_types": [
+    "project"
+  ],
+  "promotion_state": "not_approved",
+  "requires_user_approval": true,
+  "notes": "Prototype currently supports Excel-style manual entry and controlled pick lists; persistence is not yet implemented."
+}
