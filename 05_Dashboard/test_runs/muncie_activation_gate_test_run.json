@@ -1,0 +1,78 @@
+{
+  "project": "Muncie Family Physicians / IN125",
+  "use_case": "UC-001 Incomplete Fee Proposal",
+  "test_run_status": "sample_dashboard_test_run",
+  "evaluation_date": "2026-07-15",
+  "expected_startup_state": "startup_blocked",
+  "project_info": {
+    "project_name": "Muncie Family Physicians",
+    "project_number": "IN125",
+    "client": "UHG",
+    "location": "Muncie, Indiana / incomplete physical address",
+    "request_type": "Grace-only architectural fee proposal / small project fee exercise",
+    "workflow_position": "post_proposal_scope_negotiation",
+    "contract_path": "UHG MSA / Service Order framework; no Service Order issued for this fee exercise",
+    "proposed_fee": "$27,950.00",
+    "contract_comparison_fee": "$34,760.00",
+    "current_authority_posture": "acknowledgement/coordination only; no scope or fee commitment without Clinical/PIC approval"
+  },
+  "decision_records": {},
+  "gates": {
+    "A-GATE-001": {
+      "status": "confirmed",
+      "evidence": "Acceptance status is known as not approved / pending post-proposal scope negotiation. UHG requested call after internal review to discuss reduced AOR, scope, schedule, and fee."
+    },
+    "A-GATE-002": {
+      "status": "blocked",
+      "evidence": "Authority is not confirmed. User is UHG Admin Team, not Clinical Projects team or PIC, and cannot commit scope or fee reduction without approval."
+    },
+    "A-GATE-003": {
+      "status": "blocked",
+      "evidence": "No NTP, Service Order, PO, or equivalent authorization confirmed. Earlier PM clarification said no Service Order today."
+    },
+    "A-GATE-004": {
+      "status": "blocked",
+      "evidence": "Accountable Clinical/PIC ownership for startup/reduced-AOR response is not confirmed in the preserved records."
+    },
+    "A-GATE-005": {
+      "status": "blocked",
+      "evidence": "Project number / S.O. number remains missing in the Muncie Service Order Preparation Record."
+    },
+    "A-GATE-006": {
+      "status": "blocked",
+      "evidence": "Scope baseline is not startup-sufficient. UHG is considering reduced AOR/site due diligence/direct-to-90% CD and scope definition remains unresolved."
+    },
+    "A-GATE-007": {
+      "status": "blocked",
+      "evidence": "Fee basis is not approved for startup. Client-sent artifact shows $27,950 proposed vs $34,760 contract comparison, but UHG requested review of scope and fees."
+    },
+    "A-GATE-008": {
+      "status": "blocked",
+      "evidence": "Schedule baseline is not confirmed for startup. Client-sent PDF has proposed schedule notes, but reduced-AOR path may change schedule and direct-to-90% risks."
+    },
+    "A-GATE-009": {
+      "status": "confirmed",
+      "evidence": "Contract path context is identified as UHG MSA / Service Order framework, with no Service Order issued for the fee exercise yet."
+    },
+    "A-GATE-010": {
+      "status": "blocked",
+      "evidence": "Insurance/risk requirement relevance has not been reviewed for the reduced-AOR/direct-to-90% startup condition."
+    },
+    "A-GATE-011": {
+      "status": "blocked",
+      "evidence": "Consultant/additional-service triggers are acknowledged but unresolved: MEP likely later, x-ray/security/power/data/vendor dependencies remain undefined."
+    },
+    "A-GATE-012": {
+      "status": "blocked",
+      "evidence": "Billing path is not startup-viable/confirmed because no approval, Service Order, PO, or billing authorization path is recorded."
+    },
+    "A-GATE-013": {
+      "status": "confirmed",
+      "evidence": "All fourteen gates have been evaluated in this test run."
+    },
+    "A-GATE-014": {
+      "status": "blocked",
+      "evidence": "Approval-path governance is not satisfied for substantive scope/fee commitment. Pending constitutional item remains open."
+    }
+  }
+}

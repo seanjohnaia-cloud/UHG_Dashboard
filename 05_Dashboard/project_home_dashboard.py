@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import html
+import base64
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,7 @@ import streamlit as st
 
 APP_DIR = Path(__file__).resolve().parent
 FAIRVIEW_FIXTURE_PATH = APP_DIR / "test_runs" / "fairview_project_home_fixture.json"
+GRACE_LOGO_PATH = APP_DIR / "assets" / "grace_stacked_logo.jpg"
 
 NAV_ITEMS = [
     "Home",
@@ -318,6 +320,11 @@ def load_fixture(path: Path = FAIRVIEW_FIXTURE_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def image_data_uri(path: Path) -> str:
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:image/jpeg;base64,{encoded}"
+
+
 def origin(payload: dict[str, Any]) -> OriginRecord:
     return payload["origin_record"]
 
@@ -495,19 +502,20 @@ def render_header(payload: dict[str, Any], page: str) -> None:
         <style>
             .stApp {{background: #d9d9d9;}}
             [data-testid="stHeader"] {{background: #8bd34b !important;}}
-            .block-container {{padding: 12.25rem 14.25rem 1rem 1rem;}}
+            .block-container {{padding: 16rem 14.25rem 1rem 1rem;}}
             [data-testid="stDeployButton"] {{display: none;}}
             [data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] {{display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 100000 !important;}}
             [data-testid="stSidebar"] {{z-index: 99999 !important; width: 13rem !important; min-width: 13rem !important; background: #08b5dc !important;}}
             [data-testid="stSidebar"] > div {{width: 13rem !important; min-width: 13rem !important;}}
             [data-testid="stSidebar"] section, [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {{background: #08b5dc !important;}}
+            [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {{gap: .65rem;}}
             [data-testid="stSidebar"] label {{font-size: 1.05rem !important; color: #111827 !important;}}
             [data-testid="stSidebar"] label:has(input:checked) {{background: #020617 !important; color: white !important; margin-left: -1rem; margin-right: -1rem; padding: .55rem 1rem;}}
             [data-testid="stSidebar"] label:has(input:checked) * {{color: white !important;}}
-            .pii-green-cap {{position: fixed; top: 0; left: 0; right: 0; height: 11.25rem; background: #8bd34b; z-index: 99990;}}
-            .pii-top-band {{position: fixed; top: 2.35rem; left: 13rem; right: 13rem; z-index: 99991; background: #8bd34b; border: 0; border-radius: 0; padding: .45rem .65rem .5rem .65rem; margin: 0;}}
-            .pii-band-grid {{display: grid; grid-template-columns: 9rem 1fr; gap: .55rem; align-items: stretch;}}
-            .pii-band-logo {{border-right: 1px solid rgba(2, 6, 23, .28); display: flex; flex-direction: column; justify-content: center; min-height: 6.8rem; padding-right: .55rem;}}
+            .pii-green-cap {{position: fixed; top: 0; left: 0; right: 0; height: 15.25rem; background: #8bd34b; z-index: 99990;}}
+            .pii-top-band {{position: fixed; top: 3.6rem; left: 13rem; right: 13rem; z-index: 99991; background: #8bd34b; border: 0; border-radius: 0; padding: .45rem .65rem .5rem .65rem; margin: 0;}}
+            .pii-band-grid {{display: grid; grid-template-columns: 1fr; gap: .55rem; align-items: stretch;}}
+            .pii-band-logo {{display: none;}}
             .pii-band-logo-main {{font-size: 1.45rem; font-weight: 800; line-height: 1.45rem; color: #102a43;}}
             .pii-band-logo-sub {{font-size: .68rem; color: #486581; margin-top: .15rem;}}
             .pii-sheet-title {{font-size: 1.25rem; font-weight: 800; line-height: 1.35rem; margin: 0; color: #102a43;}}
@@ -519,17 +527,24 @@ def render_header(payload: dict[str, Any], page: str) -> None:
             .pii-band-label {{font-size: .53rem; line-height: .62rem; color: rgba(2, 6, 23, .7); text-transform: uppercase; letter-spacing: .035em;}}
             .pii-band-value {{font-size: .73rem; line-height: .85rem; font-weight: 650; color: #102a43;}}
             .pii-chipline {{font-size: .64rem; color: rgba(2, 6, 23, .78); margin-top: .16rem;}}
-            .grace-logo-box {{display: none;}}
-            .pii-right-rail {{position: fixed; top: 11.25rem; right: 0; width: 13rem; height: calc(100vh - 11.25rem); overflow-y: auto; z-index: 99998; background: #08b5dc; border-left: 1px solid rgba(0, 0, 0, .18); padding: 2.4rem 1rem 1rem 1rem; font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #020617;}}
+            .grace-logo-box {{height: 15.25rem; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(2, 6, 23, .35); margin: 0 0 1.4rem 0; padding: 1rem 0;}}
+            .grace-logo-img {{display: block; width: 8.5rem; max-width: 90%; height: auto; object-fit: contain; mix-blend-mode: multiply;}}
+            .pii-sidebar-loaded {{border-bottom: 1px solid rgba(2, 6, 23, .35); padding-bottom: 1rem; margin-bottom: 1.1rem; color: #111827;}}
+            .pii-sidebar-loaded-title {{font-size: .98rem; line-height: 1.55rem;}}
+            .pii-sidebar-loaded-caption {{font-size: .82rem; line-height: 1.15rem; color: rgba(2, 6, 23, .65); margin-top: .8rem;}}
+            .pii-right-rail {{position: fixed; top: 15.25rem; right: 0; width: 13rem; height: calc(100vh - 15.25rem); overflow-y: auto; z-index: 99998; background: #08b5dc; border-left: 1px solid rgba(0, 0, 0, .18); border-top: 1px solid rgba(2, 6, 23, .35); padding: 2.4rem 1rem 1rem 1rem; font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #020617;}}
             .pii-right-title {{font-size: 1.55rem; line-height: 1.9rem; font-weight: 500; color: #020617; margin: 0 0 2rem 0;}}
             .pii-right-caption {{font-size: .95rem; line-height: 1.25rem; color: rgba(2, 6, 23, .72); margin-bottom: 1rem;}}
-            .pii-pending-item {{border-top: 1px solid rgba(2, 6, 23, .2); padding: .65rem 0;}}
-            .pii-pending-item summary {{cursor: pointer; font-size: .98rem; font-weight: 600; color: #020617; line-height: 1.25rem; list-style-position: outside;}}
+            .pii-pending-item {{border-top: 1px solid rgba(2, 6, 23, .2); padding: .65rem 0 .65rem 1.65rem; position: relative;}}
+            .pii-pending-item::before {{content: ""; position: absolute; left: .15rem; top: .86rem; width: .9rem; height: .9rem; border-radius: 50%; background: #f4f7fb; border: 1px solid rgba(2, 6, 23, .28);}}
+            .pii-pending-item[open]::before {{background: #ef4444; box-shadow: inset 0 0 0 .28rem #f4f7fb;}}
+            .pii-pending-item summary {{cursor: pointer; font-size: .98rem; font-weight: 600; color: #020617; line-height: 1.25rem; list-style: none;}}
+            .pii-pending-item summary::-webkit-details-marker {{display: none;}}
             .pii-pending-detail {{font-size: .86rem; line-height: 1.18rem; color: rgba(2, 6, 23, .72); margin: .42rem 0 0 .15rem;}}
-            .pii-side-metrics {{position: absolute; left: 1rem; right: 1rem; bottom: 1.1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; align-items: end;}}
-            .pii-side-metric-label {{font-size: 1.1rem; color: #020617; margin-bottom: .4rem;}}
-            .pii-gauge {{width: 4.45rem; height: 4.45rem; border-radius: 50%; background: #1d6982; border: .35rem solid #102a43;}}
-            .pii-sidebar-metric {{position: fixed; left: 1rem; bottom: 1.1rem; z-index: 100000;}}
+            .pii-side-metrics {{position: relative; margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; align-items: end;}}
+            .pii-side-metric-label {{font-size: 1.15rem; color: #020617; margin-bottom: .45rem;}}
+            .pii-gauge {{width: 5.35rem; height: 5.35rem; border-radius: 50%; background: #1d6982; border: .42rem solid #102a43;}}
+            .pii-sidebar-metric {{position: fixed; left: 1.1rem; bottom: 1rem; z-index: 100000;}}
             .pii-terminal-screen {{background: #000; border: .18rem solid #14532d; border-radius: 3.2rem; min-height: 68vh; padding: 2.3rem 2.65rem; box-shadow: inset 0 0 34px rgba(56, 189, 248, .1); color: #38bdf8; font-family: "Cascadia Code", "Consolas", "Courier New", monospace;}}
             .pii-terminal-title {{font-size: 1.15rem; letter-spacing: .08em; text-transform: uppercase; color: #7dd3fc; margin-bottom: 1.15rem;}}
             .pii-terminal-prompt {{font-size: 1.18rem; line-height: 1.62rem; color: #38bdf8; margin-bottom: 1.35rem;}}
@@ -990,18 +1005,25 @@ def render_service_order_review(payload: dict[str, Any]) -> None:
 
 
 def render_sidebar(payload: dict[str, Any]) -> str:
+    logo_uri = image_data_uri(GRACE_LOGO_PATH)
     with st.sidebar:
         st.markdown(
-            """
+            f"""
             <div class="grace-logo-box">
-                <div class="grace-logo-text">Grace</div>
-                <div class="grace-logo-caption">Logo placeholder</div>
+                <img class="grace-logo-img" src="{logo_uri}" alt="Grace Design Studios logo" />
             </div>
             """,
             unsafe_allow_html=True,
         )
-        st.write(f"Loaded: {payload['project']}")
-        st.caption("Fixture: Fairview fictional PDD")
+        st.markdown(
+            f"""
+            <div class="pii-sidebar-loaded">
+                <div class="pii-sidebar-loaded-title">Loaded: {html.escape(payload['project'])}</div>
+                <div class="pii-sidebar-loaded-caption">Fixture: Fairview fictional PDD</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         choice = st.radio("LCD / Pii Navigation", NAV_ITEMS, label_visibility="visible")
         st.markdown(
             """

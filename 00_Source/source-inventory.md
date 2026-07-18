@@ -100,6 +100,17 @@ C:\Obsidian\My Projects\DIF_OS_Vault\V_UHG_Data_Core
 - Status: preserved and text-extracted for review
 - Contamination note: source was copied into this vault; DIF source was not modified.
 
+### SRC-FAIRVIEW-PDD-FICTIONAL
+
+- Title: Project Definition Document (PDD) — Fairview Urgent Care
+- Source type: fictional PDD / design walkthrough source artifact
+- Provided via: Hermes chat on 2026-07-15
+- Preserved path: `00_Source/Fairview/PDD/Fairview Urgent Care - Project Definition Document.md`
+- Provenance: `00_Source/Fairview/PDD/provenance.md`
+- Extracted fixture: `05_Dashboard/test_runs/fairview_project_home_fixture.json`
+- Status: preserved source artifact; extracted draft fixture; not canon by itself
+- Use: Project Home / Pii mostly-complete fictional specimen; LCD-W Section 0 / PAC origin absorption test
+
 ## Candidate External Sources — Read-Only Inventory Only
 
 Located under:
