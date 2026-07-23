@@ -31,6 +31,7 @@ Pages listed in this index are classified for context loading per `decisions/202
 
 - `raw/2026-07-22-session-capture-context-architecture-multiagent-control-system.md` — direct session record: tiered-context architecture, multi-agent context partitioning, human-concurrence gate, gate-health metrics, human-to-human reality audit, and the assembled control system. Append-only.
 - `raw/2026-07-22-chat-archive-context-architecture-session.md` — turn-by-turn chat archive of the same session (user turns verbatim; AI turns condensed and marked). Companion shape to the structured capture above. Append-only.
+- `raw/2026-07-22-session-addendum-operational-layer-questions-resolved.md` — post-enactment docket dialogue: function strip resolved as Extract/Absorb/Elevate/Archive (Quarantine struck, no source backing), Elevate≠approval, `ledger/` naming with definition, hybrid format. Append-only.
 
 ## Synthesis pages in use
 
@@ -49,7 +50,7 @@ Pages listed in this index are classified for context loading per `decisions/202
 
 ## Decision records
 
-- `decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md` — **candidate, not accepted**: new operational data layer distinct from synthesis. Blocked on two open questions (approval-gate/Elevate mechanics; Extract/Absorb/Elevate/Quarantine behavior).
+- `decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md` — **candidate, unblocked, ready for ratification**: `ledger/` layer (current operational truth with lineage; permanent home of the state tier). All design questions resolved in-session 2026-07-22: field-level three-tier schema, Elevate=proposal/concurrence=approval, hybrid format, `ledger/` naming, function strip Extract/Absorb/Elevate/Archive.
 - `decisions/2026-07-22-resident-context-concurrence-rule.md` — **accepted**.
 - `decisions/2026-07-22-tiered-context-control-system-pattern.md` — **accepted (narrowed)**.
 - `decisions/2026-07-22-ratify-exchange-development-extraction.md` — **accepted**.

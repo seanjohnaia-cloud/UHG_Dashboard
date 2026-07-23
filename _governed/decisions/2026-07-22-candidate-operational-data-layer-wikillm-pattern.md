@@ -6,6 +6,7 @@ source:
   - _governed/synthesis/concepts/pii-console-team-side-architecture.md
   - C:\Obsidian\My Projects\PI v1\AGENTS.md (WikiLLM Rules, Layer Model)
   - C:\Obsidian\My Projects\PI v1\_governed\synthesis\concepts\governed-wikillm.md
+  - _governed/raw/2026-07-22-session-addendum-operational-layer-questions-resolved.md (Q2/Q3/Q4 + function-strip resolutions)
 decided_by: null
 decision_date: null
 admissibility: initiating
@@ -21,7 +22,7 @@ supersedes: null
 
 ## What this decision would do
 
-Add a new layer to this project's `_governed/` structure — tentatively named `operations/` — that holds the **live, canonical, per-project operational data** that Pii Console's modules read and write (Budget figures, Schedule dates, Compensation terms, Consultant assignments, etc.). This layer would be:
+Add a new layer to this project's `_governed/` structure — named **`ledger/`** (resolved 2026-07-22, see Q4 below) — that holds the **live, canonical, per-project operational data** that Pii Console's modules read and write (Budget figures, Schedule dates, Compensation terms, Consultant assignments, etc.). This layer would be:
 
 - **Structured and interlinked like WikiLLM** — relationship-aware, cross-referenced, so Pii can trace which fields in which modules depend on which other fields (the data-dependency requirement established in the architecture synthesis above).
 - **NOT part of `_governed/synthesis/`.** Synthesis stays exactly as constitutionally defined: non-authoritative, `admissibility: initiating` always, safe for interpretation/commentary/uncertainty. This new layer is explicitly not that — it needs to be able to reach a `supporting` admissibility state once approved, because modules operationally depend on its values being trustworthy, not merely "someone's synthesis of the truth."
@@ -51,15 +52,28 @@ Adding a new layer changes the `_governed/` layer model itself (per this project
    - **Per-project instance data** — actual values, field-level tracked as resolved above.
 
    Field-level dependency tracking applies to whichever fields exist on a given project; *which* fields exist is core + overlay, not one fixed catalog. When work on UHG (or any engagement) reveals a useful field, it must be triaged — generic Pii pattern (candidate for promotion to core) vs. contract-specific (stays in that client's overlay) — consistent with the established client-overlay boundary rule in the parent PI environment.
-2. **Approval gate mechanics.** Does "Elevate" (from the Extract/Absorb/Elevate/Quarantine function strip) correspond to the approval event that makes a change visible to dependent modules? Or is there a separate approval step distinct from that UI action? **Still open** — asked directly in-session (2026-07-22) and not yet answered; do not assume an answer. This blocks resolving what Extract/Absorb/Elevate/Quarantine concretely do (see below) and should be resolved together with it.
-3. **Format.** Markdown-with-frontmatter (matching the rest of `_governed/`, human-readable, git-diffable) vs. structured data (JSON/YAML) optimized for programmatic dependency resolution — or a hybrid (structured data as the operational store, markdown as a human-readable rendering/audit trail of it).
-4. **Naming.** `operations/` risks collision with the "Operations" term already used for the process-centric Contract→Operations→Institutional Learning stack (Exchange 005). Consider alternatives: `state/`, `ledger/`, `live/`, `working-data/` — something that reads clearly as "the mutable operational truth," distinct from the process-taxonomy sense of "Operations."
+2. ~~**Approval gate mechanics.**~~ **RESOLVED 2026-07-22 (in-session, pending formal ratification; source: raw addendum of this date):** Elevate is **not** the approval event. Elevate is a PM's direct proposal intake — it files a proposed improvement into `memory/pending/`. Approval is the separate human concurrence gate, now enacted as `decisions/2026-07-22-resident-context-concurrence-rule.md`. Proposal and approval are deliberately never the same action: collapsing them would fold the single-pen/human-gate structure into one click. A change becomes visible to dependent modules only on concurrence.
+3. ~~**Format.**~~ **RESOLVED 2026-07-22 (in-session, pending formal ratification):** Hybrid — structured YAML frontmatter per field record (machine-resolvable dependency/provenance/state data, required for "Pii understands the relationships") with a markdown body carrying human-readable context and audit trail. Matches the rest of `_governed/` for git-diffability and human review while supporting programmatic dependency resolution.
+4. ~~**Naming.**~~ **RESOLVED 2026-07-22 (in-session, pending formal ratification):** **`ledger/`** — accepted by the decider conditional on a clear definition and context, which is hereby recorded:
+
+   **Definition:** The ledger is the project's **current operational truth with lineage** — the single place where live, canonical, per-project field values (budget figures, schedule dates, compensation terms, consultant assignments, PAC/LCD-W field instances) reside. Like an accounting ledger: entries are corrected by new lineaged entries, never by silent erasure (Authority Rule 6 supersession applies at field grain); the current balance is always readable; the history of every value is always reconstructible.
+
+   **Context / disambiguation:** `ledger/` is deliberately NOT named "operations" — "Operations" in this project refers to the process-centric Contract→Operations→Institutional Learning stack (Exchange 005 of the Instance 1 extraction), a process taxonomy, not a data store. The ledger relates to the other layers as: `raw/` is what was received (append-only evidence); `synthesis/` is what we think it means (non-authoritative); `decisions/` is what was ruled (authority); **`ledger/` is what currently is** (mutable-with-approval operational state, approvable to `supporting` admissibility). In tiered-context terms (per the accepted control-system decision of this date), the ledger is the permanent home of the **state tier**.
 5. **Admissibility lifecycle.** What specifically triggers a field moving from `unverified`/pending to `verified`/`supporting` — human sign-off equivalent to existing decision-record ratification, or a lighter per-field approval suited to high-frequency data entry (e.g. a PM approving a schedule date) that shouldn't require full decision-record ceremony for every field? Likely the same answer as #2 above.
 
-## Still open: what do Extract / Absorb / Elevate / Quarantine concretely do?
+## RESOLVED 2026-07-22: the function strip is Extract / Absorb / Elevate / Archive
 
-Asked directly in-session (2026-07-22); not yet answered. This is the other blocking question alongside #2 above — both concern what actually happens to a field's data at each step of that function strip (does clicking Elevate change a field's admissibility/visibility state? does Extract pull a value from `raw/`? does Quarantine hold a field's value back from propagation?). No behavior should be assumed or implemented for these four functions until this is answered.
+Answered in-session by the decider (source: raw addendum of this date); pending formal ratification with the rest of this record.
+
+- **Extract** — gleans information from pasted chats or artifacts as topics/major concepts *with context*. Governed mapping: produces preservation records (`raw/` → `extractions/`).
+- **Absorb** — receives an artifact created **outside** the framework environment. Admission, not endorsement: the artifact lands in `raw/` with provenance disclosing external origin, then its data must be extracted and sorted/discussed (Extract + triage dialogue) before any of it reaches ledger or synthesis standing.
+- **Elevate** — a PM's direct option to propose an improvement to the system. Files into `memory/pending/`; approval remains the separate concurrence gate (see resolved Q2).
+- **Archive** — records dialogue as close to word-for-word as achievable, each exchange from both standpoints, human and AI. Governed mapping: append-only chat-archive records in `raw/` (first specimens: the 2026-07-22 chat archive and session addendum).
+
+**Quarantine is struck.** The decider does not know what it is; it entered the earlier session's record without source backing — a synthesis-drift catch, preserved here deliberately as evidence that the record-vs-reality check works (the correspondence failure mode identified in the control-system decision of this date, caught at the gate before any audit function exists). If a quarantine-like hold state ("admitted but not yet trustworthy; withhold from propagation") is ever wanted, it is already expressible through admissibility/verification states and should be proposed on its own merits, not retained because a UI strip once used the word.
 
 ## Standing of this record
 
 Candidate. Not accepted, not acted on. Requires explicit human decision (`decided_by`, `decision_date`, `verification.status: verified`) before any implementation work creates the layer or before `AGENTS.md`/`index.md` are amended to reflect it.
+
+**Status note (2026-07-22, post-docket):** All five numbered design questions and the function-strip question are now resolved in-session (Q1 field-level three-tier schema; Q2 Elevate≠approval; Q3 hybrid format; Q4 `ledger/` with definition; Q5 folded into Q2's concurrence-gate answer — per-field approval IS the gate event, with formal decision-record ceremony reserved for schema/structure changes rather than routine field concurrence). **Nothing blocks acceptance.** This record is ready for ratification at the next human review window.
