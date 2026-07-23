@@ -1,0 +1,125 @@
+{
+  "schema": "pii-team-dashboard.dependency-edges.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "Edges represent data dependency and propagation requirements, not only visual proximity. If an approved underlying field changes, all dependent modules must reflect the same current value.",
+  "state_propagation_posture": "Propagate value plus standing: source/evidence basis, field truth state, scoped use, blocking effect, and authority requirement. Never propagate a naked value as project truth.",
+  "edges": [
+    {
+      "id": "pac_origin_to_activation",
+      "from": "project_origin",
+      "to": "activation_gates",
+      "relationship": "startup_sufficiency_dependency",
+      "shared_fields": ["acceptance_status", "authorization_confirmation", "scope_clarity_status", "schedule_confidence_status", "billing_schedule"],
+      "propagation_rule": "Activation reads PAC origin and validation fields; activation status must not overwrite PAC origin truth."
+    },
+    {
+      "id": "pac_origin_to_scope",
+      "from": "project_origin",
+      "to": "scope",
+      "relationship": "origin_population_then_validation",
+      "shared_fields": ["project_description", "estimated_gsf", "basic_services", "additional_services", "scope_clarity_status"],
+      "propagation_rule": "Scope begins from PAC origin data, then records later clarification as validation/operational truth downstream."
+    },
+    {
+      "id": "scope_to_consultants",
+      "from": "scope",
+      "to": "consultants",
+      "relationship": "scope_signal_triggers_coordination",
+      "shared_fields": ["additional_services", "programming", "record_drawings", "specialty_scope_signals"],
+      "propagation_rule": "Consultant needs are triggered by scope/services signals and must remain visible until assigned or explicitly ruled out."
+    },
+    {
+      "id": "scope_to_contracts",
+      "from": "scope",
+      "to": "contracts",
+      "relationship": "scope_contract_alignment",
+      "shared_fields": ["project_description", "basic_services", "additional_services", "service_order_scope"],
+      "propagation_rule": "Contract view must expose mismatches between operational scope and authorized/contractual scope."
+    },
+    {
+      "id": "contracts_to_activation",
+      "from": "contracts",
+      "to": "activation_gates",
+      "relationship": "authorization_control",
+      "shared_fields": ["form_of_agreement", "acceptance_status", "authorization_confirmation", "insurance_requirements"],
+      "propagation_rule": "Activation is blocked or qualified by unknown, pending, or misaligned authorization/contract data."
+    },
+    {
+      "id": "compensation_to_budget",
+      "from": "compensation",
+      "to": "budget",
+      "relationship": "fee_transformation_dependency",
+      "shared_fields": ["professional_fee", "fee_breakdown_by_phase", "reimbursable_expenses", "additional_services"],
+      "propagation_rule": "Budget transforms approved fee/compensation facts but does not rewrite compensation origin data."
+    },
+    {
+      "id": "contracts_to_compensation",
+      "from": "contracts",
+      "to": "compensation",
+      "relationship": "contractual_fee_authority",
+      "shared_fields": ["professional_fee", "fee_breakdown_by_phase", "billing_schedule", "service_order_terms"],
+      "propagation_rule": "Compensation must indicate whether fee basis is proposal-origin, contract-authorized, UHG Service Order-derived, or unresolved."
+    },
+    {
+      "id": "schedule_to_contracts",
+      "from": "schedule",
+      "to": "contracts",
+      "relationship": "milestone_contract_alignment",
+      "shared_fields": ["project_schedule_by_phase", "milestones", "schedule_confidence_status", "contractual_dates"],
+      "propagation_rule": "Contract view must expose whether dates are contractual, illustrative, preliminary, owner-dependent, or incomplete."
+    },
+    {
+      "id": "schedule_to_budget",
+      "from": "schedule",
+      "to": "budget",
+      "relationship": "phase_cashflow_dependency",
+      "shared_fields": ["project_schedule_by_phase", "fee_breakdown_by_phase", "billing_schedule", "milestones"],
+      "propagation_rule": "Budget/cashflow views depend on schedule phase/milestone structure and must mark low-confidence schedule inputs."
+    },
+    {
+      "id": "lcd_w_to_scope",
+      "from": "lcd_w_analysis",
+      "to": "scope",
+      "relationship": "project_analysis_required_fields",
+      "shared_fields": ["lcd_required_fields", "uhg_required_fields", "project_analysis_fields"],
+      "propagation_rule": "UHG-specific required LCD/LCW fields may add contractual analysis requirements without redefining PAC as UHG-specific."
+    },
+    {
+      "id": "lcd_w_to_contracts",
+      "from": "lcd_w_analysis",
+      "to": "contracts",
+      "relationship": "uhg_contractual_overlay",
+      "shared_fields": ["uhg_required_fields", "service_order_terms", "schedule_e_f_logic", "workflow_rules"],
+      "propagation_rule": "For UHG, contractually binding LCD/LCW workflow fields must be visible in contracts/authorization without becoming universal Grace PAC fields."
+    },
+    {
+      "id": "team_to_consultants",
+      "from": "team_responsibility",
+      "to": "consultants",
+      "relationship": "assignment_coordination_dependency",
+      "shared_fields": ["consultant_roles", "responsibility_assignments", "owner_contacts", "proposal_requests"],
+      "propagation_rule": "Consultant coordination depends on explicit responsibility assignment; unassigned triggers feed risk/gaps."
+    },
+    {
+      "id": "all_modules_to_risk_gaps",
+      "from": "*",
+      "to": "risk_gaps",
+      "relationship": "gap_visibility_and_archive_routing",
+      "shared_fields": ["missing_fields", "validation_required_fields", "conflicts", "override_records", "archived_source_records"],
+      "propagation_rule": "Any module may surface a gap, conflict, uncertainty, override, or archive/source-preservation need; risk/gaps is the visible worklist, not a hidden error state."
+    },
+    {
+      "id": "activation_to_system_setup",
+      "from": "activation_gates",
+      "to": "system_setup",
+      "relationship": "startup_readiness_dependency",
+      "shared_fields": ["project_number", "activation_identifier", "authorization_confirmation", "setup_blockers"],
+      "propagation_rule": "System setup proceeds only when activation conditions are satisfied or an explicit override records accepted coordination risk."
+    }
+  ]
+}

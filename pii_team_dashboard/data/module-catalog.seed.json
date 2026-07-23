@@ -1,0 +1,122 @@
+{
+  "schema": "pii-team-dashboard.module-catalog.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "Modules are stable team-side lenses onto shared project data. They do not own independent copies of project truth.",
+  "field_truth_states": ["provided", "extracted", "validated", "assumed", "missing", "conflict", "deferred", "unknown", "not_required"],
+  "state_posture": "Dashboard status is a view of governed/project state, not authority. Field truth state feeds readiness/output/routing state and must remain visible.",
+  "modules": [
+    {
+      "id": "project_origin",
+      "label": "Project Origin / PAC",
+      "category": "origin",
+      "primary_source_layer": "pac_core",
+      "description": "Known, approved, and structurally defined project-start origin data derived from PAC.",
+      "canonical_inputs": ["proposal_date", "client_entity", "project_name", "project_location", "project_description", "professional_fee", "acceptance_status"],
+      "operator_questions": ["What was known at origin?", "What remains validation-required before startup?", "What cannot be overwritten by later operations?"]
+    },
+    {
+      "id": "activation_gates",
+      "label": "Activation Gates",
+      "category": "startup_control",
+      "primary_source_layer": "pac_core",
+      "description": "Blocking-by-default startup sufficiency checks before project activation proceeds.",
+      "canonical_inputs": ["acceptance_status", "authorization_confirmation", "scope_clarity_status", "schedule_confidence_status", "billing_schedule"],
+      "operator_questions": ["Can this project start responsibly?", "Which required startup facts are still gaps?", "Which overrides create coordination risk?"]
+    },
+    {
+      "id": "scope",
+      "label": "Scope / Project Definition",
+      "category": "operations",
+      "primary_source_layer": "pac_core_plus_overlay",
+      "description": "Operational view of scope, project description, square footage, services, exclusions, and later scope clarification.",
+      "canonical_inputs": ["project_description", "estimated_gsf", "basic_services", "additional_services", "scope_clarity_status"],
+      "operator_questions": ["What is actually included?", "Where is the proposal narrative incomplete or misaligned?", "What scope signals trigger consultant or additional-service routing?"]
+    },
+    {
+      "id": "contracts",
+      "label": "Contracts / Authorization",
+      "category": "contractual_control",
+      "primary_source_layer": "pac_core_plus_uhg_overlay",
+      "description": "Agreement path, acceptance, authorization, Service Order logic, insurance, and contractual workflow constraints.",
+      "canonical_inputs": ["form_of_agreement", "acceptance_status", "authorization_confirmation", "insurance_requirements", "service_order_terms"],
+      "operator_questions": ["What authorizes the work?", "Does the contract path match the work being performed?", "Which UHG-specific contractual rules govern this project?"]
+    },
+    {
+      "id": "budget",
+      "label": "Budget / Financial Model",
+      "category": "financial_operations",
+      "primary_source_layer": "pac_transformation",
+      "description": "Transforms PAC fee and cost origin data into internal production budget and project financial controls.",
+      "canonical_inputs": ["estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "billing_schedule"],
+      "operator_questions": ["What is the approved fee basis?", "How does fee transform into production budget?", "Where does budget depend on contract or compensation data?"]
+    },
+    {
+      "id": "compensation",
+      "label": "Compensation / Fee",
+      "category": "financial_operations",
+      "primary_source_layer": "pac_core_plus_contract_overlay",
+      "description": "Professional fee, phase fee breakdown, reimbursables, additional services, and compensation assumptions.",
+      "canonical_inputs": ["professional_fee", "fee_breakdown_by_phase", "reimbursable_expenses", "additional_services"],
+      "operator_questions": ["What is Grace being paid to do?", "What fee data is origin truth vs. later transformation?", "What additional services are unresolved?"]
+    },
+    {
+      "id": "schedule",
+      "label": "Schedule / Milestones",
+      "category": "time_operations",
+      "primary_source_layer": "pac_core_plus_overlay",
+      "description": "Project schedule by phase, schedule confidence, milestones, and owner/client-dependent timing constraints.",
+      "canonical_inputs": ["project_schedule_by_phase", "schedule_confidence_status", "milestones", "owner_dependencies"],
+      "operator_questions": ["What schedule is contractual vs. illustrative?", "Which milestones drive deliverables and billing?", "Where is false precision being introduced?"]
+    },
+    {
+      "id": "team_responsibility",
+      "label": "Team + Responsibility",
+      "category": "operations",
+      "primary_source_layer": "lcw_section_b",
+      "description": "Internal, consultant, owner, and partner responsibilities that emerge after origin capture.",
+      "canonical_inputs": ["pic", "pm", "pa", "consultant_roles", "owner_contacts", "responsibility_assignments"],
+      "operator_questions": ["Who owns each required action?", "Which consultant/additional-service triggers remain unrouted?", "What responsibilities are missing or ambiguous?"]
+    },
+    {
+      "id": "consultants",
+      "label": "Consultants / Partners",
+      "category": "coordination",
+      "primary_source_layer": "lcw_section_b_plus_scope_signals",
+      "description": "Consultant needs, partner assignments, proposal requests, scope mapping, and coordination status.",
+      "canonical_inputs": ["additional_services", "programming", "record_drawings", "consultant_roles", "proposal_requests"],
+      "operator_questions": ["Which consultants are required by scope?", "Which consultant scopes are missing?", "Which assignments affect schedule, fee, or risk?"]
+    },
+    {
+      "id": "lcd_w_analysis",
+      "label": "LCD-W / Project Analysis",
+      "category": "analysis_overlay",
+      "primary_source_layer": "generic_lcd_w_or_uhg_lcd_lcw",
+      "description": "Required project-analysis fields from the generic Grace LCD-W pattern or the UHG-specific contractual LCD/LCW overlay.",
+      "canonical_inputs": ["lcd_required_fields", "uhg_required_fields", "project_analysis_fields", "workflow_rules"],
+      "operator_questions": ["Which project-analysis fields are required for this client/project?", "Which are generic Grace needs vs. UHG contractual fields?", "Which required fields remain incomplete?"]
+    },
+    {
+      "id": "system_setup",
+      "label": "System Setup",
+      "category": "operations",
+      "primary_source_layer": "lcw_section_e",
+      "description": "Operational configuration: folders, platforms, model environment, standards, and project setup requirements.",
+      "canonical_inputs": ["platforms", "folder_structure", "model_environment", "standards", "file_locations"],
+      "operator_questions": ["Is the project environment ready?", "What setup requirements are blocked by missing data?", "What setup facts need validation?"]
+    },
+    {
+      "id": "risk_gaps",
+      "label": "Risk / Gaps / Archive",
+      "category": "governance_routing",
+      "primary_source_layer": "governed_memory_pending_or_gap_records",
+      "description": "Visible worklist of missing, conflicting, uncertain, archived/source-preserved, or unresolved project facts. Quarantine is not a console function; unresolved material is carried by field truth/admissibility/verification/routing state.",
+      "canonical_inputs": ["gap_records", "conflict_records", "validation_required_fields", "archived_source_records", "override_records"],
+      "operator_questions": ["What do we not know?", "What is blocked?", "What source/dialogue needs archive preservation?", "What needs human concurrence before propagation?"]
+    }
+  ]
+}

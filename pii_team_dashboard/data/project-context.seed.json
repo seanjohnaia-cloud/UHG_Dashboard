@@ -1,0 +1,76 @@
+{
+  "schema": "pii-team-dashboard.project-context.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "dashboard": {
+    "name": "Pii Team Dashboard",
+    "alias": "Pii Console",
+    "audience": "Grace internal project management team",
+    "purpose": "Command center for project management across project origin, activation, operations, risk, gaps, and governance routing.",
+    "not_client_facing": true,
+    "not_streamlit_client_dashboard": true
+  },
+  "launch_context": {
+    "source_system": "Centerline-style project handoff",
+    "project_scope_required_before_open": true,
+    "portfolio_zoom_inside_dashboard": false,
+    "integration_standing": "deferred_adjacent_dependency_not_live_integration",
+    "description": "The console opens already scoped to one project, analogous to a terminal inheriting a working directory. This is a context-handoff pattern, not an assumption that Centerline currently owns navigation, data model, or authority."
+  },
+  "project": {
+    "project_id": "uhg-current-project-seed",
+    "project_name": "UHG project context seed",
+    "client_overlay": "uhg_lcd_lcw_contractual_overlay",
+    "base_grace_framework": "pac_core",
+    "typical_grace_overlay": "generic_lcd_w",
+    "governed_root": "_governed/"
+  },
+  "source_model": {
+    "pi_v1_wikillm": {
+      "role": "Reference/governing pattern for PI metadata, source/synthesis/decision separation, field truth states, dashboard state posture, and PAC/LCW/client-overlay boundaries.",
+      "standing": "reference_pattern_not_local_authority_store",
+      "loaded_references": [
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/project-intelligence-current-state.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/pii-operating-workflow.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/pac-project-start.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/lcw-lcd-uhg-relationship.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/grace-startup-a-f-requirements.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/dashboard-state-model.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/field-truth-states.md",
+        "C:/Obsidian/My Projects/PI v1/_governed/synthesis/concepts/process-revision-integration-protocols.md"
+      ],
+      "principle": "Use Pi v1 as the WikiLLM/PI pattern while keeping UHG_Dashboard's _governed/ layer as the local project instance."
+    },
+    "pac": {
+      "role": "Grace-wide origin/intake framework for project-start sufficiency",
+      "source": "00_Source/PAC/Working Drafts/PAC_Canonical_Data_Model_v1.1.md",
+      "principle": "PAC is captured once as origin data; later validation and transformation remain visibly downstream."
+    },
+    "generic_lcd_w": {
+      "role": "Typical/common Grace project data worksheet overlay for most projects",
+      "source": "01_Requirements/PAC - LCD-W - UHG Relationship Model.md"
+    },
+    "uhg_lcd_lcw": {
+      "role": "Client-specific, contractually binding UHG framework/workbook variant",
+      "source": "00_Source/Workflow/LCD Workbook/original/!_LCD Workbook.xlsx"
+    }
+  },
+  "excluded_scope": [
+    {
+      "name": "Institutional Learning",
+      "reason": "DIF-side function, explicitly excluded from Pii Console graph/module scope."
+    },
+    {
+      "name": "Client-facing Streamlit dashboard redesign",
+      "reason": "Separate deliverable/client overlay surface under 05_Dashboard/."
+    },
+    {
+      "name": "Live Centerline integration",
+      "reason": "Pi v1 synthesis keeps Centerline integration deferred unless scope is reopened; current seed may use a Centerline-style handoff pattern only."
+    }
+  ]
+}

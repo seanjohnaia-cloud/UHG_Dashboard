@@ -1,0 +1,72 @@
+{
+  "schema": "pii-team-dashboard.views.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "Views are clustering/lens functions over the same stable module set. A view must not create a separate copy of project data.",
+  "views": [
+    {
+      "id": "process_operations",
+      "label": "Process / Operations View",
+      "description": "Groups modules by how Grace actually manages work, independent of contract phase as the primary organizing structure.",
+      "cluster_by": "category",
+      "visual_channels": {
+        "position": "operational category",
+        "color_or_ring": "contract/phase state",
+        "edge_weight": "active dependency strength"
+      },
+      "preferred_landing": true
+    },
+    {
+      "id": "contract_structure",
+      "label": "Contract Structure View",
+      "description": "Re-clusters the same modules by contractual/deliverable structure, useful because the client-facing UHG dashboard follows contractual LCD/LCW structure.",
+      "cluster_by": "contractual_source_or_phase",
+      "visual_channels": {
+        "position": "contractual grouping",
+        "color_or_ring": "operational category",
+        "edge_weight": "contractual dependency strength"
+      },
+      "preferred_landing": false
+    },
+    {
+      "id": "origin_to_operations",
+      "label": "PAC → Operations View",
+      "description": "Shows how PAC origin fields populate, validate, or transform into downstream LCW/Pii operational modules.",
+      "cluster_by": "origin_validation_transformation_role",
+      "visual_channels": {
+        "position": "O/V/T and downstream section relationship",
+        "color_or_ring": "verification status",
+        "edge_weight": "propagation criticality"
+      },
+      "preferred_landing": false
+    },
+    {
+      "id": "risk_exposure",
+      "label": "Risk / Gap Exposure View",
+      "description": "Clusters modules around missing information, validation-required facts, conflicts, overrides, and quarantine needs.",
+      "cluster_by": "risk_gap_status",
+      "visual_channels": {
+        "position": "risk/gap cluster",
+        "color_or_ring": "severity or blocking state",
+        "edge_weight": "number of dependent modules affected"
+      },
+      "preferred_landing": false
+    },
+    {
+      "id": "responsibility_coordination",
+      "label": "Responsibility / Coordination View",
+      "description": "Clusters modules by responsible party or coordination dependency once team/consultant data exists.",
+      "cluster_by": "responsible_party_or_consultant_role",
+      "visual_channels": {
+        "position": "responsible party / role",
+        "color_or_ring": "assignment confidence",
+        "edge_weight": "coordination dependency"
+      },
+      "preferred_landing": false
+    }
+  ]
+}
