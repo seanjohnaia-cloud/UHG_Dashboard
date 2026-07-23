@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pii Console — Sonar Bunker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@600;800&display=swap');
+  :root{ --grn:#39ff9d; --grn-dim:#124a35; --grn-glow:rgba(57,255,157,.4); --bg:#040a08; --panel:#081410; }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:radial-gradient(ellipse at 50% 50%, #0a1815 0%, #020504 70%);
+    font-family:'Share Tech Mono', monospace; color:var(--grn); display:flex; justify-content:center; padding:30px;}
+  .rig{width:1260px; position:relative;}
+  h1{font-family:'Orbitron',sans-serif; text-align:center; font-size:20px; letter-spacing:6px; color:var(--grn); text-shadow:0 0 10px var(--grn-glow); margin:0 0 4px;}
+  .sub{text-align:center; font-size:10px; color:#3d8f6c; letter-spacing:3px; margin-bottom:22px;}
+
+  .layout{display:grid; grid-template-columns: 260px 1fr 260px; gap:22px; align-items:start;}
+
+  /* RADAR CENTER SCREEN */
+  .radar-wrap{background:var(--panel); border:2px solid var(--grn-dim); border-radius:50%; width:520px; height:520px; margin:0 auto; position:relative;
+    box-shadow: inset 0 0 60px rgba(0,0,0,.8), 0 0 40px rgba(57,255,157,.08);}
+  .radar{position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle, #06120e 0%, #020504 90%); overflow:hidden;}
+  .radar .ring{position:absolute; border:1px solid rgba(57,255,157,.15); border-radius:50%;}
+  .r1{inset:15%;} .r2{inset:32%;} .r3{inset:49%;}
+  .crosshair{position:absolute; inset:0;}
+  .crosshair::before, .crosshair::after{content:""; position:absolute; background:rgba(57,255,157,.15);}
+  .crosshair::before{left:50%; top:0; bottom:0; width:1px;}
+  .crosshair::after{top:50%; left:0; right:0; height:1px;}
+  .sweep{position:absolute; left:50%; top:50%; width:50%; height:2px; background:linear-gradient(90deg, var(--grn), transparent);
+    transform-origin:left center; animation:spin 4s linear infinite; box-shadow:0 0 12px var(--grn-glow);}
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .blip{position:absolute; width:6px; height:6px; border-radius:50%; background:var(--grn); box-shadow:0 0 8px var(--grn);}
+
+  .console-text{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; pointer-events:none;}
+  .console-text .label{font-size:9px; letter-spacing:2px; color:#3d8f6c;}
+  .console-text .big{font-family:'Orbitron',sans-serif; font-size:15px; letter-spacing:2px; margin:6px 0; color:var(--grn); text-shadow:0 0 8px var(--grn-glow);}
+  .console-text .line{font-size:11px; color:#9adfc0; margin-top:3px;}
+
+  .functions{display:flex; gap:10px; margin-top:18px; justify-content:center;}
+  .fn-btn{background:#06130f; border:1px solid var(--grn-dim); color:#7fdcb1; font-family:'Orbitron',sans-serif; font-size:11px;
+    letter-spacing:2px; padding:12px 18px; border-radius:30px; cursor:pointer; transition:.15s;}
+  .fn-btn:hover{border-color:var(--grn); color:var(--grn);}
+  .fn-btn.active{background:var(--grn-dim); color:var(--grn); box-shadow:0 0 16px var(--grn-glow);}
+
+  /* SIDE PANELS */
+  .panel{background:var(--panel); border:1px solid var(--grn-dim); border-radius:10px; padding:16px;}
+  .panel h3{font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:2px; margin:0 0 14px; color:var(--grn); border-bottom:1px solid var(--grn-dim); padding-bottom:8px;}
+
+  .switch-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .switch-label{font-size:10px; color:#9adfc0; max-width:130px; line-height:1.3;}
+  .lever{width:16px; height:44px; background:#020504; border-radius:8px; border:1px solid var(--grn-dim); position:relative; cursor:pointer;}
+  .lever .nub{position:absolute; left:-4px; width:24px; height:14px; border-radius:4px; background:linear-gradient(180deg,#1e5c43,#0b2b1f);
+    top:2px; transition:.15s; box-shadow:0 1px 3px rgba(0,0,0,.6);}
+  .lever.on .nub{top:26px; background:linear-gradient(180deg,var(--grn),#1e8a5f); box-shadow:0 0 10px var(--grn-glow);}
+
+  .slider-block{margin:10px 0 16px;}
+  .slider-label{font-size:9px; color:#3d8f6c; letter-spacing:1px; display:flex; justify-content:space-between; margin-bottom:6px;}
+  input[type=range]{-webkit-appearance:none; width:100%; height:4px; background:var(--grn-dim); border-radius:2px; outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--grn); box-shadow:0 0 8px var(--grn-glow); cursor:pointer;}
+
+  .gauge-list{display:flex; flex-direction:column; gap:14px;}
+  .gauge-row{display:flex; align-items:center; gap:10px;}
+  .gauge-row svg{flex:none;}
+  .gauge-meta{flex:1;}
+  .gauge-name{font-size:9.5px; color:#9adfc0; letter-spacing:.5px;}
+  .gauge-val{font-family:'Orbitron',sans-serif; font-size:15px; margin-top:2px;}
+
+  .log{margin-top:14px; font-size:10px; color:#4f9c7a; height:90px; overflow:auto; border-top:1px solid var(--grn-dim); padding-top:8px;}
+  .log div{margin-bottom:4px;}
+  .log .tag{color:var(--grn);}
+  footer{text-align:center; margin-top:20px; font-size:9px; color:#2f6b50; letter-spacing:2px;}
+</style>
+</head>
+<body>
+<div class="rig">
+  <h1>PII SONAR — FAIRVIEW UC-002</h1>
+  <div class="sub">GRACE HEALTHCARE STUDIOS · CONTACT: PROJECT INTELLIGENCE</div>
+
+  <div class="layout">
+    <!-- LEFT: perspective switches -->
+    <div class="panel">
+      <h3>Perspective Switches</h3>
+      <div class="switch-row"><span class="switch-label">Financial Health</span><div class="lever on" onclick="this.classList.toggle('on')"><div class="nub"></div></div></div>
+      <div class="slider-block">
+        <div class="slider-label"><span>AMPLITUDE</span><span id="v1">75%</span></div>
+        <input type="range" min="0" max="100" value="75" oninput="document.getElementById('v1').innerText=this.value+'%'">
+      </div>
+      <div class="switch-row"><span class="switch-label">Resource Reconciliation</span><div class="lever on" onclick="this.classList.toggle('on')"><div class="nub"></div></div></div>
+      <div class="slider-block">
+        <div class="slider-label"><span>AMPLITUDE</span><span id="v2">33%</span></div>
+        <input type="range" min="0" max="100" value="33" oninput="document.getElementById('v2').innerText=this.value+'%'">
+      </div>
+      <div class="switch-row"><span class="switch-label">Task Assignments</span><div class="lever" onclick="this.classList.toggle('on')"><div class="nub"></div></div></div>
+      <div class="slider-block">
+        <div class="slider-label"><span>AMPLITUDE</span><span id="v3">0%</span></div>
+        <input type="range" min="0" max="100" value="0" oninput="document.getElementById('v3').innerText=this.value+'%'">
+      </div>
+      <div class="switch-row"><span class="switch-label">Risk / Deficiency</span><div class="lever" onclick="this.classList.toggle('on')"><div class="nub"></div></div></div>
+      <div class="slider-block">
+        <div class="slider-label"><span>AMPLITUDE</span><span id="v4">0%</span></div>
+        <input type="range" min="0" max="100" value="0" oninput="document.getElementById('v4').innerText=this.value+'%'">
+      </div>
+    </div>
+
+    <!-- CENTER: radar -->
+    <div>
+      <div class="radar-wrap">
+        <div class="radar">
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <div class="crosshair"></div>
+          <div class="sweep"></div>
+          <div class="blip" style="top:30%; left:62%;"></div>
+          <div class="blip" style="top:58%; left:40%;"></div>
+          <div class="blip" style="top:70%; left:66%; background:#ff5a5a; box-shadow:0 0 8px #ff5a5a;"></div>
+        </div>
+        <div class="console-text">
+          <div class="label">DIALOGUE // ACTIVE CONTACT</div>
+          <div class="big">DESIGN DEVELOPMENT</div>
+          <div class="line">3 gaps flagged · comp. basis unresolved</div>
+          <div class="line">Sched NOMINAL · Budget WATCH</div>
+        </div>
+      </div>
+      <div class="functions">
+        <button class="fn-btn active" onclick="fnClick(this,'EXTRACT')">Extract</button>
+        <button class="fn-btn" onclick="fnClick(this,'ABSORB')">Absorb</button>
+        <button class="fn-btn" onclick="fnClick(this,'ELEVATE')">Elevate</button>
+        <button class="fn-btn" onclick="fnClick(this,'QUARANTINE')">Quarantine</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: gauges -->
+    <div class="panel">
+      <h3>Quick Glance</h3>
+      <div class="gauge-list" id="gaugeList"></div>
+      <div class="log" id="log">
+        <div><span class="tag">[SONAR]</span> Contact locked — Fairview UC-002.</div>
+      </div>
+    </div>
+  </div>
+  <footer>PII v0.1 · CONSOLE SHELL · APPEARANCE: DEFAULT TEMPLATE — USER CUSTOMIZABLE</footer>
+</div>
+<script>
+function gaugeSVG(value, color){
+  const r=26, c=2*Math.PI*r, off=c*(1-value/100);
+  return `<svg width="64" height="64" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="${r}" fill="none" stroke="#0d2a1f" stroke-width="6"/>
+    <circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="6"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round" transform="rotate(-90 32 32)"/>
+  </svg>`;
+}
+const gauges=[
+  {name:"Schedule Health", val:82, color:"#39ff9d"},
+  {name:"Delivery Quality", val:64, color:"#39ff9d"},
+  {name:"Budget / Fee Health", val:41, color:"#ff5a5a"},
+  {name:"Construction Responsiveness", val:70, color:"#39ff9d"},
+];
+document.getElementById('gaugeList').innerHTML = gauges.map(g=>`
+  <div class="gauge-row">
+    ${gaugeSVG(g.val,g.color)}
+    <div class="gauge-meta">
+      <div class="gauge-name">${g.name}</div>
+      <div class="gauge-val" style="color:${g.color}">${g.val}</div>
+    </div>
+  </div>`).join('');
+
+function fnClick(el,name){
+  document.querySelectorAll('.fn-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const log=document.getElementById('log');
+  const div=document.createElement('div');
+  div.innerHTML = `<span class="tag">[${new Date().toLocaleTimeString('en-US',{hour12:false})}]</span> ${name} selected`;
+  log.appendChild(div); log.scrollTop=log.scrollHeight;
+}
+</script>
+</body>
+</html>
