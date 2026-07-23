@@ -1,20 +1,20 @@
 ---
 layer: decision
-status: candidate
+status: accepted
 source:
   - session discussion, 2026-07-22, Pii UHG Dashboard project (Hermes session)
   - _governed/synthesis/concepts/pii-console-team-side-architecture.md
   - C:\Obsidian\My Projects\PI v1\AGENTS.md (WikiLLM Rules, Layer Model)
   - C:\Obsidian\My Projects\PI v1\_governed\synthesis\concepts\governed-wikillm.md
   - _governed/raw/2026-07-22-session-addendum-operational-layer-questions-resolved.md (Q2/Q3/Q4 + function-strip resolutions)
-decided_by: null
-decision_date: null
-admissibility: initiating
+decided_by: Sean Johnson
+decision_date: 2026-07-22
+admissibility: supporting
 verification:
-  status: unverified
-  verified_by: null
-  verified_on: null
-  method: null
+  status: verified
+  verified_by: Sean Johnson
+  verified_on: 2026-07-22
+  method: "Human review under open review window (.review-open), second window of 2026-07-22, after all design questions were resolved in-session (see raw addendum of this date)."
 supersedes: null
 ---
 
@@ -74,6 +74,6 @@ Answered in-session by the decider (source: raw addendum of this date); pending 
 
 ## Standing of this record
 
-Candidate. Not accepted, not acted on. Requires explicit human decision (`decided_by`, `decision_date`, `verification.status: verified`) before any implementation work creates the layer or before `AGENTS.md`/`index.md` are amended to reflect it.
+**ACCEPTED 2026-07-22** under an open human review window (the second window of this date), by Sean Johnson. All design questions were resolved prior to acceptance — see the resolution annotations above and the raw addendum they cite. Enactment actions taken with acceptance: `_governed/ledger/` created with `ledger/README.md` carrying the definition and disambiguation; `index.md` and project `AGENTS.md` layer models amended to include the ledger layer. The candidate-era text below is preserved unchanged as lineage.
 
-**Status note (2026-07-22, post-docket):** All five numbered design questions and the function-strip question are now resolved in-session (Q1 field-level three-tier schema; Q2 Elevate≠approval; Q3 hybrid format; Q4 `ledger/` with definition; Q5 folded into Q2's concurrence-gate answer — per-field approval IS the gate event, with formal decision-record ceremony reserved for schema/structure changes rather than routine field concurrence). **Nothing blocks acceptance.** This record is ready for ratification at the next human review window.
+**Status note (2026-07-22, post-docket, pre-acceptance):** All five numbered design questions and the function-strip question were resolved in-session (Q1 field-level three-tier schema; Q2 Elevate≠approval; Q3 hybrid format; Q4 `ledger/` with definition; Q5 folded into Q2's concurrence-gate answer — per-field approval IS the gate event, with formal decision-record ceremony reserved for schema/structure changes rather than routine field concurrence). Nothing blocked acceptance; ratified at the window recorded in this record's frontmatter.

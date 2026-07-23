@@ -18,11 +18,12 @@ This project inherits its governance pattern from the production PI environment 
 _governed/
 ├── raw/                  # append-only source records (sessions, client comms, workflow facts)
 ├── extractions/          # preservation records from source material
-│   └── exchange-development/  # candidate sub-type: reciprocal human/AI idea development (see index.md)
+│   └── exchange-development/  # ratified sub-type: reciprocal human/AI idea development (decisions/2026-07-22-ratify-exchange-development-extraction.md)
 ├── memory/
 │   ├── pending/          # AI/user proposed durable memory awaiting review
 │   ├── accepted/         # human-gated durable memory
 │   └── superseded/       # retired memory with lineage
+├── ledger/               # current operational truth with lineage; mutable-with-approval field records; state-tier home (decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md; see ledger/README.md)
 ├── synthesis/            # WikiLLM living wiki; non-authoritative synthesis
 ├── decisions/            # authority-bearing design/process decision records
 └── index.md              # governed layer map
@@ -41,6 +42,7 @@ Existing notes and code outside `_governed/` (dashboard modules, requirements do
 7. **Model-native memory is working context, never project record.** Information stored, inferred, consolidated, or recalled by a model has no independent constitutional standing.
 8. **Unverified material may initiate verification work but may not support another constitutional claim.** Avoid circular provenance.
 9. **Extraction sub-types (e.g. Exchange Development Extraction) are preservation, not authority.** They may be cited as source evidence for later synthesis or decision records, but they do not themselves decide anything. A new extraction sub-type becomes a durable artifact class only once a decision record ratifies it.
+10. **Ledger changes require concurrence.** `_governed/ledger/` holds current operational truth (state tier — load-bearing context). Changes enter as proposals (PM Elevate or AI scrub) via `memory/pending/` and take effect only on human concurrence; field corrections supersede visibly at field grain, never silently. Elevate is proposal intake, not approval. (Per decisions of 2026-07-22: ledger layer + resident-context concurrence rule.)
 
 ## Required Frontmatter Patterns
 

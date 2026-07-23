@@ -11,6 +11,7 @@ This project inherits its governance pattern from the production PI environment 
 - `memory/pending/` — AI/user proposed durable memory awaiting review
 - `memory/accepted/` — human-gated durable memory
 - `memory/superseded/` — retired memory with lineage
+- `ledger/` — current operational truth with lineage; mutable-with-approval field records (hybrid YAML+markdown); permanent home of the state tier. Established by decision 2026-07-22; see `ledger/README.md` for definition and rules.
 - `synthesis/` — WikiLLM living wiki; non-authoritative synthesis
 - `decisions/` — authority-bearing design/process decision records
 - `index.md` — this file
@@ -20,7 +21,7 @@ This project inherits its governance pattern from the production PI environment 
 Pages listed in this index are classified for context loading per `decisions/2026-07-22-tiered-context-control-system-pattern.md`. Interim boundary rule (per `decisions/2026-07-22-resident-context-concurrence-rule.md`): a page is resident/state-tier **iff listed as such here**; such pages require human concurrence on updates.
 
 - **Resident tier:** `AGENTS.md` (project root), this `index.md`.
-- **State tier:** *(none yet — current-state synthesis pages will be listed here as they are created and tagged).*
+- **State tier:** `ledger/` (all contents, by construction — see `ledger/README.md`); current-state synthesis pages will additionally be listed here as they are created and tagged.
 - All other synthesis/extraction/decision content is deep tier; `raw/` and `memory/superseded/` are archival tier.
 
 ## Extraction sub-types in use
@@ -50,7 +51,7 @@ Pages listed in this index are classified for context loading per `decisions/202
 
 ## Decision records
 
-- `decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md` — **candidate, unblocked, ready for ratification**: `ledger/` layer (current operational truth with lineage; permanent home of the state tier). All design questions resolved in-session 2026-07-22: field-level three-tier schema, Elevate=proposal/concurrence=approval, hybrid format, `ledger/` naming, function strip Extract/Absorb/Elevate/Archive.
+- `decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md` — **accepted** (second review window of 2026-07-22): establishes `ledger/` (current operational truth with lineage; state-tier home; field-level three-tier schema; hybrid format; Elevate=proposal/concurrence=approval; function strip Extract/Absorb/Elevate/Archive, Quarantine struck).
 - `decisions/2026-07-22-resident-context-concurrence-rule.md` — **accepted**.
 - `decisions/2026-07-22-tiered-context-control-system-pattern.md` — **accepted (narrowed)**.
 - `decisions/2026-07-22-ratify-exchange-development-extraction.md` — **accepted**.
