@@ -1,0 +1,166 @@
+{
+  "schema": "pii-team-dashboard.action-strip.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "The action strip turns operator intent into governed routing. Actions may preserve source, extract candidate field state, propose state changes, or archive source/dialogue; no action creates authority by itself.",
+  "function_order": ["extract", "absorb", "elevate", "archive"],
+  "explicitly_not_a_function": [
+    {
+      "id": "quarantine",
+      "reason": "Earlier sketch language was struck. Unresolved material is represented through field truth, admissibility, verification, gaps/conflicts, recorded risk, and Archive/source preservation rather than a separate Quarantine command."
+    }
+  ],
+  "shared_inputs": {
+    "required_context_fields": ["source_ref", "truth_state", "scope_of_use"],
+    "recommended_context_fields": ["extraction_ref", "blocking_effect", "follow_up_required", "authority_requirement", "governance_route_state"],
+    "allowed_modules": ["project_origin", "activation_gates", "scope", "contracts", "budget", "compensation", "schedule", "team_responsibility", "consultants", "lcd_w_analysis", "system_setup", "risk_gaps"]
+  },
+  "actions": [
+    {
+      "id": "extract",
+      "label": "Extract",
+      "operator_intent": "Glean field candidates, topics, gaps, conflicts, and state changes from preserved source material or dialogue without making them authoritative.",
+      "governed_pipeline": "raw_or_archive_source -> extraction_ref -> candidate_field_state -> module/risk routing",
+      "allowed_permissions": ["read", "propose", "route", "derive"],
+      "primary_modules": ["project_origin", "lcd_w_analysis", "risk_gaps"],
+      "secondary_modules": ["activation_gates", "scope", "contracts", "budget", "compensation", "schedule", "team_responsibility", "consultants", "system_setup"],
+      "reads": ["source_ref", "archived_source_records", "truth_state", "scope_of_use"],
+      "may_propose": ["extraction_ref", "missing_fields", "validation_required_fields", "conflicts", "gap_records", "conflict_records", "specialty_scope_signals", "project_analysis_fields", "uhg_required_fields", "service_order_terms", "service_order_scope", "schedule_e_f_logic", "follow_up_required", "governance_route_state"],
+      "may_derive": ["missing_fields", "validation_required_fields", "conflicts", "specialty_scope_signals", "project_analysis_fields"],
+      "may_route": ["missing_fields", "validation_required_fields", "conflicts", "gap_records", "conflict_records", "governance_route_state"],
+      "cannot_overwrite": ["proposal_date", "client_entity", "project_name", "project_description", "estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "project_schedule_by_phase", "form_of_agreement", "acceptance_status"],
+      "requires_concurrence_for": ["gap_records", "conflict_records", "governance_route_state"],
+      "outputs": [
+        {
+          "type": "candidate_field_state",
+          "required_fields": ["field_id", "proposed_truth_state", "source_ref", "extraction_ref", "scope_of_use", "notes"]
+        },
+        {
+          "type": "gap_or_conflict_candidate",
+          "required_fields": ["field_id", "route", "source_ref", "blocking_effect", "follow_up_required"]
+        }
+      ],
+      "guardrails": [
+        "Extraction is not validation.",
+        "Extracted values must retain source/extraction references.",
+        "Missing, conflict, assumed, and deferred states are valid outputs and must not be hidden.",
+        "UHG overlay extractions must not become PAC core fields without generalization and review."
+      ]
+    },
+    {
+      "id": "absorb",
+      "label": "Absorb",
+      "operator_intent": "Intake an externally created artifact, file, note, workbook, PDF, email, or generated artifact as source material for this project context.",
+      "governed_pipeline": "external_artifact -> source_ref/archived_source_records -> Extract -> triage",
+      "allowed_permissions": ["read", "archive", "route", "propose"],
+      "primary_modules": ["risk_gaps", "project_origin", "lcd_w_analysis"],
+      "secondary_modules": ["contracts", "scope", "activation_gates", "system_setup"],
+      "reads": ["source_ref", "truth_state", "scope_of_use"],
+      "may_propose": ["archived_source_records", "source_ref", "extraction_ref", "missing_fields", "validation_required_fields", "gap_records", "follow_up_required", "governance_route_state"],
+      "may_derive": [],
+      "may_route": ["archived_source_records", "missing_fields", "validation_required_fields", "gap_records", "governance_route_state"],
+      "cannot_overwrite": ["proposal_date", "client_entity", "project_name", "project_description", "estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "project_schedule_by_phase", "form_of_agreement", "acceptance_status"],
+      "requires_concurrence_for": ["governance_route_state", "gap_records"],
+      "outputs": [
+        {
+          "type": "absorbed_source_pointer",
+          "required_fields": ["source_ref", "source_type", "received_from", "received_on", "standing", "notes"]
+        },
+        {
+          "type": "archive_or_extraction_queue_item",
+          "required_fields": ["source_ref", "suggested_modules", "initial_route", "follow_up_required"]
+        }
+      ],
+      "guardrails": [
+        "Absorb means admission into source handling, not endorsement.",
+        "Absorbed artifacts must be traceable before field values are extracted from them.",
+        "Do not collapse external artifact content directly into current operational truth.",
+        "If source material is client-specific, classify it as project/client overlay before considering Pii generalization."
+      ]
+    },
+    {
+      "id": "elevate",
+      "label": "Elevate",
+      "operator_intent": "Propose a field/state/routing change for human review, concurrence, pending memory, or later decision. Elevate is proposal intake, not approval.",
+      "governed_pipeline": "candidate_field_state_or_gap -> proposal_packet -> memory_pending_or_review_queue -> human_concurrence_or_decision",
+      "allowed_permissions": ["read", "propose", "route"],
+      "primary_modules": ["risk_gaps", "activation_gates", "contracts"],
+      "secondary_modules": ["project_origin", "scope", "budget", "compensation", "schedule", "team_responsibility", "consultants", "lcd_w_analysis", "system_setup"],
+      "reads": ["truth_state", "source_ref", "extraction_ref", "scope_of_use", "blocking_effect", "follow_up_required", "authority_requirement", "governance_route_state", "gap_records", "conflict_records", "override_records"],
+      "may_propose": ["gap_records", "conflict_records", "override_records", "activation_override_record", "activation_gate_status", "authority_requirement", "governance_route_state", "follow_up_required", "setup_blockers"],
+      "may_derive": [],
+      "may_route": ["gap_records", "conflict_records", "override_records", "authority_requirement", "governance_route_state", "setup_blockers"],
+      "cannot_overwrite": ["proposal_date", "client_entity", "project_name", "project_description", "estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "project_schedule_by_phase", "form_of_agreement", "acceptance_status", "authorization_confirmation", "project_number"],
+      "requires_concurrence_for": ["activation_gate_status", "activation_override_record", "override_records", "gap_records", "conflict_records", "setup_blockers", "authority_requirement", "governance_route_state"],
+      "outputs": [
+        {
+          "type": "proposal_packet",
+          "required_fields": ["proposal_id", "proposed_change", "source_ref", "extraction_ref", "affected_fields", "affected_modules", "authority_requirement", "risk_or_blocking_effect", "requested_human_action"]
+        },
+        {
+          "type": "concurrence_candidate",
+          "required_fields": ["field_id", "current_state", "proposed_state", "lineage", "reviewer_needed", "reason"]
+        }
+      ],
+      "guardrails": [
+        "Elevate is not approval; proposal and concurrence are separate events.",
+        "A module cannot elevate its own derived output into current truth without human concurrence where required.",
+        "Activation overrides require accountable decision lineage and accepted risk.",
+        "Institutional/DIF claims route through Risk Management, not directly from project module output."
+      ]
+    },
+    {
+      "id": "archive",
+      "label": "Archive",
+      "operator_intent": "Preserve source material, dialogue, or artifact context word-for-word or by pointer so later extraction/synthesis has provenance.",
+      "governed_pipeline": "dialogue_or_artifact -> archived_source_records/source_ref -> optional Extract",
+      "allowed_permissions": ["read", "archive", "route"],
+      "primary_modules": ["risk_gaps", "project_origin"],
+      "secondary_modules": ["lcd_w_analysis", "contracts", "scope", "activation_gates"],
+      "reads": ["source_ref", "extraction_ref", "truth_state", "scope_of_use"],
+      "may_propose": ["archived_source_records", "source_ref", "follow_up_required", "governance_route_state"],
+      "may_derive": [],
+      "may_route": ["archived_source_records", "governance_route_state", "follow_up_required"],
+      "cannot_overwrite": ["proposal_date", "client_entity", "project_name", "project_description", "estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "project_schedule_by_phase", "form_of_agreement", "acceptance_status"],
+      "requires_concurrence_for": ["governance_route_state"],
+      "outputs": [
+        {
+          "type": "archive_record_pointer",
+          "required_fields": ["archive_id", "source_ref", "source_type", "captured_by", "captured_on", "scope", "standing"]
+        }
+      ],
+      "guardrails": [
+        "Archive preserves; it does not interpret or validate.",
+        "Archived records are source/provenance material, not accepted memory or decisions.",
+        "Raw/source preservation should be append-only under governed rules.",
+        "If material is live discussion, preserve only when the capture threshold is met or user explicitly requests capture."
+      ]
+    }
+  ],
+  "ui_implications": {
+    "display_order": ["Extract", "Absorb", "Elevate", "Archive"],
+    "status_badges": ["non_authoritative", "requires_source", "requires_scope", "requires_concurrence_when_elevated"],
+    "disabled_when": [
+      {
+        "action": "extract",
+        "condition": "no source_ref or archived_source_records available"
+      },
+      {
+        "action": "absorb",
+        "condition": "artifact/source pointer is absent"
+      },
+      {
+        "action": "elevate",
+        "condition": "proposal lacks source_ref, affected_fields, or authority_requirement"
+      },
+      {
+        "action": "archive",
+        "condition": "capture scope/provenance is absent or raw append-only boundary would be violated"
+      }
+    ]
+  }
+}
