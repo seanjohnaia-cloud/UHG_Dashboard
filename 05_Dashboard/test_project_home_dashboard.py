@@ -71,6 +71,24 @@ class ManualLcdEntryTests(unittest.TestCase):
         self.assertIn("Project Initiation", selectboxes["Current Phase"].options)
         self.assertIn("Furniture", app.multiselect[0].options)
 
+    def test_alliance_partners_page_uses_owner_consultant_checklist(self) -> None:
+        self.assertEqual(len(project_home_dashboard.OWNER_CONSULTANT_OPTIONS), 11)
+        self.assertIn("Furniture", project_home_dashboard.OWNER_CONSULTANT_OPTIONS)
+        self.assertIn("Storefront Systems", project_home_dashboard.OWNER_CONSULTANT_OPTIONS)
+        self.assertIn("Food Service", project_home_dashboard.OWNER_CONSULTANT_OPTIONS)
+        self.assertEqual(project_home_dashboard.included_alliance_partner_defaults(self.record), set())
+
+        app = AppTest.from_file(str(MODULE_PATH)).run(timeout=10)
+        app.radio[0].set_value("Alliance Partners").run(timeout=10)
+
+        self.assertEqual(list(app.exception), [])
+        self.assertIn("Alliance Partners", [subheader.value for subheader in app.subheader])
+        self.assertEqual(len(app.checkbox), len(project_home_dashboard.OWNER_CONSULTANT_OPTIONS))
+        self.assertGreaterEqual(len(app.text_input), 2)
+
+        checkbox_keys = [checkbox.key for checkbox in app.checkbox]
+        self.assertEqual(len(checkbox_keys), len(set(checkbox_keys)))
+
     def test_metrics_source_tables_match_sow_structure(self) -> None:
         self.assertEqual(
             ["KPI Category", "Goal"],
@@ -94,6 +112,63 @@ class ManualLcdEntryTests(unittest.TestCase):
         self.assertIn('Key Performance Indicators (“KPIs”)', [subheader.value for subheader in app.subheader])
         self.assertIn("Required Metrics List", [subheader.value for subheader in app.subheader])
         self.assertIn("Future Gauge Summary Inputs", [subheader.value for subheader in app.subheader])
+
+    def test_contract_documents_exclude_service_order_template_row(self) -> None:
+        documents = {row["Document"]: row for row in project_home_dashboard.CONTRACT_DOCUMENT_ROWS}
+
+        self.assertIn("Master Agreement", documents)
+        self.assertIn("Scope of Work", documents)
+        self.assertIn("Executed Service Order", documents)
+        self.assertNotIn("Service Order Template", documents)
+        self.assertTrue(documents["Master Agreement"]["Path"].endswith("master agreement.pdf"))
+        self.assertEqual(documents["Executed Service Order"]["Status"], "Pending")
+        self.assertEqual(documents["Executed Service Order"]["Path"], "")
+        self.assertEqual(documents["Master Agreement"]["Display Mode"], "image_pages")
+        self.assertEqual(documents["Scope of Work"]["Display Mode"], "extracted_markdown")
+
+    def test_contracts_page_renders_clickable_contract_document_actions(self) -> None:
+        app = AppTest.from_file(str(MODULE_PATH)).run(timeout=10)
+        app.radio[0].set_value("Contracts").run(timeout=10)
+
+        self.assertEqual(list(app.exception), [])
+        self.assertIn("Contract Documents", [subheader.value for subheader in app.subheader])
+        button_labels = [button.label for button in app.button]
+        self.assertIn("Open Master Agreement", button_labels)
+        self.assertIn("Open Scope of Work", button_labels)
+        self.assertIn("Attach Executed Service Order", button_labels)
+        self.assertNotIn("Open Service Order Template", button_labels)
+
+    def test_service_order_template_rows_autopopulate_as_lcd_like_editable_fields(self) -> None:
+        rows = project_home_dashboard.service_order_template_entry_rows()
+        first = rows[0]
+
+        self.assertGreaterEqual(len(rows), 20)
+        self.assertIn("Article", first)
+        self.assertEqual(first["Article"], "Article 1 — Initial Information")
+        self.assertEqual(first["SO Template Field"], "Service Order No.")
+        self.assertIn("Editable Entry", first)
+        self.assertIn("Entry Notes", first)
+        self.assertEqual(first["Editable Entry"], "Provided by CBRE PM")
+
+        by_field = {row["SO Template Field"]: row for row in rows}
+        self.assertEqual(by_field["Project Name / Location"]["Editable Entry"], "From Initial Information")
+        self.assertEqual(by_field["Other Documents"]["Editable Entry"], "TBD")
+        duplicate_attachment_keys = [
+            project_home_dashboard.service_order_template_widget_key(row["Article"], row["SO Template Field"], index)
+            for index, row in enumerate(rows)
+            if row["SO Template Field"] == "Attachment X"
+        ]
+        self.assertEqual(len(duplicate_attachment_keys), len(set(duplicate_attachment_keys)))
+
+    def test_service_order_template_page_renders_template_editor(self) -> None:
+        app = AppTest.from_file(str(MODULE_PATH)).run(timeout=10)
+        app.radio[0].set_value("Service Order Template").run(timeout=10)
+
+        self.assertEqual(list(app.exception), [])
+        self.assertIn("Service Order Template Worksheet", [subheader.value for subheader in app.subheader])
+        self.assertIn("Uploaded Template PDF Reference", [subheader.value for subheader in app.subheader])
+        self.assertIn("Contracts Communication Package", [subheader.value for subheader in app.subheader])
+        self.assertGreaterEqual(len(app.text_input), 20)
 
 
 if __name__ == "__main__":

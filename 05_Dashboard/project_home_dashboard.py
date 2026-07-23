@@ -7,9 +7,11 @@ PAC / Origin, Pii context reconstruction, and UHG Service Order review.
 
 from __future__ import annotations
 
-import json
-import html
 import base64
+import csv
+import html
+import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +21,9 @@ import streamlit as st
 APP_DIR = Path(__file__).resolve().parent
 FAIRVIEW_FIXTURE_PATH = APP_DIR / "test_runs" / "fairview_project_home_fixture.json"
 GRACE_LOGO_PATH = APP_DIR / "assets" / "grace_stacked_logo.jpg"
+SERVICE_ORDER_TEMPLATE_CSV_PATH = APP_DIR.parent / "00_Source" / "Workflow" / "LCD Workbook" / "extracted" / "Service_Order.csv"
+SERVICE_ORDER_TEMPLATE_PDF_PATH = APP_DIR.parent / "00_Source" / "Workflow" / "LCD Workbook" / "Service Order PDF" / "Service Order Template.pdf"
+SERVICE_ORDER_TEMPLATE_PAGE_IMAGE_DIR = APP_DIR.parent / "00_Source" / "Workflow" / "LCD Workbook" / "Service Order PDF" / "page_images"
 
 NAV_ITEMS = [
     "Home",
@@ -31,7 +36,7 @@ NAV_ITEMS = [
     "Alliance Partners",
     "Contracts",
     "Metrics",
-    "Service Order Review",
+    "Service Order Template",
 ]
 
 DESIGN_SCHEDULE_PHASES = {
@@ -164,30 +169,36 @@ COMPENSATION_REFERENCE_ROWS = [
 ]
 
 CONTRACT_DOCUMENT_ROWS = [
-    (
-        "Master Agreement",
-        "Available",
-        "00_Source/Contract/Executed Agreement Package/original/master agreement.pdf",
-        "Governing contract layer",
-    ),
-    (
-        "Scope of Work Document",
-        "Available",
-        "00_Source/Contract/Exhibit A - Scope of Work/Exhibit A-Scope of Work.docx",
-        "Current SOW basis; subject to periodic replacement/update",
-    ),
-    (
-        "Service Order Template",
-        "Available",
-        "00_Source/Contract/Executed Agreement Package/original/Exhibit B-Service Order DRAFT AIA B221-2018.docx",
-        "Template / Contracts output structure",
-    ),
-    (
-        "Executed Service Order",
-        "Not received",
-        "Pending project-specific executed SO",
-        "Must be attached when received; Contracts creates final SO",
-    ),
+    {
+        "Document": "Master Agreement",
+        "Status": "Available",
+        "Path": "00_Source/Contract/Executed Agreement Package/original/master agreement.pdf",
+        "Role": "Governing contract layer",
+        "Action": "Open Master Agreement",
+        "Mime Type": "application/pdf",
+        "Display Mode": "image_pages",
+        "Preview Path": "00_Source/Contract/Executed Agreement Package/extracted/master_agreement_page_images",
+    },
+    {
+        "Document": "Scope of Work",
+        "Status": "Available",
+        "Path": "00_Source/Contract/Exhibit A - Scope of Work/Exhibit A-Scope of Work.docx",
+        "Role": "Current SOW basis; subject to periodic replacement/update",
+        "Action": "Open Scope of Work",
+        "Mime Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "Display Mode": "extracted_markdown",
+        "Preview Path": "00_Source/Contract/Exhibit A - Scope of Work/extracted-text.md",
+    },
+    {
+        "Document": "Executed Service Order",
+        "Status": "Pending",
+        "Path": "",
+        "Role": "Display the actual executed SO here when received; template preparation lives on the Service Order Review page.",
+        "Action": "Attach Executed Service Order",
+        "Mime Type": "application/pdf",
+        "Display Mode": "pending_source",
+        "Preview Path": "",
+    },
 ]
 
 SOW_UPDATE_ABSORPTION_STEPS = [
@@ -510,6 +521,151 @@ def load_fixture(path: Path = FAIRVIEW_FIXTURE_PATH) -> dict[str, Any]:
 def image_data_uri(path: Path) -> str:
     encoded = base64.b64encode(path.read_bytes()).decode("ascii")
     return f"data:image/jpeg;base64,{encoded}"
+
+
+def source_path(relative_path: str) -> Path:
+    return APP_DIR.parent / relative_path
+
+
+def file_data_uri(path: Path, mime_type: str) -> str:
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:{mime_type};base64,{encoded}"
+
+
+def service_order_template_entry_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for article, items in SERVICE_ORDER_ARTICLES.items():
+        for field, source_value, review_state in items:
+            rows.append(
+                {
+                    "Article": article,
+                    "SO Template Field": field,
+                    "Editable Entry": source_value,
+                    "Source / Current Value": source_value,
+                    "Review State": review_state,
+                    "Entry Notes": "",
+                }
+            )
+    return rows
+
+
+def spreadsheet_column_name(index: int) -> str:
+    name = ""
+    current = index
+    while current:
+        current, remainder = divmod(current - 1, 26)
+        name = chr(65 + remainder) + name
+    return name
+
+
+def lcd_reference_value_map(record: OriginRecord) -> dict[str, Any]:
+    values: dict[str, Any] = {}
+    for row_data in manual_lcd_entry_rows(record):
+        reference_text = row_data.get("LCD-W / Service Order Reference", "")
+        for ref in re.findall(r"Life Cycle Data Worksheet!([A-Z]+\d+)", str(reference_text)):
+            values[ref] = row_data.get("Manual Entry", "")
+    return values
+
+
+def resolve_service_order_template_cell(value: str, reference_values: dict[str, Any]) -> str:
+    match = re.fullmatch(r"='Life Cycle Data Worksheet'!([A-Z]+\d+)", value.strip())
+    if match:
+        mapped = reference_values.get(match.group(1))
+        if mapped not in (None, ""):
+            return str(mapped)
+    return value
+
+
+def service_order_template_grid(record: OriginRecord) -> pd.DataFrame:
+    reference_values = lcd_reference_value_map(record)
+    with SERVICE_ORDER_TEMPLATE_CSV_PATH.open(newline="", encoding="utf-8") as handle:
+        raw_rows = list(csv.reader(handle))
+
+    max_columns = max(len(row_values) for row_values in raw_rows)
+    columns = ["Row"] + [spreadsheet_column_name(index) for index in range(1, max_columns)]
+    resolved_rows: list[list[str]] = []
+    for raw_row in raw_rows:
+        row_number = raw_row[0]
+        cells = [resolve_service_order_template_cell(cell, reference_values) for cell in raw_row[1:]]
+        cells.extend([""] * (max_columns - len(raw_row)))
+        resolved_rows.append([row_number, *cells])
+
+    return pd.DataFrame(resolved_rows, columns=columns).astype(str)
+
+
+def service_order_template_widget_key(article: str, field: str, index: int = 0) -> str:
+    return "so_template_" + "".join(
+        character.lower() if character.isalnum() else "_" for character in f"{article}_{field}_{index}"
+    )
+
+
+def alliance_partner_widget_key(partner: str, suffix: str) -> str:
+    return "alliance_partner_" + "".join(
+        character.lower() if character.isalnum() else "_" for character in f"{partner}_{suffix}"
+    )
+
+
+def included_alliance_partner_defaults(record: OriginRecord) -> set[str]:
+    current = str(field_value(record, "owner_consultants", "owner_retained_consultants") or "")
+    if current.lower().startswith("none identified"):
+        return set()
+    return {partner for partner in OWNER_CONSULTANT_OPTIONS if partner.lower() in current.lower()}
+
+
+def render_extracted_markdown_preview(row: dict[str, Any]) -> None:
+    preview_path = source_path(row["Preview Path"])
+    source_document = source_path(row["Path"])
+    if not preview_path.exists():
+        st.warning(f"{row['Document']} preview text is not available yet.")
+        return
+
+    st.markdown(f"**Opened:** {row['Document']} extracted text")
+    st.caption("Displayed from extracted text so the source can be visible in-pane; the preserved DOCX remains the source of record.")
+    st.markdown(preview_path.read_text(encoding="utf-8"))
+    if source_document.exists():
+        st.download_button(
+            f"Download preserved {row['Document']} source",
+            data=source_document.read_bytes(),
+            file_name=source_document.name,
+            mime=row["Mime Type"],
+            key=f"download_{row['Document'].lower().replace(' ', '_')}",
+        )
+
+
+def render_image_page_preview(row: dict[str, Any]) -> None:
+    preview_dir = source_path(row["Preview Path"])
+    if not preview_dir.exists():
+        st.warning(f"{row['Document']} page-image preview is not available yet.")
+        return
+
+    page_paths = sorted(preview_dir.glob("*.png"))
+    if not page_paths:
+        st.warning(f"{row['Document']} page-image preview has no pages yet.")
+        return
+
+    st.markdown(f"**Opened:** {row['Document']} page preview")
+    st.caption("Displayed from extracted page images because the browser preview pane did not reliably render the large PDF iframe.")
+    for page_path in page_paths:
+        st.image(str(page_path), caption=page_path.stem.replace("_", " "), width="stretch")
+
+
+def render_contract_document_preview(row: dict[str, Any]) -> None:
+    display_mode = row.get("Display Mode")
+    if display_mode == "image_pages":
+        render_image_page_preview(row)
+    elif display_mode == "extracted_markdown":
+        render_extracted_markdown_preview(row)
+    elif display_mode == "pending_source":
+        st.info(
+            "No executed Service Order has been attached yet. When the executed SO is received, "
+            "this Contract Documents row should point to that signed PDF. The template stays on the Service Order Review page."
+        )
+    elif row.get("Path"):
+        path = source_path(row["Path"])
+        if path.exists():
+            st.download_button(row["Action"], data=path.read_bytes(), file_name=path.name, mime=row["Mime Type"])
+        else:
+            st.warning(f"{row['Document']} source is not attached yet.")
 
 
 def origin(payload: dict[str, Any]) -> OriginRecord:
@@ -1304,19 +1460,74 @@ def render_consultants(payload: dict[str, Any]) -> None:
 
 def render_alliance_partners(payload: dict[str, Any]) -> None:
     record = origin(payload)
-    rows = [
-        (
-            "UHG Design Experience Regional Representative",
-            field_value(record, "general_project_information", "uhg_design_experience_representative"),
-        ),
-        (
-            "UHG Regional Project Management Representative",
-            field_value(record, "general_project_information", "uhg_project_management_representative"),
-        ),
-        ("Owner-retained Consultants", field_value(record, "owner_consultants", "owner_retained_consultants")),
-    ]
     st.subheader("Alliance Partners")
-    st.dataframe(pd.DataFrame(rows, columns=["Partner / Representative", "Current Value"]), width="stretch", hide_index=True)
+    st.caption(
+        "Nationally contracted UHG companies that may be contractually required for coordination. "
+        "Check Included to expand coordination fields for that partner."
+    )
+
+    st.markdown(
+        """
+        <style>
+            .alliance-section-title {background: #d9ead3; border: 1px solid #2f3a27; color: #111827; font-weight: 800; padding: .28rem .45rem; margin: .7rem 0 .25rem 0;}
+            .alliance-row-label {background: #eeeeee; border: 1px solid #7a7a7a; min-height: 2.15rem; padding: .42rem .5rem; font-weight: 700; font-size: .88rem; color: #111827;}
+            .alliance-note {font-size: .78rem; color: #667085; margin: -.15rem 0 .45rem 0;}
+            div[data-testid="stTextInput"] input, div[data-testid="stTextArea"] textarea {border-radius: 0 !important; border: 1px solid #7a7a7a !important; background: #fff !important; color: #101828 !important; font-size: .86rem !important;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    rep_cols = st.columns(2, gap="small")
+    with rep_cols[0]:
+        st.markdown('<div class="alliance-section-title">UHG Representatives</div>', unsafe_allow_html=True)
+        st.text_input(
+            "UHG Design Experience Regional Representative",
+            value=str(field_value(record, "general_project_information", "uhg_design_experience_representative")),
+            key="alliance_uhg_design_experience_rep",
+        )
+    with rep_cols[1]:
+        st.markdown('<div class="alliance-section-title">UHG Project Management</div>', unsafe_allow_html=True)
+        st.text_input(
+            "UHG Regional Project Management Representative",
+            value=str(field_value(record, "general_project_information", "uhg_project_management_representative")),
+            key="alliance_uhg_regional_pm_rep",
+        )
+
+    st.markdown('<div class="alliance-section-title">Owner\'s Consultants and Contractors</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="alliance-note">Source list from the LCD right-side Owner\'s Consultants and Contractors list. Included partners expand for coordination notes.</div>',
+        unsafe_allow_html=True,
+    )
+
+    included_defaults = included_alliance_partner_defaults(record)
+    for partner in OWNER_CONSULTANT_OPTIONS:
+        row_cols = st.columns([0.16, 1.8], gap="small")
+        included_key = alliance_partner_widget_key(partner, "included")
+        with row_cols[0]:
+            included = st.checkbox(
+                "Included",
+                value=partner in included_defaults,
+                key=included_key,
+                label_visibility="collapsed",
+                help=f"Include {partner} on this project",
+            )
+        with row_cols[1]:
+            st.markdown(f'<div class="alliance-row-label">{html.escape(partner)}</div>', unsafe_allow_html=True)
+
+        if included:
+            with st.expander(f"{partner} coordination details", expanded=True):
+                detail_cols = st.columns(3, gap="small")
+                with detail_cols[0]:
+                    st.text_input("Company / Vendor", value=partner, key=alliance_partner_widget_key(partner, "company"))
+                    st.text_input("Primary Contact", key=alliance_partner_widget_key(partner, "contact"))
+                with detail_cols[1]:
+                    st.text_input("Email", key=alliance_partner_widget_key(partner, "email"))
+                    st.text_input("Phone", key=alliance_partner_widget_key(partner, "phone"))
+                with detail_cols[2]:
+                    st.text_input("Coordination Responsibility", key=alliance_partner_widget_key(partner, "responsibility"))
+                    st.text_input("Status", value="Included / needs coordination", key=alliance_partner_widget_key(partner, "status"))
+                st.text_area("Coordination Notes", key=alliance_partner_widget_key(partner, "notes"), height=90)
 
 
 def render_contracts(payload: dict[str, Any]) -> None:
@@ -1328,16 +1539,31 @@ def render_contracts(payload: dict[str, Any]) -> None:
 
     cols = st.columns(4)
     cols[0].metric("Master Agreement", "Available")
-    cols[1].metric("Scope of Work", "Current + updateable")
+    cols[1].metric("Scope of Work", "Visible text")
     cols[2].metric("Executed SO", "Pending")
     cols[3].metric("SOW Updates", "Absorption required")
 
     st.subheader("Contract Documents")
-    st.dataframe(
-        pd.DataFrame(CONTRACT_DOCUMENT_ROWS, columns=["Document", "Status", "Path / Placeholder", "Role"]),
-        width="stretch",
-        hide_index=True,
+    st.caption(
+        "Click the document action to open the preserved contract source. "
+        "The Service Order template is intentionally not listed here because Service Order preparation has its own page."
     )
+    selected_document = st.session_state.get("contract_document_open")
+    for row in CONTRACT_DOCUMENT_ROWS:
+        path = source_path(row["Path"]) if row["Path"] else None
+        available = row["Status"] == "Available" and path is not None and path.exists()
+        cols = st.columns([1.15, .55, 2.1, 1.0])
+        cols[0].markdown(f"**{row['Document']}**")
+        cols[1].markdown(row["Status"])
+        cols[2].caption(row["Role"])
+        if cols[3].button(row["Action"], key=f"open_contract_{row['Document'].lower().replace(' ', '_')}", disabled=not available):
+            selected_document = row["Document"]
+            st.session_state["contract_document_open"] = selected_document
+
+    if selected_document:
+        selected_row = next((row for row in CONTRACT_DOCUMENT_ROWS if row["Document"] == selected_document), None)
+        if selected_row:
+            render_contract_document_preview(selected_row)
 
     st.subheader("Scope of Work Update Absorption")
     st.warning(
@@ -1415,25 +1641,91 @@ def render_metrics(payload: dict[str, Any]) -> None:
             render_table(rows, columns=("Metric / Log Field", "Entry Source", "Dashboard Use"))
 
 
-def render_service_order_review(payload: dict[str, Any]) -> None:
-    st.subheader("Service Order Review")
+def render_service_order_template(payload: dict[str, Any]) -> None:
+    entries = service_order_template_entry_rows()
+    st.subheader("Service Order Template")
     st.caption(
-        "Contracts creates the actual Service Order. Pii prepares the article-based information package "
-        "needed to communicate with Contracts without duplicating the B221 form."
+        "LCD-style Service Order template entry surface. Headings and field labels are fixed; each white field is editable and can later become an auto-fill or controlled pick-list."
     )
 
     total_items = sum(len(items) for items in SERVICE_ORDER_ARTICLES.values())
     cols = st.columns(4)
     cols[0].metric("Articles", len(SERVICE_ORDER_ARTICLES))
-    cols[1].metric("Preparation Items", total_items)
-    cols[2].metric("Executed SO", "Pending")
-    cols[3].metric("Readiness", "Open")
+    cols[1].metric("Editable Fields", len(entries))
+    cols[2].metric("Template PDF Pages", len(list(SERVICE_ORDER_TEMPLATE_PAGE_IMAGE_DIR.glob("*.png"))))
+    cols[3].metric("Executed SO", "Pending")
 
     st.warning(
-        "This is a preparation/checklist view based on the Service Order template. "
-        "It does not create the legal form; it collects and reviews the information Contracts needs."
+        "The executed Service Order belongs on the Contracts page only after the signed PDF is received. "
+        "This page is the editable Service Order template surface, not the executed document."
     )
 
+    st.subheader("Service Order Template Worksheet")
+    st.caption(
+        "Formatted like the LCD entry page: article headings are fixed, labels are fixed, and white cells are editable/pre-populated from current source context."
+    )
+    st.markdown(
+        """
+        <style>
+            .so-sheet-note {font-size: .86rem; color: #475467; margin: -.2rem 0 1rem 0;}
+            .so-section-title {background: #d9ead3; border: 1px solid #2f3a27; color: #111827; font-weight: 800; padding: .28rem .45rem; margin: .7rem 0 .25rem 0;}
+            .so-field-label {background: #eeeeee; border: 1px solid #7a7a7a; border-right: 0; min-height: 2.15rem; padding: .38rem .42rem; font-weight: 700; font-size: .82rem; color: #111827;}
+            .so-source-chip {font-size: .68rem; color: #667085; margin: -.35rem 0 .35rem 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+            .so-save-strip {background: #f2f4f7; border: 1px solid #98a2b3; padding: .55rem .7rem; margin-top: .8rem; font-size: .86rem;}
+            div[data-testid="stTextInput"] input {border-radius: 0 !important; border: 1px solid #7a7a7a !important; background: #fff !important; color: #101828 !important; font-size: .86rem !important;}
+        </style>
+        <div class="so-sheet-note">Click white cells to enter or revise Service Order values. Future build can replace selected fields with controlled dropdowns without changing this layout.</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    for article, rows in SERVICE_ORDER_ARTICLES.items():
+        st.markdown(f'<div class="so-section-title">{html.escape(article)}</div>', unsafe_allow_html=True)
+        for index in range(0, len(rows), 2):
+            row_pair = rows[index : index + 2]
+            columns = st.columns(len(row_pair), gap="small")
+            for offset, (column, (field, source_value, review_state)) in enumerate(zip(columns, row_pair)):
+                with column:
+                    st.markdown(f'<div class="so-field-label">{html.escape(field)}:</div>', unsafe_allow_html=True)
+                    key = service_order_template_widget_key(article, field, index + offset)
+                    if key not in st.session_state:
+                        st.session_state[key] = str(source_value)
+                    st.text_input(
+                        field,
+                        key=key,
+                        label_visibility="collapsed",
+                        help=f"Current/source value: {source_value} | Review state: {review_state}",
+                    )
+                    st.markdown(
+                        f'<div class="so-source-chip">{html.escape(review_state)} · {html.escape(str(source_value))}</div>',
+                        unsafe_allow_html=True,
+                    )
+
+    st.markdown(
+        '<div class="so-save-strip">Draft entry mode: values are editable in this dashboard session. Next build step is Save Service Order Template Draft into the project record.</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("Uploaded Template PDF Reference")
+    st.caption("Visual reference from the uploaded Service Order Template PDF. Use this to compare the editable grid against the PDF layout.")
+    if SERVICE_ORDER_TEMPLATE_PDF_PATH.exists():
+        st.download_button(
+            "Download Service Order Template PDF",
+            data=SERVICE_ORDER_TEMPLATE_PDF_PATH.read_bytes(),
+            file_name=SERVICE_ORDER_TEMPLATE_PDF_PATH.name,
+            mime="application/pdf",
+            key="download_service_order_template_pdf",
+        )
+    page_paths = sorted(SERVICE_ORDER_TEMPLATE_PAGE_IMAGE_DIR.glob("*.png"))
+    if page_paths:
+        for page_path in page_paths:
+            with st.expander(page_path.stem.replace("_", " ").title()):
+                st.image(str(page_path), width="stretch")
+    else:
+        st.info("No rendered PDF page images are available yet.")
+
+    st.subheader("Template Field Checklist")
+    st.caption(f"{total_items} structured items are tracked beneath the worksheet for review/routing.")
     for article, rows in SERVICE_ORDER_ARTICLES.items():
         with st.expander(f"{article} ({len(rows)} items)"):
             render_table(rows, columns=("Required Information", "Source / Current Value", "Review State"))
@@ -1510,8 +1802,8 @@ def render_dashboard() -> None:
         render_contracts(payload)
     elif choice == "Metrics":
         render_metrics(payload)
-    elif choice == "Service Order Review":
-        render_service_order_review(payload)
+    elif choice == "Service Order Template":
+        render_service_order_template(payload)
 
 
 if __name__ == "__main__":
