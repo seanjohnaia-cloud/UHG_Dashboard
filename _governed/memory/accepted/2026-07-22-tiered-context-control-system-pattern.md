@@ -1,6 +1,6 @@
 ---
 layer: memory
-status: proposed
+status: accepted
 proposal_type: pattern_candidate
 target_layer: decisions
 source:
@@ -10,8 +10,11 @@ source:
 derived_by: hermes
 confidence: medium
 uncertainty: "Untested design, not implementation. Open: session-state artifact for conversational continuity; human-declared per-session context mode; concrete proposal-format/triage specs for the gate; audit sampling parameters; whether the single-pen rule survives real multi-agent operation. Claimed as Pii-generic core, but developed in one specimen project (UHG_Dashboard) — the generalization test has not been run against a second project."
-supersedes: null
 review_after: 2026-08-05
+accepted_by: Sean Johnson
+accepted_on: 2026-07-22
+enacted_by_decision: "_governed/decisions/2026-07-22-tiered-context-control-system-pattern.md"
+supersedes: "_governed/memory/superseded/2026-07-22-tiered-context-control-system-pattern-pending-draft.md"
 admissibility: initiating
 verification:
   status: unverified
@@ -54,3 +57,8 @@ Supporting multi-agent rules proposed with it: partition agents by governed laye
 ## Not enacted
 
 No tooling, dashboard, or agent behavior should assume this pattern until a decision record accepts it (in whole or narrowed). The two synthesis pages carry the full articulation; this proposal exists so the pattern enters the governed promotion pipeline rather than living only in synthesis.
+
+
+## Acceptance note (2026-07-22)
+
+Accepted under an open human review window. Authority is expressed through the decision record at `_governed/decisions/2026-07-22-tiered-context-control-system-pattern.md`; this accepted-memory record carries the durable claim. The original pending draft is preserved with lineage at `memory/superseded/2026-07-22-tiered-context-control-system-pattern-pending-draft.md`. Accepted **narrowed**: candidate Pii-generic core pending the second-project generalization test — see the decision record's narrowing section.

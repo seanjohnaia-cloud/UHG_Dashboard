@@ -1,6 +1,6 @@
 ---
 layer: memory
-status: proposed
+status: accepted
 proposal_type: constitutional_rule_candidate
 target_layer: decisions
 source:
@@ -9,8 +9,11 @@ source:
 derived_by: hermes
 confidence: high
 uncertainty: "Boundary definition is unsettled: which synthesis pages count as 'resident/state context' (loaded per query / per project touch) vs. ordinary deep-tier synthesis. The rule's scope depends on a tier-classification convention that does not yet exist. Cadence (weekly?) and who counts as the concurring human (PM? designated reviewer?) are also open."
-supersedes: null
 review_after: 2026-08-05
+accepted_by: Sean Johnson
+accepted_on: 2026-07-22
+enacted_by_decision: "_governed/decisions/2026-07-22-resident-context-concurrence-rule.md"
+supersedes: "_governed/memory/superseded/2026-07-22-resident-context-concurrence-rule-pending-draft.md"
 admissibility: initiating
 verification:
   status: unverified
@@ -36,3 +39,8 @@ User correction, 2026-07-22 session: automated current-state updates rejected wh
 ## Not enacted
 
 This proposal binds nothing until a human authors an accepted decision record. Until then, agents should treat it as a candidate norm and behave conservatively (propose, don't auto-update state-tier pages).
+
+
+## Acceptance note (2026-07-22)
+
+Accepted under an open human review window. Authority is expressed through the decision record at `_governed/decisions/2026-07-22-resident-context-concurrence-rule.md`; this accepted-memory record carries the durable claim. The original pending draft is preserved with lineage at `memory/superseded/2026-07-22-resident-context-concurrence-rule-pending-draft.md`.
