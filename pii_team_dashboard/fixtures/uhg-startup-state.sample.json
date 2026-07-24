@@ -1,0 +1,421 @@
+{
+  "schema": "pii-team-dashboard.project-state.sample.v0",
+  "standing": {
+    "status": "sample_fixture",
+    "authority": "non_authoritative",
+    "admissibility": "test_fixture",
+    "verification": "synthetic_for_spine_testing"
+  },
+  "purpose": "Synthetic UHG startup-state fixture used to prove the Pii Team Dashboard spine can carry a mixed readiness condition without promoting sample data into project authority.",
+  "project_ref": {
+    "project_key": "fixture:uhg-startup-001",
+    "project_name": "UHG Sample Startup State",
+    "source_basis": "fixture_only",
+    "scope_of_use": "spine_testing_and_static_prototype"
+  },
+  "source_refs": [
+    {
+      "source_ref": "fixture:pac_sample",
+      "source_type": "synthetic_pac_record",
+      "standing": "fixture_only",
+      "notes": "Synthetic PAC-like origin record for display and origin-lock testing."
+    },
+    {
+      "source_ref": "fixture:uhg_overlay_sample",
+      "source_type": "synthetic_uhg_overlay_record",
+      "standing": "fixture_only",
+      "notes": "Synthetic UHG overlay record for Service Order / LCD-W overlay testing."
+    },
+    {
+      "source_ref": "fixture:startup_review_note",
+      "source_type": "synthetic_internal_review_note",
+      "standing": "fixture_only",
+      "notes": "Synthetic internal review note used to create gap/conflict/proposal records."
+    }
+  ],
+  "field_states": [
+    {
+      "field_id": "project_name",
+      "value": "UHG Sample Clinic Refresh",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "display_readiness",
+      "blocking_effect": "none",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "client_entity",
+      "value": "UnitedHealth Group fixture entity",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "display_readiness",
+      "blocking_effect": "none",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "project_description",
+      "value": "Synthetic interior refresh scope for startup-spine testing.",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "display_readiness_and_scope_review",
+      "blocking_effect": "none",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "professional_fee",
+      "value": "125000 USD fixture fee",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "budget_and_compensation_testing",
+      "blocking_effect": "none",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "fee_breakdown_by_phase",
+      "value": "SD 20%, DD 30%, CD 35%, CA 15% fixture split",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "budget_and_schedule_testing",
+      "blocking_effect": "none",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "project_schedule_by_phase",
+      "value": "Fixture draft: SD 3 weeks, DD 4 weeks, CD 6 weeks, CA TBD",
+      "truth_state": "provided",
+      "source_ref": "fixture:pac_sample",
+      "scope_of_use": "schedule_display_only",
+      "blocking_effect": "blocks_final_output",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "schedule_confidence_status",
+      "value": "illustrative_not_confirmed",
+      "truth_state": "assumed",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "current_internal_schedule_discussion",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Confirm owner/client dependencies and whether dates are contractual or illustrative.",
+      "lineage_refs": ["fixture:pac_sample"]
+    },
+    {
+      "field_id": "acceptance_status",
+      "value": "verbally_accepted_pending_formal_confirmation",
+      "truth_state": "provided",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "activation_screening",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Attach formal acceptance/authorization source before activation-ready status.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "ntp_or_equivalent_authorization",
+      "value": null,
+      "truth_state": "missing",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "activation_readiness",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Request NTP or equivalent authorization evidence.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "activation_identifier",
+      "value": null,
+      "truth_state": "missing",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "system_setup_and_activation",
+      "blocking_effect": "blocks_current_output",
+      "follow_up_required": "Confirm activation identifier before setup can complete.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "project_number",
+      "value": null,
+      "truth_state": "missing",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "system_setup_and_billing",
+      "blocking_effect": "blocks_current_output",
+      "follow_up_required": "Assign or confirm project number.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "billing_path_viability",
+      "value": "unknown_until_project_number_and_authorization_confirmed",
+      "truth_state": "unknown",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "budget_current_output_readiness",
+      "blocking_effect": "blocks_current_output",
+      "follow_up_required": "Confirm billing path after authorization and project number are available.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "owner_dependencies",
+      "value": "owner fixture review dates assumed from startup conversation",
+      "truth_state": "assumed",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "schedule_current_output_readiness",
+      "blocking_effect": "routing_only",
+      "follow_up_required": "Validate owner review durations before final schedule output.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "service_order_terms",
+      "value": "fixture conflict: PAC suggests proposal agreement; UHG overlay suggests Service Order required",
+      "truth_state": "conflict",
+      "source_ref": "fixture:uhg_overlay_sample",
+      "scope_of_use": "contracts_and_lcd_w_analysis",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Resolve agreement path vs UHG Service Order requirement.",
+      "lineage_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"]
+    },
+    {
+      "field_id": "fee_basis_alignment",
+      "value": "fixture conflict between proposal fee basis and service-order workflow",
+      "truth_state": "conflict",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "compensation_and_activation_readiness",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Confirm whether fee basis is proposal-origin, contract-authorized, or Service Order-derived.",
+      "lineage_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"]
+    },
+    {
+      "field_id": "activation_override_record",
+      "value": "candidate override to begin limited setup while authorization is pending",
+      "truth_state": "extracted",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "activation_override_review_only",
+      "blocking_effect": "routing_only",
+      "follow_up_required": "Requires PM/PIC concurrence before any current-truth propagation.",
+      "lineage_refs": []
+    },
+    {
+      "field_id": "activation_gate_status",
+      "value": "blocked_pending_authorization_and_contract_resolution",
+      "truth_state": "extracted",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "activation_readiness",
+      "blocking_effect": "blocks_activation",
+      "follow_up_required": "Elevate activation status for concurrence only after blockers are resolved or accepted by override.",
+      "lineage_refs": ["fixture:startup_review_note"]
+    },
+    {
+      "field_id": "archived_source_records",
+      "value": ["fixture:pac_sample", "fixture:uhg_overlay_sample", "fixture:startup_review_note"],
+      "truth_state": "provided",
+      "source_ref": "fixture:startup_review_note",
+      "scope_of_use": "governance_readiness",
+      "blocking_effect": "routing_only",
+      "lineage_refs": []
+    }
+  ],
+  "active_records": {
+    "candidate_field_states": [
+      {
+        "candidate_id": "cand:activation-gate-status-001",
+        "field_id": "activation_gate_status",
+        "proposed_value": "blocked_pending_authorization_and_contract_resolution",
+        "proposed_truth_state": "extracted",
+        "source_ref": "fixture:startup_review_note",
+        "extraction_ref": "fixture:extract-startup-review-001",
+        "scope_of_use": "activation_readiness",
+        "initiating_action": "extract",
+        "initiating_module": "activation_gates",
+        "permission_used": "derive",
+        "status": "candidate",
+        "lineage_refs": ["fixture:startup_review_note"],
+        "notes": "Synthetic candidate to test that extracted activation status does not become authority."
+      }
+    ],
+    "gap_records": [
+      {
+        "gap_id": "gap:ntp-001",
+        "field_id": "ntp_or_equivalent_authorization",
+        "gap_kind": "missing",
+        "truth_state": "missing",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "activation_readiness",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Request NTP/equivalent authorization source.",
+        "initiating_action": "extract",
+        "initiating_module": "activation_gates",
+        "status": "routed",
+        "lineage_refs": ["fixture:startup_review_note"],
+        "affected_modules": ["activation_gates", "contracts", "system_setup"]
+      },
+      {
+        "gap_id": "gap:project-number-001",
+        "field_id": "project_number",
+        "gap_kind": "missing",
+        "truth_state": "missing",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "system_setup_and_billing",
+        "blocking_effect": "blocks_current_output",
+        "follow_up_required": "Assign or confirm project number.",
+        "initiating_action": "extract",
+        "initiating_module": "system_setup",
+        "status": "routed",
+        "lineage_refs": ["fixture:startup_review_note"],
+        "affected_modules": ["system_setup", "budget", "contracts"]
+      }
+    ],
+    "conflict_records": [
+      {
+        "conflict_id": "conflict:service-order-terms-001",
+        "field_id": "service_order_terms",
+        "conflicting_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"],
+        "conflict_summary": "Fixture conflict between proposal/agreement path and UHG Service Order requirement.",
+        "truth_state": "conflict",
+        "scope_of_use": "contracts_and_lcd_w_analysis",
+        "blocking_effect": "blocks_activation",
+        "initiating_action": "extract",
+        "initiating_module": "contracts",
+        "status": "routed",
+        "lineage_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"],
+        "affected_modules": ["contracts", "lcd_w_analysis", "activation_gates"],
+        "authority_requirement": "pm_concurrence_required"
+      },
+      {
+        "conflict_id": "conflict:fee-basis-001",
+        "field_id": "fee_basis_alignment",
+        "conflicting_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"],
+        "conflict_summary": "Fixture conflict over whether fee basis is proposal-origin or Service Order-derived.",
+        "truth_state": "conflict",
+        "scope_of_use": "compensation_and_activation_readiness",
+        "blocking_effect": "blocks_activation",
+        "initiating_action": "extract",
+        "initiating_module": "compensation",
+        "status": "routed",
+        "lineage_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"],
+        "affected_modules": ["compensation", "budget", "activation_gates"],
+        "authority_requirement": "pm_concurrence_required"
+      }
+    ],
+    "proposal_packets": [
+      {
+        "proposal_id": "proposal:limited-setup-override-001",
+        "proposed_change": "Allow limited system setup preparation while activation remains blocked, without treating activation as ready.",
+        "source_ref": "fixture:startup_review_note",
+        "extraction_ref": "fixture:extract-startup-review-001",
+        "affected_fields": ["activation_override_record", "activation_gate_status", "system_setup"],
+        "affected_modules": ["activation_gates", "system_setup", "risk_gaps"],
+        "authority_requirement": "pm_concurrence_required",
+        "risk_or_blocking_effect": "blocks_activation remains; setup may proceed only as qualified internal preparation if concurred",
+        "requested_human_action": "review_and_concur_or_reject_limited_setup_override",
+        "initiating_action": "elevate",
+        "initiating_module": "activation_gates",
+        "status": "pending_concurrence",
+        "lineage_refs": ["cand:activation-gate-status-001", "gap:ntp-001"]
+      }
+    ],
+    "concurrence_candidates": [
+      {
+        "concurrence_candidate_id": "concur-candidate:limited-setup-override-001",
+        "field_id": "activation_override_record",
+        "current_state": "no_concurred_override",
+        "proposed_state": "limited_setup_preparation_allowed_without_activation_ready_status",
+        "lineage_refs": ["proposal:limited-setup-override-001", "fixture:startup_review_note"],
+        "reviewer_needed": "PM or PIC",
+        "reason": "Synthetic case tests that Elevate is proposal intake, not approval.",
+        "status": "pending_concurrence",
+        "proposal_id": "proposal:limited-setup-override-001",
+        "affected_modules": ["activation_gates", "system_setup", "risk_gaps"],
+        "blocking_effect": "routing_only",
+        "authority_requirement": "pm_concurrence_required",
+        "scope_of_use": "limited_internal_setup_preparation"
+      }
+    ],
+    "archive_record_pointers": [
+      {
+        "archive_id": "archive:fixture-source-bundle-001",
+        "source_ref": "fixture:startup_review_note",
+        "source_type": "synthetic_internal_review_note",
+        "captured_by": "fixture_author",
+        "captured_on": "2026-07-23",
+        "scope": "spine_testing_and_static_prototype",
+        "standing": "fixture_only",
+        "initiating_action": "archive",
+        "initiating_module": "risk_gaps",
+        "status": "archived",
+        "lineage_refs": ["fixture:pac_sample", "fixture:uhg_overlay_sample"]
+      }
+    ],
+    "propagation_events": []
+  },
+  "expected_module_readiness": [
+    {
+      "module_id": "project_origin",
+      "display_readiness": "ready",
+      "governance_readiness": "qualified",
+      "reason": "Core origin fields are source-traceable, but downstream validation and activation issues remain visible."
+    },
+    {
+      "module_id": "activation_gates",
+      "activation_readiness": "blocked",
+      "governance_readiness": "pending_concurrence",
+      "propagation_readiness": "blocked",
+      "reason": "Authorization/NTP is missing, service-order and fee-basis conflicts block activation, and override is only pending concurrence."
+    },
+    {
+      "module_id": "scope",
+      "current_output_readiness": "qualified",
+      "governance_readiness": "qualified",
+      "reason": "Origin scope is source-traceable for display and internal discussion, but later UHG overlay and Service Order implications remain unresolved."
+    },
+    {
+      "module_id": "contracts",
+      "activation_readiness": "blocked",
+      "current_output_readiness": "blocked",
+      "final_output_readiness": "blocked",
+      "reason": "Service Order terms conflict and authorization path is unresolved."
+    },
+    {
+      "module_id": "budget",
+      "current_output_readiness": "blocked",
+      "propagation_readiness": "blocked",
+      "reason": "Professional fee is source-traceable, but fee basis and billing path remain unresolved."
+    },
+    {
+      "module_id": "compensation",
+      "current_output_readiness": "blocked",
+      "final_output_readiness": "blocked",
+      "reason": "Fee-basis alignment is conflicted and needs PM concurrence or source resolution."
+    },
+    {
+      "module_id": "schedule",
+      "current_output_readiness": "qualified",
+      "final_output_readiness": "blocked",
+      "reason": "Schedule is usable only as internal assumption; false precision is blocked from final output."
+    },
+    {
+      "module_id": "team_responsibility",
+      "activation_readiness": "unknown",
+      "current_output_readiness": "qualified",
+      "reason": "Accountable assignments are not fully represented in this fixture; follow-up should remain visible."
+    },
+    {
+      "module_id": "consultants",
+      "current_output_readiness": "qualified",
+      "governance_readiness": "qualified",
+      "reason": "Specialty/consultant implications are not final, but scope signals can be routed."
+    },
+    {
+      "module_id": "lcd_w_analysis",
+      "current_output_readiness": "blocked",
+      "final_output_readiness": "blocked",
+      "governance_readiness": "qualified",
+      "reason": "UHG overlay is visible but Service Order terms conflict blocks clean readiness."
+    },
+    {
+      "module_id": "system_setup",
+      "activation_readiness": "blocked",
+      "current_output_readiness": "blocked",
+      "reason": "Project number and activation identifier are missing."
+    },
+    {
+      "module_id": "risk_gaps",
+      "display_readiness": "ready",
+      "governance_readiness": "ready",
+      "reason": "Known gaps, conflicts, proposal, concurrence candidate, and archive pointer are visible and routed."
+    }
+  ]
+}
