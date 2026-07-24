@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pii Team Dashboard Prototype — Synthetic Fixture</title>
+  <style>
+    :root {
+      --bg: #090805;
+      --panel: rgba(28, 22, 13, 0.92);
+      --panel-2: rgba(44, 33, 17, 0.82);
+      --ink: #f8e9bf;
+      --muted: #a89368;
+      --amber: #ffb238;
+      --amber-2: #ff7a18;
+      --green: #7ce08a;
+      --red: #ff5d48;
+      --blue: #7ac7ff;
+      --violet: #c69cff;
+      --line: rgba(255, 178, 56, 0.28);
+      --glass: rgba(255, 178, 56, 0.07);
+      --shadow: 0 0 26px rgba(255, 139, 23, 0.16), inset 0 0 0 1px rgba(255, 178, 56, 0.18);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 8%, rgba(255,178,56,.18), transparent 28rem),
+        radial-gradient(circle at 78% 20%, rgba(122,199,255,.10), transparent 24rem),
+        linear-gradient(135deg, #050503 0%, #11100b 48%, #070604 100%);
+      font-family: var(--sans);
+      letter-spacing: .01em;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,178,56,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,178,56,.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at 50% 30%, black 0%, transparent 78%);
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1.1fr auto;
+      gap: 1rem;
+      align-items: start;
+      padding: 24px 28px 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(30,22,11,.92), rgba(10,9,6,.66));
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(14px);
+    }
+    h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.65rem); line-height: 1; text-transform: uppercase; letter-spacing: .09em; }
+    .subtitle { color: var(--muted); margin-top: .55rem; max-width: 78ch; }
+    .authority-banner {
+      border: 1px solid rgba(255,93,72,.55);
+      background: linear-gradient(135deg, rgba(255,93,72,.18), rgba(255,178,56,.08));
+      color: #ffd8cf;
+      padding: .85rem 1rem;
+      border-radius: 14px;
+      max-width: 34rem;
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+      font-size: .82rem;
+    }
+    main { padding: 22px 28px 32px; display: grid; grid-template-columns: minmax(520px, 1.25fr) minmax(360px, .75fr); gap: 20px; }
+    .panel { border: 1px solid var(--line); background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; }
+    .panel-title { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding: 14px 16px; border-bottom:1px solid var(--line); background: rgba(255,178,56,.06); }
+    .panel-title h2 { margin: 0; font-size: .9rem; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
+    .tiny { font-family: var(--mono); color: var(--muted); font-size: .72rem; }
+    .graph { position: relative; min-height: 620px; padding: 20px; overflow:hidden; }
+    .radar { position:absolute; inset: 22px; border-radius:50%; border: 1px dashed rgba(255,178,56,.22); opacity:.65; }
+    .radar::before, .radar::after { content:""; position:absolute; inset: 17%; border-radius:50%; border: 1px dashed rgba(255,178,56,.16); }
+    .radar::after { inset: 34%; }
+    .sweep { position:absolute; width: 46%; height: 46%; left:50%; top:50%; transform-origin: 0 0; background: conic-gradient(from -18deg, rgba(255,178,56,.22), transparent 34deg); animation: sweep 12s linear infinite; opacity:.42; }
+    @keyframes sweep { to { transform: rotate(360deg); } }
+    .nodes { position: relative; height: 580px; }
+    .node {
+      position: absolute;
+      width: 168px;
+      min-height: 92px;
+      padding: 12px;
+      border: 1px solid rgba(255,178,56,.30);
+      background: linear-gradient(145deg, rgba(33,25,14,.96), rgba(12,11,8,.92));
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .node:hover, .node.active { transform: translateY(-3px) scale(1.02); border-color: var(--amber); box-shadow: 0 0 22px rgba(255,178,56,.28); }
+    .node-id { font-family: var(--mono); color: var(--muted); font-size: .62rem; margin-bottom: 7px; }
+    .node-label { font-size: .86rem; font-weight: 700; line-height: 1.1; }
+    .badges { display:flex; flex-wrap:wrap; gap: 5px; margin-top: 10px; }
+    .badge { border:1px solid rgba(255,178,56,.25); border-radius: 99px; padding: 3px 7px; font-family: var(--mono); font-size:.62rem; text-transform: uppercase; }
+    .ready { color: var(--green); border-color: rgba(124,224,138,.45); background: rgba(124,224,138,.08); }
+    .qualified { color: var(--amber); }
+    .blocked { color: var(--red); border-color: rgba(255,93,72,.45); background: rgba(255,93,72,.08); }
+    .pending_concurrence { color: var(--violet); border-color: rgba(198,156,255,.45); background: rgba(198,156,255,.08); }
+    .unknown, .deferred, .not_required { color: var(--blue); border-color: rgba(122,199,255,.38); background: rgba(122,199,255,.06); }
+    .detail { display:grid; gap: 16px; }
+    .module-detail { padding: 16px; }
+    .module-detail h3 { margin: 0 0 .45rem; color: var(--ink); font-size: 1.35rem; }
+    .module-detail p { color: var(--muted); margin: .35rem 0 .9rem; line-height: 1.5; }
+    .field-list, .record-list { display:grid; gap: 8px; }
+    .field, .record { border: 1px solid rgba(255,178,56,.17); background: var(--glass); border-radius: 13px; padding: 10px; }
+    .field-head, .record-head { display:flex; justify-content:space-between; gap:.75rem; align-items:start; }
+    .field-id, .record-id { font-family: var(--mono); color: var(--amber); font-size:.72rem; overflow-wrap:anywhere; }
+    .field-value, .record-body { color: #efd9a6; margin-top: 6px; font-size: .84rem; line-height:1.35; }
+    .strip { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 16px; }
+    .action { border: 1px solid rgba(255,178,56,.30); background: linear-gradient(180deg, rgba(255,178,56,.12), rgba(255,178,56,.04)); border-radius: 16px; padding: 12px; min-height: 110px; }
+    .action strong { display:block; color: var(--amber); text-transform: uppercase; letter-spacing:.14em; font-size:.78rem; }
+    .action span { display:block; color: var(--muted); font-size:.78rem; line-height:1.35; margin-top: 8px; }
+    .records-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; }
+    .record-section h3 { margin: 0 0 10px; font-size:.82rem; color: var(--amber); text-transform: uppercase; letter-spacing:.12em; }
+    .footer-note { margin: 0 28px 26px; color: var(--muted); font-family: var(--mono); font-size: .78rem; }
+    @media (max-width: 1050px) { main { grid-template-columns: 1fr; } header { grid-template-columns: 1fr; } .strip, .records-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Pii Console // UHG Startup Spine Proof</h1>
+      <div class="subtitle">Grace/team-side command center prototype using synthetic fixture state. Readiness is rendered as dashboard posture over field truth, transitions, and routing — not as project authority.</div>
+    </div>
+    <div class="authority-banner">SYNTHETIC FIXTURE ONLY · NON-AUTHORITATIVE · NOT REAL UHG PROJECT STATE · READINESS IS DASHBOARD STATE, NOT AUTHORITY</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="panel-title"><h2>Sonar Module Graph</h2><span class="tiny">12 stable module lenses · one shared fixture spine</span></div>
+      <div class="graph">
+        <div class="radar"></div><div class="sweep"></div>
+        <div class="nodes" id="nodes"></div>
+      </div>
+    </section>
+
+    <aside class="detail">
+      <section class="panel module-detail" id="moduleDetail"></section>
+      <section class="panel">
+        <div class="panel-title"><h2>Action Strip</h2><span class="tiny">operator intent ≠ authority</span></div>
+        <div class="strip" id="actionStrip"></div>
+      </section>
+    </aside>
+  </main>
+
+  <section class="panel" style="margin: 0 28px 20px;">
+    <div class="panel-title"><h2>Active Governed Records</h2><span class="tiny">gaps · conflicts · proposals · concurrence candidates · archive pointers</span></div>
+    <div class="records-grid" id="recordsGrid"></div>
+  </section>
+
+  <p class="footer-note">Fixture source: pii_team_dashboard/fixtures/uhg-startup-state.sample.json · Client-facing dashboard files are outside this prototype scope.</p>
+
+  <script id="pii-seed-data" type="application/json">{
+  "fixture": {
+    "schema": "pii-team-dashboard.project-state.sample.v0",
+    "standing": {
+      "status": "sample_fixture",
+      "authority": "non_authoritative",
+      "admissibility": "test_fixture",
+      "verification": "synthetic_for_spine_testing"
+    },
+    "purpose": "Synthetic UHG startup-state fixture used to prove the Pii Team Dashboard spine can carry a mixed readiness condition without promoting sample data into project authority.",
+    "project_ref": {
+      "project_key": "fixture:uhg-startup-001",
+      "project_name": "UHG Sample Startup State",
+      "source_basis": "fixture_only",
+      "scope_of_use": "spine_testing_and_static_prototype"
+    },
+    "source_refs": [
+      {
+        "source_ref": "fixture:pac_sample",
+        "source_type": "synthetic_pac_record",
+        "standing": "fixture_only",
+        "notes": "Synthetic PAC-like origin record for display and origin-lock testing."
+      },
+      {
+        "source_ref": "fixture:uhg_overlay_sample",
+        "source_type": "synthetic_uhg_overlay_record",
+        "standing": "fixture_only",
+        "notes": "Synthetic UHG overlay record for Service Order / LCD-W overlay testing."
+      },
+      {
+        "source_ref": "fixture:startup_review_note",
+        "source_type": "synthetic_internal_review_note",
+        "standing": "fixture_only",
+        "notes": "Synthetic internal review note used to create gap/conflict/proposal records."
+      }
+    ],
+    "field_states": [
+      {
+        "field_id": "project_name",
+        "value": "UHG Sample Clinic Refresh",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "display_readiness",
+        "blocking_effect": "none",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "client_entity",
+        "value": "UnitedHealth Group fixture entity",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "display_readiness",
+        "blocking_effect": "none",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "project_description",
+        "value": "Synthetic interior refresh scope for startup-spine testing.",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "display_readiness_and_scope_review",
+        "blocking_effect": "none",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "professional_fee",
+        "value": "125000 USD fixture fee",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "budget_and_compensation_testing",
+        "blocking_effect": "none",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "fee_breakdown_by_phase",
+        "value": "SD 20%, DD 30%, CD 35%, CA 15% fixture split",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "budget_and_schedule_testing",
+        "blocking_effect": "none",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "project_schedule_by_phase",
+        "value": "Fixture draft: SD 3 weeks, DD 4 weeks, CD 6 weeks, CA TBD",
+        "truth_state": "provided",
+        "source_ref": "fixture:pac_sample",
+        "scope_of_use": "schedule_display_only",
+        "blocking_effect": "blocks_final_output",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "schedule_confidence_status",
+        "value": "illustrative_not_confirmed",
+        "truth_state": "assumed",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "current_internal_schedule_discussion",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Confirm owner/client dependencies and whether dates are contractual or illustrative.",
+        "lineage_refs": [
+          "fixture:pac_sample"
+        ]
+      },
+      {
+        "field_id": "acceptance_status",
+        "value": "verbally_accepted_pending_formal_confirmation",
+        "truth_state": "provided",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "activation_screening",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Attach formal acceptance/authorization source before activation-ready status.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "ntp_or_equivalent_authorization",
+        "value": null,
+        "truth_state": "missing",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "activation_readiness",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Request NTP or equivalent authorization evidence.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "activation_identifier",
+        "value": null,
+        "truth_state": "missing",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "system_setup_and_activation",
+        "blocking_effect": "blocks_current_output",
+        "follow_up_required": "Confirm activation identifier before setup can complete.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "project_number",
+        "value": null,
+        "truth_state": "missing",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "system_setup_and_billing",
+        "blocking_effect": "blocks_current_output",
+        "follow_up_required": "Assign or confirm project number.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "billing_path_viability",
+        "value": "unknown_until_project_number_and_authorization_confirmed",
+        "truth_state": "unknown",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "budget_current_output_readiness",
+        "blocking_effect": "blocks_current_output",
+        "follow_up_required": "Confirm billing path after authorization and project number are available.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "owner_dependencies",
+        "value": "owner fixture review dates assumed from startup conversation",
+        "truth_state": "assumed",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "schedule_current_output_readiness",
+        "blocking_effect": "routing_only",
+        "follow_up_required": "Validate owner review durations before final schedule output.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "service_order_terms",
+        "value": "fixture conflict: PAC suggests proposal agreement; UHG overlay suggests Service Order required",
+        "truth_state": "conflict",
+        "source_ref": "fixture:uhg_overlay_sample",
+        "scope_of_use": "contracts_and_lcd_w_analysis",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Resolve agreement path vs UHG Service Order requirement.",
+        "lineage_refs": [
+          "fixture:pac_sample",
+          "fixture:uhg_overlay_sample"
+        ]
+      },
+      {
+        "field_id": "fee_basis_alignment",
+        "value": "fixture conflict between proposal fee basis and service-order workflow",
+        "truth_state": "conflict",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "compensation_and_activation_readiness",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Confirm whether fee basis is proposal-origin, contract-authorized, or Service Order-derived.",
+        "lineage_refs": [
+          "fixture:pac_sample",
+          "fixture:uhg_overlay_sample"
+        ]
+      },
+      {
+        "field_id": "activation_override_record",
+        "value": "candidate override to begin limited setup while authorization is pending",
+        "truth_state": "extracted",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "activation_override_review_only",
+        "blocking_effect": "routing_only",
+        "follow_up_required": "Requires PM/PIC concurrence before any current-truth propagation.",
+        "lineage_refs": []
+      },
+      {
+        "field_id": "activation_gate_status",
+        "value": "blocked_pending_authorization_and_contract_resolution",
+        "truth_state": "extracted",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "activation_readiness",
+        "blocking_effect": "blocks_activation",
+        "follow_up_required": "Elevate activation status for concurrence only after blockers are resolved or accepted by override.",
+        "lineage_refs": [
+          "fixture:startup_review_note"
+        ]
+      },
+      {
+        "field_id": "archived_source_records",
+        "value": [
+          "fixture:pac_sample",
+          "fixture:uhg_overlay_sample",
+          "fixture:startup_review_note"
+        ],
+        "truth_state": "provided",
+        "source_ref": "fixture:startup_review_note",
+        "scope_of_use": "governance_readiness",
+        "blocking_effect": "routing_only",
+        "lineage_refs": []
+      }
+    ],
+    "active_records": {
+      "candidate_field_states": [
+        {
+          "candidate_id": "cand:activation-gate-status-001",
+          "field_id": "activation_gate_status",
+          "proposed_value": "blocked_pending_authorization_and_contract_resolution",
+          "proposed_truth_state": "extracted",
+          "source_ref": "fixture:startup_review_note",
+          "extraction_ref": "fixture:extract-startup-review-001",
+          "scope_of_use": "activation_readiness",
+          "initiating_action": "extract",
+          "initiating_module": "activation_gates",
+          "permission_used": "derive",
+          "status": "candidate",
+          "lineage_refs": [
+            "fixture:startup_review_note"
+          ],
+          "notes": "Synthetic candidate to test that extracted activation status does not become authority."
+        }
+      ],
+      "gap_records": [
+        {
+          "gap_id": "gap:ntp-001",
+          "field_id": "ntp_or_equivalent_authorization",
+          "gap_kind": "missing",
+          "truth_state": "missing",
+          "source_ref": "fixture:startup_review_note",
+          "scope_of_use": "activation_readiness",
+          "blocking_effect": "blocks_activation",
+          "follow_up_required": "Request NTP/equivalent authorization source.",
+          "initiating_action": "extract",
+          "initiating_module": "activation_gates",
+          "status": "routed",
+          "lineage_refs": [
+            "fixture:startup_review_note"
+          ],
+          "affected_modules": [
+            "activation_gates",
+            "contracts",
+            "system_setup"
+          ]
+        },
+        {
+          "gap_id": "gap:project-number-001",
+          "field_id": "project_number",
+          "gap_kind": "missing",
+          "truth_state": "missing",
+          "source_ref": "fixture:startup_review_note",
+          "scope_of_use": "system_setup_and_billing",
+          "blocking_effect": "blocks_current_output",
+          "follow_up_required": "Assign or confirm project number.",
+          "initiating_action": "extract",
+          "initiating_module": "system_setup",
+          "status": "routed",
+          "lineage_refs": [
+            "fixture:startup_review_note"
+          ],
+          "affected_modules": [
+            "system_setup",
+            "budget",
+            "contracts"
+          ]
+        }
+      ],
+      "conflict_records": [
+        {
+          "conflict_id": "conflict:service-order-terms-001",
+          "field_id": "service_order_terms",
+          "conflicting_refs": [
+            "fixture:pac_sample",
+            "fixture:uhg_overlay_sample"
+          ],
+          "conflict_summary": "Fixture conflict between proposal/agreement path and UHG Service Order requirement.",
+          "truth_state": "conflict",
+          "scope_of_use": "contracts_and_lcd_w_analysis",
+          "blocking_effect": "blocks_activation",
+          "initiating_action": "extract",
+          "initiating_module": "contracts",
+          "status": "routed",
+          "lineage_refs": [
+            "fixture:pac_sample",
+            "fixture:uhg_overlay_sample"
+          ],
+          "affected_modules": [
+            "contracts",
+            "lcd_w_analysis",
+            "activation_gates"
+          ],
+          "authority_requirement": "pm_concurrence_required"
+        },
+        {
+          "conflict_id": "conflict:fee-basis-001",
+          "field_id": "fee_basis_alignment",
+          "conflicting_refs": [
+            "fixture:pac_sample",
+            "fixture:uhg_overlay_sample"
+          ],
+          "conflict_summary": "Fixture conflict over whether fee basis is proposal-origin or Service Order-derived.",
+          "truth_state": "conflict",
+          "scope_of_use": "compensation_and_activation_readiness",
+          "blocking_effect": "blocks_activation",
+          "initiating_action": "extract",
+          "initiating_module": "compensation",
+          "status": "routed",
+          "lineage_refs": [
+            "fixture:pac_sample",
+            "fixture:uhg_overlay_sample"
+          ],
+          "affected_modules": [
+            "compensation",
+            "budget",
+            "activation_gates"
+          ],
+          "authority_requirement": "pm_concurrence_required"
+        }
+      ],
+      "proposal_packets": [
+        {
+          "proposal_id": "proposal:limited-setup-override-001",
+          "proposed_change": "Allow limited system setup preparation while activation remains blocked, without treating activation as ready.",
+          "source_ref": "fixture:startup_review_note",
+          "extraction_ref": "fixture:extract-startup-review-001",
+          "affected_fields": [
+            "activation_override_record",
+            "activation_gate_status",
+            "system_setup"
+          ],
+          "affected_modules": [
+            "activation_gates",
+            "system_setup",
+            "risk_gaps"
+          ],
+          "authority_requirement": "pm_concurrence_required",
+          "risk_or_blocking_effect": "blocks_activation remains; setup may proceed only as qualified internal preparation if concurred",
+          "requested_human_action": "review_and_concur_or_reject_limited_setup_override",
+          "initiating_action": "elevate",
+          "initiating_module": "activation_gates",
+          "status": "pending_concurrence",
+          "lineage_refs": [
+            "cand:activation-gate-status-001",
+            "gap:ntp-001"
+          ]
+        }
+      ],
+      "concurrence_candidates": [
+        {
+          "concurrence_candidate_id": "concur-candidate:limited-setup-override-001",
+          "field_id": "activation_override_record",
+          "current_state": "no_concurred_override",
+          "proposed_state": "limited_setup_preparation_allowed_without_activation_ready_status",
+          "lineage_refs": [
+            "proposal:limited-setup-override-001",
+            "fixture:startup_review_note"
+          ],
+          "reviewer_needed": "PM or PIC",
+          "reason": "Synthetic case tests that Elevate is proposal intake, not approval.",
+          "status": "pending_concurrence",
+          "proposal_id": "proposal:limited-setup-override-001",
+          "affected_modules": [
+            "activation_gates",
+            "system_setup",
+            "risk_gaps"
+          ],
+          "blocking_effect": "routing_only",
+          "authority_requirement": "pm_concurrence_required",
+          "scope_of_use": "limited_internal_setup_preparation"
+        }
+      ],
+      "archive_record_pointers": [
+        {
+          "archive_id": "archive:fixture-source-bundle-001",
+          "source_ref": "fixture:startup_review_note",
+          "source_type": "synthetic_internal_review_note",
+          "captured_by": "fixture_author",
+          "captured_on": "2026-07-23",
+          "scope": "spine_testing_and_static_prototype",
+          "standing": "fixture_only",
+          "initiating_action": "archive",
+          "initiating_module": "risk_gaps",
+          "status": "archived",
+          "lineage_refs": [
+            "fixture:pac_sample",
+            "fixture:uhg_overlay_sample"
+          ]
+        }
+      ],
+      "propagation_events": []
+    },
+    "expected_module_readiness": [
+      {
+        "module_id": "project_origin",
+        "display_readiness": "ready",
+        "governance_readiness": "qualified",
+        "reason": "Core origin fields are source-traceable, but downstream validation and activation issues remain visible."
+      },
+      {
+        "module_id": "activation_gates",
+        "activation_readiness": "blocked",
+        "governance_readiness": "pending_concurrence",
+        "propagation_readiness": "blocked",
+        "reason": "Authorization/NTP is missing, service-order and fee-basis conflicts block activation, and override is only pending concurrence."
+      },
+      {
+        "module_id": "scope",
+        "current_output_readiness": "qualified",
+        "governance_readiness": "qualified",
+        "reason": "Origin scope is source-traceable for display and internal discussion, but later UHG overlay and Service Order implications remain unresolved."
+      },
+      {
+        "module_id": "contracts",
+        "activation_readiness": "blocked",
+        "current_output_readiness": "blocked",
+        "final_output_readiness": "blocked",
+        "reason": "Service Order terms conflict and authorization path is unresolved."
+      },
+      {
+        "module_id": "budget",
+        "current_output_readiness": "blocked",
+        "propagation_readiness": "blocked",
+        "reason": "Professional fee is source-traceable, but fee basis and billing path remain unresolved."
+      },
+      {
+        "module_id": "compensation",
+        "current_output_readiness": "blocked",
+        "final_output_readiness": "blocked",
+        "reason": "Fee-basis alignment is conflicted and needs PM concurrence or source resolution."
+      },
+      {
+        "module_id": "schedule",
+        "current_output_readiness": "qualified",
+        "final_output_readiness": "blocked",
+        "reason": "Schedule is usable only as internal assumption; false precision is blocked from final output."
+      },
+      {
+        "module_id": "team_responsibility",
+        "activation_readiness": "unknown",
+        "current_output_readiness": "qualified",
+        "reason": "Accountable assignments are not fully represented in this fixture; follow-up should remain visible."
+      },
+      {
+        "module_id": "consultants",
+        "current_output_readiness": "qualified",
+        "governance_readiness": "qualified",
+        "reason": "Specialty/consultant implications are not final, but scope signals can be routed."
+      },
+      {
+        "module_id": "lcd_w_analysis",
+        "current_output_readiness": "blocked",
+        "final_output_readiness": "blocked",
+        "governance_readiness": "qualified",
+        "reason": "UHG overlay is visible but Service Order terms conflict blocks clean readiness."
+      },
+      {
+        "module_id": "system_setup",
+        "activation_readiness": "blocked",
+        "current_output_readiness": "blocked",
+        "reason": "Project number and activation identifier are missing."
+      },
+      {
+        "module_id": "risk_gaps",
+        "display_readiness": "ready",
+        "governance_readiness": "ready",
+        "reason": "Known gaps, conflicts, proposal, concurrence candidate, and archive pointer are visible and routed."
+      }
+    ]
+  },
+  "modules": [
+    {
+      "id": "project_origin",
+      "label": "Project Origin / PAC",
+      "category": "origin",
+      "primary_source_layer": "pac_core",
+      "description": "Known, approved, and structurally defined project-start origin data derived from PAC.",
+      "canonical_inputs": [
+        "proposal_date",
+        "client_entity",
+        "project_name",
+        "project_location",
+        "project_description",
+        "professional_fee",
+        "acceptance_status"
+      ],
+      "operator_questions": [
+        "What was known at origin?",
+        "What remains validation-required before startup?",
+        "What cannot be overwritten by later operations?"
+      ]
+    },
+    {
+      "id": "activation_gates",
+      "label": "Activation Gates",
+      "category": "startup_control",
+      "primary_source_layer": "pac_core",
+      "description": "Blocking-by-default startup sufficiency checks before project activation proceeds.",
+      "canonical_inputs": [
+        "acceptance_status",
+        "authorization_confirmation",
+        "scope_clarity_status",
+        "schedule_confidence_status",
+        "billing_schedule"
+      ],
+      "operator_questions": [
+        "Can this project start responsibly?",
+        "Which required startup facts are still gaps?",
+        "Which overrides create coordination risk?"
+      ]
+    },
+    {
+      "id": "scope",
+      "label": "Scope / Project Definition",
+      "category": "operations",
+      "primary_source_layer": "pac_core_plus_overlay",
+      "description": "Operational view of scope, project description, square footage, services, exclusions, and later scope clarification.",
+      "canonical_inputs": [
+        "project_description",
+        "estimated_gsf",
+        "basic_services",
+        "additional_services",
+        "scope_clarity_status"
+      ],
+      "operator_questions": [
+        "What is actually included?",
+        "Where is the proposal narrative incomplete or misaligned?",
+        "What scope signals trigger consultant or additional-service routing?"
+      ]
+    },
+    {
+      "id": "contracts",
+      "label": "Contracts / Authorization",
+      "category": "contractual_control",
+      "primary_source_layer": "pac_core_plus_uhg_overlay",
+      "description": "Agreement path, acceptance, authorization, Service Order logic, insurance, and contractual workflow constraints.",
+      "canonical_inputs": [
+        "form_of_agreement",
+        "acceptance_status",
+        "authorization_confirmation",
+        "insurance_requirements",
+        "service_order_terms"
+      ],
+      "operator_questions": [
+        "What authorizes the work?",
+        "Does the contract path match the work being performed?",
+        "Which UHG-specific contractual rules govern this project?"
+      ]
+    },
+    {
+      "id": "budget",
+      "label": "Budget / Financial Model",
+      "category": "financial_operations",
+      "primary_source_layer": "pac_transformation",
+      "description": "Transforms PAC fee and cost origin data into internal production budget and project financial controls.",
+      "canonical_inputs": [
+        "estimated_construction_cost",
+        "professional_fee",
+        "fee_breakdown_by_phase",
+        "billing_schedule"
+      ],
+      "operator_questions": [
+        "What is the approved fee basis?",
+        "How does fee transform into production budget?",
+        "Where does budget depend on contract or compensation data?"
+      ]
+    },
+    {
+      "id": "compensation",
+      "label": "Compensation / Fee",
+      "category": "financial_operations",
+      "primary_source_layer": "pac_core_plus_contract_overlay",
+      "description": "Professional fee, phase fee breakdown, reimbursables, additional services, and compensation assumptions.",
+      "canonical_inputs": [
+        "professional_fee",
+        "fee_breakdown_by_phase",
+        "reimbursable_expenses",
+        "additional_services"
+      ],
+      "operator_questions": [
+        "What is Grace being paid to do?",
+        "What fee data is origin truth vs. later transformation?",
+        "What additional services are unresolved?"
+      ]
+    },
+    {
+      "id": "schedule",
+      "label": "Schedule / Milestones",
+      "category": "time_operations",
+      "primary_source_layer": "pac_core_plus_overlay",
+      "description": "Project schedule by phase, schedule confidence, milestones, and owner/client-dependent timing constraints.",
+      "canonical_inputs": [
+        "project_schedule_by_phase",
+        "schedule_confidence_status",
+        "milestones",
+        "owner_dependencies"
+      ],
+      "operator_questions": [
+        "What schedule is contractual vs. illustrative?",
+        "Which milestones drive deliverables and billing?",
+        "Where is false precision being introduced?"
+      ]
+    },
+    {
+      "id": "team_responsibility",
+      "label": "Team + Responsibility",
+      "category": "operations",
+      "primary_source_layer": "lcw_section_b",
+      "description": "Internal, consultant, owner, and partner responsibilities that emerge after origin capture.",
+      "canonical_inputs": [
+        "pic",
+        "pm",
+        "pa",
+        "consultant_roles",
+        "owner_contacts",
+        "responsibility_assignments"
+      ],
+      "operator_questions": [
+        "Who owns each required action?",
+        "Which consultant/additional-service triggers remain unrouted?",
+        "What responsibilities are missing or ambiguous?"
+      ]
+    },
+    {
+      "id": "consultants",
+      "label": "Consultants / Partners",
+      "category": "coordination",
+      "primary_source_layer": "lcw_section_b_plus_scope_signals",
+      "description": "Consultant needs, partner assignments, proposal requests, scope mapping, and coordination status.",
+      "canonical_inputs": [
+        "additional_services",
+        "programming",
+        "record_drawings",
+        "consultant_roles",
+        "proposal_requests"
+      ],
+      "operator_questions": [
+        "Which consultants are required by scope?",
+        "Which consultant scopes are missing?",
+        "Which assignments affect schedule, fee, or risk?"
+      ]
+    },
+    {
+      "id": "lcd_w_analysis",
+      "label": "LCD-W / Project Analysis",
+      "category": "analysis_overlay",
+      "primary_source_layer": "generic_lcd_w_or_uhg_lcd_lcw",
+      "description": "Required project-analysis fields from the generic Grace LCD-W pattern or the UHG-specific contractual LCD/LCW overlay.",
+      "canonical_inputs": [
+        "lcd_required_fields",
+        "uhg_required_fields",
+        "project_analysis_fields",
+        "workflow_rules"
+      ],
+      "operator_questions": [
+        "Which project-analysis fields are required for this client/project?",
+        "Which are generic Grace needs vs. UHG contractual fields?",
+        "Which required fields remain incomplete?"
+      ]
+    },
+    {
+      "id": "system_setup",
+      "label": "System Setup",
+      "category": "operations",
+      "primary_source_layer": "lcw_section_e",
+      "description": "Operational configuration: folders, platforms, model environment, standards, and project setup requirements.",
+      "canonical_inputs": [
+        "platforms",
+        "folder_structure",
+        "model_environment",
+        "standards",
+        "file_locations"
+      ],
+      "operator_questions": [
+        "Is the project environment ready?",
+        "What setup requirements are blocked by missing data?",
+        "What setup facts need validation?"
+      ]
+    },
+    {
+      "id": "risk_gaps",
+      "label": "Risk / Gaps / Archive",
+      "category": "governance_routing",
+      "primary_source_layer": "governed_memory_pending_or_gap_records",
+      "description": "Visible worklist of missing, conflicting, uncertain, archived/source-preserved, or unresolved project facts. Quarantine is not a console function; unresolved material is carried by field truth/admissibility/verification/routing state.",
+      "canonical_inputs": [
+        "gap_records",
+        "conflict_records",
+        "validation_required_fields",
+        "archived_source_records",
+        "override_records"
+      ],
+      "operator_questions": [
+        "What do we not know?",
+        "What is blocked?",
+        "What source/dialogue needs archive preservation?",
+        "What needs human concurrence before propagation?"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "extract",
+      "label": "Extract",
+      "operator_intent": "Glean field candidates, topics, gaps, conflicts, and state changes from preserved source material or dialogue without making them authoritative."
+    },
+    {
+      "id": "absorb",
+      "label": "Absorb",
+      "operator_intent": "Intake an externally created artifact, file, note, workbook, PDF, email, or generated artifact as source material for this project context."
+    },
+    {
+      "id": "elevate",
+      "label": "Elevate",
+      "operator_intent": "Propose a field/state/routing change for human review, concurrence, pending memory, or later decision. Elevate is proposal intake, not approval."
+    },
+    {
+      "id": "archive",
+      "label": "Archive",
+      "operator_intent": "Preserve source material, dialogue, or artifact context word-for-word or by pointer so later extraction/synthesis has provenance."
+    }
+  ],
+  "readinessStates": [
+    {
+      "id": "ready",
+      "meaning": "All required scoped inputs are current, sourced, non-conflicted, non-blocking, and concurrence requirements are satisfied.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "qualified",
+      "meaning": "Usable for a scoped purpose with visible assumptions, deferred items, non-blocking gaps, or explicit limitations.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "pending_concurrence",
+      "meaning": "A candidate, proposal, validation, override, or propagation item is waiting on human concurrence before current-truth use.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "blocked",
+      "meaning": "A required field or transition blocks the scoped dimension due to missing, conflict, source, permission, scope, activation, output, or governance conditions.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "deferred",
+      "meaning": "The item is intentionally delayed for a scoped reason and is not currently blocking unless a dependency needs it now.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "not_required",
+      "meaning": "The item is explicitly outside the scoped use and has scope_of_use support.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "unknown",
+      "meaning": "The dashboard lacks enough source, scope, truth state, or routing data to classify readiness honestly.",
+      "authority_effect": "none"
+    }
+  ],
+  "readinessDimensions": [
+    {
+      "id": "display_readiness",
+      "label": "Display Readiness",
+      "question": "Can the dashboard honestly display known state for this module or project context?",
+      "clean_ready_requires": [
+        "source_ref_present",
+        "truth_state_not_unknown_for_required_display_fields"
+      ],
+      "may_be_ready_with_gaps": true
+    },
+    {
+      "id": "activation_readiness",
+      "label": "Activation Readiness",
+      "question": "Can the project responsibly proceed through activation/startup gates?",
+      "clean_ready_requires": [
+        "no_blocks_activation",
+        "no_required_conflicts",
+        "required_concurrence_satisfied"
+      ],
+      "may_be_ready_with_gaps": false
+    },
+    {
+      "id": "current_output_readiness",
+      "label": "Current Output Readiness",
+      "question": "Can current internal outputs be used for scoped team operations?",
+      "clean_ready_requires": [
+        "no_blocks_current_output",
+        "current_truth_or_scoped_not_required",
+        "source_ref_present"
+      ],
+      "may_be_ready_with_gaps": "only_if_gap_has_no_current_output_blocking_effect"
+    },
+    {
+      "id": "final_output_readiness",
+      "label": "Final Output Readiness",
+      "question": "Can deliverable-grade or final downstream output rely on this state?",
+      "clean_ready_requires": [
+        "no_blocks_final_output",
+        "validated_or_concurred_current_state",
+        "no_unresolved_conflicts"
+      ],
+      "may_be_ready_with_gaps": false
+    },
+    {
+      "id": "governance_readiness",
+      "label": "Governance Readiness",
+      "question": "Are gaps, conflicts, proposals, overrides, and archive/source needs visible and routed?",
+      "clean_ready_requires": [
+        "all_unresolved_records_have_route",
+        "authority_requirement_visible",
+        "follow_up_required_when_needed"
+      ],
+      "may_be_ready_with_gaps": true
+    },
+    {
+      "id": "propagation_readiness",
+      "label": "Propagation Readiness",
+      "question": "May the field state propagate to dependent modules as current truth?",
+      "clean_ready_requires": [
+        "human_concurrence_when_required",
+        "dependency_edges_identified",
+        "standing_metadata_present"
+      ],
+      "may_be_ready_with_gaps": false
+    }
+  ]
+}</script>
+  <script>
+    const DATA = JSON.parse(document.getElementById('pii-seed-data').textContent);
+    const fixture = DATA.fixture;
+    const readinessByModule = Object.fromEntries(fixture.expected_module_readiness.map(r => [r.module_id, r]));
+    const moduleById = Object.fromEntries(DATA.modules.map(m => [m.id, m]));
+    const fieldsByModule = (moduleId) => fixture.field_states.filter(f => {
+      const mod = moduleById[moduleId];
+      if (!mod) return false;
+      return (mod.canonical_inputs || []).includes(f.field_id) ||
+        (readinessByModule[moduleId]?.reason || '').toLowerCase().includes(f.field_id.replaceAll('_', ' ')) ||
+        (moduleId === 'risk_gaps' && ['activation_gate_status','archived_source_records','activation_override_record'].includes(f.field_id));
+    }).slice(0, 6);
+
+    const positions = [
+      [45, 28], [270, 22], [500, 42], [690, 140],
+      [704, 360], [520, 470], [300, 488], [72, 410],
+      [80, 180], [350, 255], [545, 260], [220, 320]
+    ];
+
+    function stateClass(state) { return (state || 'unknown').replace(/[^a-z0-9_]/g, '_'); }
+    function readinessBadges(moduleId) {
+      const r = readinessByModule[moduleId] || {};
+      return Object.entries(r)
+        .filter(([k]) => k.endsWith('_readiness'))
+        .map(([k, v]) => `<span class="badge ${stateClass(v)}">${k.replace('_readiness','')}: ${v}</span>`)
+        .join('');
+    }
+    function renderNodes(selected = 'activation_gates') {
+      const root = document.getElementById('nodes');
+      root.innerHTML = DATA.modules.map((m, i) => {
+        const [x, y] = positions[i];
+        return `<button class="node ${m.id === selected ? 'active' : ''}" data-module="${m.id}" style="left:${x}px; top:${y}px;" aria-label="${m.label}">
+          <div class="node-id">${m.id}</div>
+          <div class="node-label">${m.label}</div>
+          <div class="badges">${readinessBadges(m.id)}</div>
+        </button>`;
+      }).join('');
+      root.querySelectorAll('.node').forEach(el => el.addEventListener('click', () => selectModule(el.dataset.module)));
+    }
+    function fieldCard(f) {
+      return `<div class="field"><div class="field-head"><span class="field-id">${f.field_id}</span><span class="badge ${stateClass(f.truth_state)}">${f.truth_state}</span></div><div class="field-value">${String(f.value ?? 'null')}</div><div class="badges"><span class="badge ${stateClass(f.blocking_effect)}">${f.blocking_effect}</span><span class="badge">${f.scope_of_use}</span></div></div>`;
+    }
+    function selectModule(moduleId) {
+      renderNodes(moduleId);
+      const mod = moduleById[moduleId];
+      const ready = readinessByModule[moduleId] || {};
+      const fields = fieldsByModule(moduleId);
+      document.getElementById('moduleDetail').innerHTML = `
+        <div class="tiny">SELECTED MODULE · ${mod.id}</div>
+        <h3>${mod.label}</h3>
+        <p>${mod.description}</p>
+        <div class="badges">${readinessBadges(mod.id)}</div>
+        <p><strong>Readiness reason:</strong> ${ready.reason || 'No synthetic readiness reason provided.'}</p>
+        <div class="panel-title" style="margin: 14px -16px 12px;"><h2>Relevant Fixture Fields</h2><span class="tiny">synthetic/non-authoritative</span></div>
+        <div class="field-list">${fields.length ? fields.map(fieldCard).join('') : '<div class="field"><span class="field-id">No direct fixture fields selected for this module.</span></div>'}</div>`;
+    }
+    function renderActions() {
+      document.getElementById('actionStrip').innerHTML = DATA.actions.map(a => `<div class="action"><strong>${a.label}</strong><span>${a.operator_intent}</span></div>`).join('');
+    }
+    function recordSummary(rec) {
+      const id = rec.candidate_id || rec.gap_id || rec.conflict_id || rec.proposal_id || rec.concurrence_candidate_id || rec.archive_id || rec.propagation_id || 'record';
+      const body = rec.conflict_summary || rec.proposed_change || rec.reason || rec.follow_up_required || rec.notes || rec.source_type || rec.status || '';
+      const state = rec.status || rec.truth_state || 'routed';
+      return `<div class="record"><div class="record-head"><span class="record-id">${id}</span><span class="badge ${stateClass(state)}">${state}</span></div><div class="record-body">${body}</div></div>`;
+    }
+    function renderRecords() {
+      const labels = {
+        gap_records: 'Gap Records', conflict_records: 'Conflict Records', proposal_packets: 'Proposal Packets',
+        concurrence_candidates: 'Concurrence Candidates', archive_record_pointers: 'Archive Pointers', candidate_field_states: 'Candidate Field States', propagation_events: 'Propagation Events'
+      };
+      const order = ['gap_records','conflict_records','proposal_packets','concurrence_candidates','archive_record_pointers','candidate_field_states','propagation_events'];
+      document.getElementById('recordsGrid').innerHTML = order.map(key => {
+        const records = fixture.active_records[key] || [];
+        return `<div class="record-section"><h3>${labels[key]} · ${records.length}</h3><div class="record-list">${records.length ? records.map(recordSummary).join('') : '<div class="record"><span class="record-id">none before concurrence</span></div>'}</div></div>`;
+      }).join('');
+    }
+    renderActions();
+    renderRecords();
+    selectModule('activation_gates');
+  </script>
+</body>
+</html>
