@@ -17,6 +17,7 @@
       "primary_source_layer": "pac_core",
       "description": "Known, approved, and structurally defined project-start origin data derived from PAC.",
       "canonical_inputs": ["proposal_date", "client_entity", "project_name", "project_location", "project_description", "professional_fee", "acceptance_status"],
+      "canonical_inputs_extra": ["project_type", "market_sector", "project_address", "estimated_gsf", "form_of_agreement"],
       "operator_questions": ["What was known at origin?", "What remains validation-required before startup?", "What cannot be overwritten by later operations?"]
     },
     {
@@ -26,6 +27,7 @@
       "primary_source_layer": "pac_core",
       "description": "Blocking-by-default startup sufficiency checks before project activation proceeds.",
       "canonical_inputs": ["acceptance_status", "authorization_confirmation", "scope_clarity_status", "schedule_confidence_status", "billing_schedule"],
+      "canonical_inputs_extra": ["ntp_or_equivalent_authorization", "accountable_project_owner", "project_number", "activation_identifier", "fee_basis_alignment", "risk_requirement_reviewed", "consultant_trigger_routing_status"],
       "operator_questions": ["Can this project start responsibly?", "Which required startup facts are still gaps?", "Which overrides create coordination risk?"]
     },
     {
@@ -35,6 +37,7 @@
       "primary_source_layer": "pac_core_plus_overlay",
       "description": "Operational view of scope, project description, square footage, services, exclusions, and later scope clarification.",
       "canonical_inputs": ["project_description", "estimated_gsf", "basic_services", "additional_services", "scope_clarity_status"],
+      "canonical_inputs_extra": ["scope_baseline_sufficiency", "exclusions", "uhg_overlay", "consultant_trigger", "final_output_lock", "operator_question", "market_sector"],
       "operator_questions": ["What is actually included?", "Where is the proposal narrative incomplete or misaligned?", "What scope signals trigger consultant or additional-service routing?"]
     },
     {
@@ -44,6 +47,7 @@
       "primary_source_layer": "pac_core_plus_uhg_overlay",
       "description": "Agreement path, acceptance, authorization, Service Order logic, insurance, and contractual workflow constraints.",
       "canonical_inputs": ["form_of_agreement", "acceptance_status", "authorization_confirmation", "insurance_requirements", "service_order_terms"],
+      "canonical_inputs_extra": ["uhg_required_fields", "fee_basis_alignment", "contract_path_identified", "pm_review_status", "conflict_service_order", "archive_pointer", "final_output_readiness"],
       "operator_questions": ["What authorizes the work?", "Does the contract path match the work being performed?", "Which UHG-specific contractual rules govern this project?"]
     },
     {
@@ -53,6 +57,7 @@
       "primary_source_layer": "pac_transformation",
       "description": "Transforms PAC fee and cost origin data into internal production budget and project financial controls.",
       "canonical_inputs": ["estimated_construction_cost", "professional_fee", "fee_breakdown_by_phase", "billing_schedule"],
+      "canonical_inputs_extra": ["project_number", "budget_transform_status", "current_output_lock", "elevate_review_status", "fee_basis_alignment", "archive_fee_source", "billing_path_viability", "final_output_readiness"],
       "operator_questions": ["What is the approved fee basis?", "How does fee transform into production budget?", "Where does budget depend on contract or compensation data?"]
     },
     {
@@ -62,6 +67,7 @@
       "primary_source_layer": "pac_core_plus_contract_overlay",
       "description": "Professional fee, phase fee breakdown, reimbursables, additional services, and compensation assumptions.",
       "canonical_inputs": ["professional_fee", "fee_breakdown_by_phase", "reimbursable_expenses", "additional_services"],
+      "canonical_inputs_extra": ["fee_basis_alignment", "contract_dependency", "budget_dependency", "phase_fee_confirmation", "compensation_assumptions", "additional_service_fee_status", "archive_compensation_source", "final_output_readiness"],
       "operator_questions": ["What is Grace being paid to do?", "What fee data is origin truth vs. later transformation?", "What additional services are unresolved?"]
     },
     {
@@ -71,6 +77,7 @@
       "primary_source_layer": "pac_core_plus_overlay",
       "description": "Project schedule by phase, schedule confidence, milestones, and owner/client-dependent timing constraints.",
       "canonical_inputs": ["project_schedule_by_phase", "schedule_confidence_status", "milestones", "owner_dependencies"],
+      "canonical_inputs_extra": ["contractual_dates", "false_precision_guardrail", "milestone_route", "propagation_lock", "billing_path_dependency", "archive_schedule_source", "operator_question_dates", "final_output_readiness"],
       "operator_questions": ["What schedule is contractual vs. illustrative?", "Which milestones drive deliverables and billing?", "Where is false precision being introduced?"]
     },
     {
@@ -80,6 +87,7 @@
       "primary_source_layer": "lcw_section_b",
       "description": "Internal, consultant, owner, and partner responsibilities that emerge after origin capture.",
       "canonical_inputs": ["pic", "pm", "pa", "consultant_roles", "owner_contacts", "responsibility_assignments"],
+      "canonical_inputs_extra": ["follow_up_owner", "artifact_intake_target", "concurrence_lock", "current_truth_status", "archive_team_note", "final_output_readiness"],
       "operator_questions": ["Who owns each required action?", "Which consultant/additional-service triggers remain unrouted?", "What responsibilities are missing or ambiguous?"]
     },
     {
@@ -89,6 +97,7 @@
       "primary_source_layer": "lcw_section_b_plus_scope_signals",
       "description": "Consultant needs, partner assignments, proposal requests, scope mapping, and coordination status.",
       "canonical_inputs": ["additional_services", "programming", "record_drawings", "consultant_roles", "proposal_requests"],
+      "canonical_inputs_extra": ["scope_trigger", "fee_dependency", "responsibility_route", "archive_consultant_source", "final_output_lock", "operator_question_scope", "budget_dependency"],
       "operator_questions": ["Which consultants are required by scope?", "Which consultant scopes are missing?", "Which assignments affect schedule, fee, or risk?"]
     },
     {
@@ -98,6 +107,7 @@
       "primary_source_layer": "generic_lcd_w_or_uhg_lcd_lcw",
       "description": "Required project-analysis fields from the generic Grace LCD-W pattern or the UHG-specific contractual LCD/LCW overlay.",
       "canonical_inputs": ["lcd_required_fields", "uhg_required_fields", "project_analysis_fields", "workflow_rules"],
+      "canonical_inputs_extra": ["required_field_gap", "analysis_output_status", "contract_dependency", "archive_analysis_source", "authority_boundary", "elevate_gap_status", "governance_route_state", "final_output_readiness"],
       "operator_questions": ["Which project-analysis fields are required for this client/project?", "Which are generic Grace needs vs. UHG contractual fields?", "Which required fields remain incomplete?"]
     },
     {
@@ -107,6 +117,7 @@
       "primary_source_layer": "lcw_section_e",
       "description": "Operational configuration: folders, platforms, model environment, standards, and project setup requirements.",
       "canonical_inputs": ["platforms", "folder_structure", "model_environment", "standards", "file_locations"],
+      "canonical_inputs_extra": ["project_number", "activation_identifier", "limited_setup_proposal", "billing_path_dependency", "archive_setup_source", "propagation_lock", "final_output_readiness"],
       "operator_questions": ["Is the project environment ready?", "What setup requirements are blocked by missing data?", "What setup facts need validation?"]
     },
     {
@@ -116,6 +127,7 @@
       "primary_source_layer": "governed_memory_pending_or_gap_records",
       "description": "Visible worklist of missing, conflicting, uncertain, archived/source-preserved, or unresolved project facts. Quarantine is not a console function; unresolved material is carried by field truth/admissibility/verification/routing state.",
       "canonical_inputs": ["gap_records", "conflict_records", "validation_required_fields", "archived_source_records", "override_records"],
+      "canonical_inputs_extra": ["proposal_packets", "concurrence_candidates", "propagation_events", "candidate_field_states", "hidden_state_check", "governance_route_state", "final_output_readiness"],
       "operator_questions": ["What do we not know?", "What is blocked?", "What source/dialogue needs archive preservation?", "What needs human concurrence before propagation?"]
     }
   ]
