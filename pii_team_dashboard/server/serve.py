@@ -2,12 +2,24 @@
 """Local dev server for the Pii Team Dashboard -- Checkpoint 1 (read-side wiring).
 
 Serves this project's pii_team_dashboard/ directory as static files (prototype/,
-data/, fixtures/ -- unchanged) AND exposes read-only JSON endpoints over the real
-_governed/ layers (ledger/, memory/pending/, decisions/) via governed_reader.py.
+data/, fixtures/ -- unchanged) AND exposes:
 
-This server never writes to _governed/. It does not modify prototype/index.html;
-that page's fetch calls still point at data/*.seed.json and fixtures/*.json exactly
-as before. Wiring the console to /api/state is a separate, explicitly flagged step.
+  - read-only JSON GET endpoints over the real _governed/ layers (ledger/,
+    memory/pending/, decisions/) via governed_reader.py.
+  - write JSON POST endpoints for the three non-concurrence-gated console actions
+    (Extract, Absorb, Archive) via governed_writer.py. These write ONLY to
+    _governed/raw/ and _governed/extractions/, and only ever create new files
+    (see governed_writer.py's append-only-by-construction note). Elevate
+    (memory/pending/ proposals) and any ledger/ write are explicitly out of scope
+    for this server -- ledger changes require human concurrence outside this API,
+    per the resident-context concurrence rule.
+
+This server does not modify prototype/index.html; that page's fetch calls still
+point at data/*.seed.json and fixtures/*.json exactly as before. Wiring the
+console's buttons to these endpoints is a separate, explicitly flagged step.
+
+Requires PyYAML (`import yaml` in governed_reader.py) on whichever interpreter
+runs this script.
 
 Run:
     python server/serve.py [port]      (default port 8765)
@@ -18,6 +30,10 @@ Then:
     http://localhost:8765/api/ledger
     http://localhost:8765/api/pending
     http://localhost:8765/api/decisions
+
+    POST http://localhost:8765/api/actions/extract  {"title": "...", "source_text": "...", "context": "...", "topics": [...]}
+    POST http://localhost:8765/api/actions/absorb   {"title": "...", "artifact_text": "...", "received_from": "..."}
+    POST http://localhost:8765/api/actions/archive  {"title": "...", "dialogue_text": "..."}
 """
 from __future__ import annotations
 
@@ -28,6 +44,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import governed_reader as gr  # noqa: E402
+import governed_writer as gw  # noqa: E402
 
 STATIC_ROOT = Path(__file__).resolve().parent.parent  # .../pii_team_dashboard
 
@@ -36,6 +53,12 @@ API_ROUTES = {
     "/api/ledger": lambda: {"ledger": gr.read_ledger()},
     "/api/pending": lambda: {"pending": gr.read_pending()},
     "/api/decisions": lambda: {"decisions": gr.read_decisions()},
+}
+
+ACTION_ROUTES = {
+    "/api/actions/extract": gw.extract,
+    "/api/actions/absorb": gw.absorb,
+    "/api/actions/archive": gw.archive,
 }
 
 
@@ -59,8 +82,38 @@ class Handler(SimpleHTTPRequestHandler):
         except Exception as exc:  # surface the real failure, don't swallow it
             self.send_error(500, f"Governed read failed: {exc.__class__.__name__}: {exc}")
             return
+        self._send_json(200, payload)
+
+    def do_POST(self):  # noqa: N802 (stdlib method name)
+        route = self.path.split("?", 1)[0]
+        if route not in ACTION_ROUTES:
+            self.send_error(404, f"Unknown action route: {route}")
+            return
+        length = int(self.headers.get("Content-Length", 0) or 0)
+        raw_body = self.rfile.read(length) if length else b"{}"
+        try:
+            payload = json.loads(raw_body or b"{}")
+            if not isinstance(payload, dict):
+                raise ValueError("request body must be a JSON object")
+        except (json.JSONDecodeError, ValueError) as exc:
+            self.send_error(400, f"Invalid JSON body: {exc}")
+            return
+        try:
+            result = ACTION_ROUTES[route](**payload)
+        except TypeError as exc:
+            self.send_error(400, f"Bad request for {route}: {exc}")
+            return
+        except ValueError as exc:
+            self.send_error(400, str(exc))
+            return
+        except Exception as exc:  # surface the real failure, don't swallow it
+            self.send_error(500, f"Write failed: {exc.__class__.__name__}: {exc}")
+            return
+        self._send_json(201, result)
+
+    def _send_json(self, status: int, payload) -> None:
         body = json.dumps(payload, indent=2).encode("utf-8")
-        self.send_response(200)
+        self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
