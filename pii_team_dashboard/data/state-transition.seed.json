@@ -1,0 +1,413 @@
+{
+  "schema": "pii-team-dashboard.state-transition.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "The state-transition seed is the operational bridge between action-strip intent, module-field permissions, and governed state routing. It describes candidate records and propagation events; no transition creates authority by itself.",
+  "source_seed_files": [
+    "pii_team_dashboard/data/action-strip.seed.json",
+    "pii_team_dashboard/data/module-field-map.seed.json",
+    "pii_team_dashboard/data/field-registry.seed.json",
+    "pii_team_dashboard/data/dependency-edges.seed.json"
+  ],
+  "global_rules": {
+    "non_authority_rule": "Actions, derived outputs, routed gaps, proposal packets, archive pointers, and propagation events are non-authoritative until reviewed through the appropriate governed path.",
+    "concurrence_rule": "Human concurrence is required before state-tier/current-truth propagation into ledger-like standing or before dependent modules treat a candidate as current operational truth.",
+    "permission_rule": "A module may only read, propose, validate, route, archive, or derive fields allowed by the module-field map. Missing permission produces a blocked transition, not an implicit override.",
+    "lineage_rule": "Every material transition must preserve source_ref, scope_of_use, truth_state, initiating_action, initiating_module, and lineage_refs. Candidate transitions may add extraction_ref, proposal_id, archive_id, or concurrence_id.",
+    "origin_lock_rule": "PAC Layer 0 origin fields may be cited, flagged, validated for scoped use, or superseded downstream with lineage, but not silently overwritten by any action, module, or propagation event.",
+    "overlay_rule": "Generic LCD-W and UHG LCD/LCW overlay transitions may add client/project requirements without redefining PAC core fields.",
+    "visibility_rule": "Missing, conflict, assumed, deferred, and blocked states remain visible through risk/gap routing rather than being hidden or collapsed into a pass/fail status.",
+    "single_source_many_lenses_rule": "After concurrence, propagation updates the shared field spine and dependent module views; modules do not maintain independent copies of current truth."
+  },
+  "transition_status_values": [
+    "drafted",
+    "candidate",
+    "routed",
+    "blocked",
+    "pending_concurrence",
+    "concurred",
+    "rejected",
+    "archived",
+    "propagated"
+  ],
+  "authority_requirements": [
+    "none_for_capture_only",
+    "source_trace_required",
+    "module_owner_review_required",
+    "pm_concurrence_required",
+    "pic_concurrence_required",
+    "decision_record_required",
+    "risk_management_intake_required",
+    "dif_boundary_review_required"
+  ],
+  "record_shapes": [
+    {
+      "type": "candidate_field_state",
+      "purpose": "A proposed field value or field standing change produced by Extract, module derivation, validation, or routing. It is not current truth until concurrence where required.",
+      "required_fields": [
+        "candidate_id",
+        "field_id",
+        "proposed_value",
+        "proposed_truth_state",
+        "source_ref",
+        "scope_of_use",
+        "initiating_action",
+        "initiating_module",
+        "permission_used",
+        "status",
+        "lineage_refs",
+        "notes"
+      ],
+      "recommended_fields": [
+        "current_value_ref",
+        "current_truth_state",
+        "extraction_ref",
+        "blocking_effect",
+        "follow_up_required",
+        "authority_requirement",
+        "affected_modules"
+      ],
+      "must_not_do": [
+        "overwrite_origin_truth",
+        "skip_source_ref",
+        "propagate_without_concurrence_when_state_tier_or_current_truth_changes"
+      ]
+    },
+    {
+      "type": "gap_record",
+      "purpose": "A visible unresolved missing, incomplete, deferred, assumed, or validation-required condition that may block activation, output, setup, or routing.",
+      "required_fields": [
+        "gap_id",
+        "field_id",
+        "gap_kind",
+        "truth_state",
+        "source_ref",
+        "scope_of_use",
+        "blocking_effect",
+        "follow_up_required",
+        "initiating_action",
+        "initiating_module",
+        "status",
+        "lineage_refs"
+      ],
+      "gap_kind_values": ["missing", "validation_required", "assumed", "deferred", "unknown", "setup_blocker"],
+      "recommended_fields": ["affected_modules", "authority_requirement", "requested_owner", "due_context"],
+      "must_not_do": ["treat_gap_visibility_as_approval", "hide_blocking_effect", "collapse_unresolved_state_into_not_required_without_scope"]
+    },
+    {
+      "type": "conflict_record",
+      "purpose": "A visible disagreement between source fragments, field candidates, overlays, or module interpretations that must not be silently resolved by the dashboard.",
+      "required_fields": [
+        "conflict_id",
+        "field_id",
+        "conflicting_refs",
+        "conflict_summary",
+        "truth_state",
+        "scope_of_use",
+        "blocking_effect",
+        "initiating_action",
+        "initiating_module",
+        "status",
+        "lineage_refs"
+      ],
+      "recommended_fields": ["affected_modules", "authority_requirement", "resolution_options", "requested_reviewer"],
+      "must_not_do": ["choose_one_source_without_review", "rewrite_source_material", "propagate_conflicted_value_as_current_truth"]
+    },
+    {
+      "type": "proposal_packet",
+      "purpose": "A structured Elevate output requesting human review, concurrence, or a decision path for a candidate state, gap, conflict, override, or routing change.",
+      "required_fields": [
+        "proposal_id",
+        "proposed_change",
+        "source_ref",
+        "affected_fields",
+        "affected_modules",
+        "authority_requirement",
+        "risk_or_blocking_effect",
+        "requested_human_action",
+        "initiating_action",
+        "initiating_module",
+        "status",
+        "lineage_refs"
+      ],
+      "recommended_fields": ["extraction_ref", "candidate_ids", "gap_ids", "conflict_ids", "reviewer_needed", "review_window", "decision_record_ref"],
+      "must_not_do": ["act_as_approval", "self_concur", "promote_to_ledger_without_human_concurrence"]
+    },
+    {
+      "type": "concurrence_candidate",
+      "purpose": "A reviewable comparison of current state and proposed state, prepared for human concurrence but not itself a concurrence event.",
+      "required_fields": [
+        "concurrence_candidate_id",
+        "field_id",
+        "current_state",
+        "proposed_state",
+        "lineage_refs",
+        "reviewer_needed",
+        "reason",
+        "status"
+      ],
+      "recommended_fields": ["proposal_id", "affected_modules", "blocking_effect", "authority_requirement", "scope_of_use"],
+      "must_not_do": ["record_concurrence_without_human_actor", "propagate_before_concurred", "erase_superseded_field_lineage"]
+    },
+    {
+      "type": "archive_record_pointer",
+      "purpose": "A pointer to preserved source material, dialogue, artifact context, or external material admitted for later extraction and review.",
+      "required_fields": [
+        "archive_id",
+        "source_ref",
+        "source_type",
+        "captured_by",
+        "captured_on",
+        "scope",
+        "standing",
+        "initiating_action",
+        "initiating_module",
+        "status"
+      ],
+      "recommended_fields": ["artifact_hash", "artifact_location", "received_from", "extraction_queue_status", "lineage_refs"],
+      "must_not_do": ["interpret_or_validate_source", "create_accepted_memory", "modify_append_only_raw_records"]
+    },
+    {
+      "type": "propagation_event",
+      "purpose": "A post-concurrence event that updates dependent module views from the shared field spine while preserving lineage and standing metadata.",
+      "required_fields": [
+        "propagation_id",
+        "field_id",
+        "concurrence_ref",
+        "approved_state_ref",
+        "from_module",
+        "affected_modules",
+        "dependency_edge_refs",
+        "propagated_value_ref",
+        "propagated_truth_state",
+        "scope_of_use",
+        "lineage_refs",
+        "status"
+      ],
+      "recommended_fields": ["supersedes_refs", "blocking_effect_after", "follow_up_required_after", "operator_visible_summary"],
+      "must_not_do": ["propagate_naked_value_without_standing", "bypass_dependency_edges", "rewrite_source_or_origin_records"]
+    }
+  ],
+  "transition_flows": [
+    {
+      "id": "extract_to_candidate_field_state",
+      "from_action": "extract",
+      "required_permissions": ["read", "propose"],
+      "optional_permissions": ["derive", "route"],
+      "input_requirements": ["source_ref", "scope_of_use", "initiating_module"],
+      "outputs": ["candidate_field_state", "gap_record", "conflict_record"],
+      "default_status": "candidate",
+      "concurrence_required_before": ["current_truth_update", "state_tier_propagation", "ledger_like_standing"],
+      "guardrails": [
+        "Extraction can propose field state but cannot validate it by itself.",
+        "Derived missing/conflict records route to risk_gaps when blocking or unresolved.",
+        "Extracted UHG overlay material remains overlay unless separately reviewed for generalization."
+      ]
+    },
+    {
+      "id": "absorb_to_archive_pointer_and_extraction_queue",
+      "from_action": "absorb",
+      "required_permissions": ["read", "archive", "route"],
+      "optional_permissions": ["propose"],
+      "input_requirements": ["artifact_or_source_pointer", "source_type", "received_from_or_captured_by", "scope"],
+      "outputs": ["archive_record_pointer", "gap_record"],
+      "default_status": "archived",
+      "concurrence_required_before": ["using_absorbed_content_as_current_truth", "state_tier_propagation"],
+      "guardrails": [
+        "Absorb admits material into source handling; it does not endorse its contents.",
+        "Absorbed artifacts should be Extracted before their field values become candidates.",
+        "Archive/source preservation remains traceable and append-only where governed raw rules apply."
+      ]
+    },
+    {
+      "id": "elevate_to_proposal_packet",
+      "from_action": "elevate",
+      "required_permissions": ["read", "propose", "route"],
+      "optional_permissions": [],
+      "input_requirements": ["candidate_or_gap_or_conflict_ref", "affected_fields", "authority_requirement", "requested_human_action"],
+      "outputs": ["proposal_packet", "concurrence_candidate"],
+      "default_status": "pending_concurrence",
+      "concurrence_required_before": ["approval", "current_truth_update", "propagation_event"],
+      "guardrails": [
+        "Elevate is proposal intake, not approval.",
+        "A proposal packet may request concurrence, but only a human concurrence event can satisfy it.",
+        "Activation overrides and governance route changes require accountable lineage."
+      ]
+    },
+    {
+      "id": "archive_to_source_pointer",
+      "from_action": "archive",
+      "required_permissions": ["read", "archive"],
+      "optional_permissions": ["route"],
+      "input_requirements": ["source_ref_or_dialogue", "capture_scope", "captured_by", "captured_on"],
+      "outputs": ["archive_record_pointer"],
+      "default_status": "archived",
+      "concurrence_required_before": ["interpreting_archive_as_truth", "propagating_archive_contents"],
+      "guardrails": [
+        "Archive preserves; it does not interpret, validate, or approve.",
+        "Archived records may later feed Extract but are not accepted memory or decisions by themselves.",
+        "Live discussion capture follows explicit capture thresholds or user request."
+      ]
+    },
+    {
+      "id": "module_validate_to_concurrence_candidate",
+      "from_permission": "validate",
+      "required_permissions": ["read", "validate", "propose"],
+      "input_requirements": ["field_id", "current_state", "proposed_state", "source_ref", "scope_of_use", "initiating_module"],
+      "outputs": ["candidate_field_state", "concurrence_candidate"],
+      "default_status": "pending_concurrence",
+      "concurrence_required_before": ["validation_becomes_current_operational_truth", "state_tier_propagation"],
+      "guardrails": [
+        "Validation is scoped; it does not rewrite source evidence or origin text.",
+        "A module validation action prepares a concurrence candidate where current truth changes.",
+        "Validation of not_required must include scope_of_use."
+      ]
+    },
+    {
+      "id": "module_derive_to_candidate_or_gap",
+      "from_permission": "derive",
+      "required_permissions": ["read", "derive", "propose"],
+      "optional_permissions": ["route"],
+      "input_requirements": ["input_field_refs", "derivation_rule_ref", "initiating_module", "scope_of_use"],
+      "outputs": ["candidate_field_state", "gap_record", "conflict_record"],
+      "default_status": "candidate",
+      "concurrence_required_before": ["derived_value_becomes_current_truth", "dependent_module_propagation"],
+      "guardrails": [
+        "Derived values cite their inputs and derivation rule.",
+        "Derived status does not mean authoritative status.",
+        "If derivation exposes missing or conflict state, route visibly instead of filling with false precision."
+      ]
+    },
+    {
+      "id": "human_concurrence_to_propagation_event",
+      "from_event": "human_concurrence",
+      "required_inputs": ["concurrence_candidate_id", "human_actor", "concurrence_decision", "scope_of_use", "approved_state_ref"],
+      "outputs": ["propagation_event"],
+      "default_status": "concurred",
+      "propagation_allowed_when": [
+        "concurrence_decision is approved",
+        "approved_state_ref retains standing metadata",
+        "dependency_edge_refs identify affected module paths"
+      ],
+      "guardrails": [
+        "Only human concurrence can unlock state-tier/current-truth propagation in this seed model.",
+        "Rejected concurrence candidates remain visible with lineage and do not propagate.",
+        "Propagation updates shared field state plus standing, not separate per-module copies."
+      ]
+    }
+  ],
+  "permission_to_record_mapping": [
+    {
+      "permission": "read",
+      "allowed_outputs": [],
+      "description": "Read exposes field value and standing to a module; it creates no record unless paired with another permission."
+    },
+    {
+      "permission": "propose",
+      "allowed_outputs": ["candidate_field_state", "gap_record", "conflict_record", "proposal_packet", "concurrence_candidate"],
+      "description": "Propose creates candidate or reviewable records, not authority."
+    },
+    {
+      "permission": "validate",
+      "allowed_outputs": ["candidate_field_state", "concurrence_candidate"],
+      "description": "Validate prepares scoped confirmation; current-truth effect requires concurrence where state-tier standing changes."
+    },
+    {
+      "permission": "route",
+      "allowed_outputs": ["gap_record", "conflict_record", "proposal_packet"],
+      "description": "Route moves unresolved conditions to visible governance/risk/follow-up handling."
+    },
+    {
+      "permission": "archive",
+      "allowed_outputs": ["archive_record_pointer"],
+      "description": "Archive preserves source pointers or records for provenance; it does not validate or approve content."
+    },
+    {
+      "permission": "derive",
+      "allowed_outputs": ["candidate_field_state", "gap_record", "conflict_record"],
+      "description": "Derive computes downstream candidates or visible missing/conflict signals from cited inputs."
+    }
+  ],
+  "propagation_model": {
+    "pre_concurrence_behavior": "Candidates, gaps, conflicts, proposals, and archive pointers may be visible in module/risk queues but must not update current operational truth or dependent module current-state displays.",
+    "concurrence_gate": "Human concurrence resolves whether a proposed state enters state-tier/current-truth standing, remains pending, is rejected, or requires a formal decision record.",
+    "post_concurrence_behavior": "A propagation_event updates the shared field spine and all dependent module lenses identified by dependency edges and module-field maps.",
+    "propagated_payload_required_fields": ["field_id", "value_or_state_ref", "truth_state", "source_ref", "scope_of_use", "authority_requirement", "lineage_refs", "concurrence_ref"],
+    "dependent_module_update_rule": "Dependent modules receive value plus standing metadata. If a dependent module lacks read permission, the event records a blocked or hidden-by-permission state rather than leaking the value.",
+    "supersession_rule": "When a concurred state supersedes prior current state, prior state remains visible by lineage rather than being deleted. Origin-locked fields retain original source text and record downstream supersession separately."
+  },
+  "blocked_transition_conditions": [
+    {
+      "id": "missing_source_ref",
+      "condition": "source_ref is absent for a material field, proposal, gap, conflict, or propagation payload",
+      "result": "blocked",
+      "route_to": "risk_gaps"
+    },
+    {
+      "id": "missing_scope_of_use",
+      "condition": "scope_of_use is absent for validation, not_required, current-truth, or propagation transitions",
+      "result": "blocked",
+      "route_to": "risk_gaps"
+    },
+    {
+      "id": "permission_not_granted",
+      "condition": "initiating module lacks the required module-field permission for the target field/output",
+      "result": "blocked",
+      "route_to": "risk_gaps"
+    },
+    {
+      "id": "origin_overwrite_attempt",
+      "condition": "transition attempts to overwrite a PAC Layer 0 origin field rather than create downstream validation/supersession lineage",
+      "result": "blocked",
+      "route_to": "risk_gaps"
+    },
+    {
+      "id": "current_truth_without_concurrence",
+      "condition": "transition attempts state-tier/current-truth propagation before human concurrence",
+      "result": "blocked",
+      "route_to": "proposal_packet_or_concurrence_candidate"
+    },
+    {
+      "id": "conflict_as_current_truth",
+      "condition": "transition attempts to propagate a conflict state as settled current truth",
+      "result": "blocked",
+      "route_to": "conflict_record"
+    }
+  ],
+  "ui_implications": {
+    "operator_badges": [
+      "candidate_not_authority",
+      "source_required",
+      "scope_required",
+      "pending_concurrence",
+      "blocked_transition",
+      "propagated_after_concurrence"
+    ],
+    "module_console_states": [
+      {
+        "state": "read_only_current",
+        "meaning": "Module is displaying current field state and standing from the shared field spine."
+      },
+      {
+        "state": "candidate_overlay",
+        "meaning": "Module has candidate or derived state visible but not accepted as current truth."
+      },
+      {
+        "state": "gap_or_conflict_visible",
+        "meaning": "Module is exposing unresolved missing/conflict/deferred/assumed state and routing path."
+      },
+      {
+        "state": "pending_concurrence",
+        "meaning": "A proposal/concurrence candidate exists and awaits human review."
+      },
+      {
+        "state": "propagated_current",
+        "meaning": "A concurred state has propagated through dependency edges with standing metadata."
+      }
+    ]
+  }
+}
