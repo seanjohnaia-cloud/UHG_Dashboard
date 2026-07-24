@@ -85,10 +85,13 @@
   .toggle::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:linear-gradient(180deg,#5b5548,#242019);transition:.14s;}
   .toggle.on{background:#261b07;}
   .toggle.on::after{left:22px;background:linear-gradient(180deg,var(--amber),#a66d12);box-shadow:0 0 10px var(--amber-glow);}
-  .knob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 8px;margin-top:auto;padding-top:14px;border-top:1px solid #342d22;}
+  .knob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;margin-top:0;padding-top:14px;border-top:1px solid #342d22;}
   .knob-unit{text-align:center;}
-  .knob-control{display:grid;grid-template-columns:18px 1fr 18px;gap:4px;align-items:center;}
+  .knob-control{position:relative;width:102px;height:50px;margin:0 auto;display:grid;place-items:center;}
   .trim-btn{width:18px;height:22px;border:1px solid #3b3327;background:#100e0a;color:#d8c692;border-radius:4px;font-family:var(--display);font-size:12px;line-height:1;cursor:pointer;box-shadow:inset 0 0 8px rgba(0,0,0,.55);}
+  .knob-control .trim-btn{position:absolute;bottom:0;z-index:1;}
+  .knob-control .trim-btn:first-child{left:0px;}
+  .knob-control .trim-btn:last-child{right:0px;}
   .trim-btn:hover{color:var(--amber);border-color:var(--amber-dim);box-shadow:0 0 8px rgba(255,178,56,.16),inset 0 0 8px rgba(0,0,0,.55);}
   .knob{width:50px;height:50px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 36% 30%,#50483a,#17130d);border:2px solid #080705;position:relative;box-shadow:0 4px 8px rgba(0,0,0,.6),inset 0 0 8px rgba(0,0,0,.75);}
   .knob::after{content:"";position:absolute;top:5px;left:50%;width:2px;height:18px;background:var(--amber);transform:translateX(-50%) rotate(var(--rot,28deg));transform-origin:bottom center;box-shadow:0 0 8px var(--amber-glow);}
@@ -273,7 +276,7 @@ const modules = {
       ['G','candidate field state','Extracted candidate visible','pending','not current truth'],
       ['H','propagation events','None before concurrence','inactive','no propagation']
     ],
-    route:'Route: All modules → Risk/Gaps/Archive. Archive preserves source; it does not validate, approve, or quarantine.'
+    route:'Route: All modules → Risk/Gaps/Archive. Archive preserves source; it does not validate, approve, or hide source material.'
   }
 };
 const actions=[['Extract','candidate fields'],['Absorb','source intake'],['Elevate','proposal only'],['Archive','preserve source']];
