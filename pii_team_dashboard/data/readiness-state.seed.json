@@ -1,0 +1,512 @@
+{
+  "schema": "pii-team-dashboard.readiness-state.seed.v0",
+  "standing": {
+    "status": "implementation_seed",
+    "authority": "non_authoritative",
+    "admissibility": "initiating",
+    "verification": "unverified"
+  },
+  "principle": "Readiness is a visible rollup of field truth, blocking effect, transition status, concurrence posture, and dependency exposure. It is a dashboard state, not authority, and must not promote candidates or action outputs into current truth.",
+  "source_seed_files": [
+    "pii_team_dashboard/data/module-catalog.seed.json",
+    "pii_team_dashboard/data/field-registry.seed.json",
+    "pii_team_dashboard/data/module-field-map.seed.json",
+    "pii_team_dashboard/data/dependency-edges.seed.json",
+    "pii_team_dashboard/data/state-transition.seed.json"
+  ],
+  "global_rules": {
+    "non_authority_rule": "Readiness labels describe operating posture for a scoped use. They do not create accepted project memory, ledger standing, or decision authority.",
+    "current_truth_rule": "Only current/concurred field state may improve readiness. Candidate, extracted, elevated, or archived material may warn, qualify, or block readiness but must not make a module ready by itself.",
+    "concurrence_rule": "If a field, module, route, or propagation event requires human concurrence, readiness remains pending_concurrence or blocked_pending_concurrence until concurrence is recorded.",
+    "scope_rule": "Readiness is always scoped. not_required and deferred states are readiness-supporting only when scope_of_use explains why the field is outside the current use.",
+    "source_rule": "Material readiness cannot be asserted without source_ref for the underlying field state or transition record.",
+    "conflict_rule": "Conflict state blocks readiness for affected scoped outputs until resolved or explicitly routed with an accepted override/concurrence path.",
+    "assumption_rule": "Assumed state can at most produce qualified readiness; it cannot produce clean ready state.",
+    "dependency_rule": "Upstream missing, conflict, blocked, or pending-concurrence state degrades dependent module readiness along dependency edges.",
+    "risk_gaps_rule": "The risk_gaps module is readiness-healthy when it exposes unresolved state with routes; the presence of gaps does not itself make risk_gaps failed. Hidden or unrouted gaps do."
+  },
+  "readiness_dimensions": [
+    {
+      "id": "display_readiness",
+      "label": "Display Readiness",
+      "question": "Can the dashboard honestly display known state for this module or project context?",
+      "clean_ready_requires": ["source_ref_present", "truth_state_not_unknown_for_required_display_fields"],
+      "may_be_ready_with_gaps": true
+    },
+    {
+      "id": "activation_readiness",
+      "label": "Activation Readiness",
+      "question": "Can the project responsibly proceed through activation/startup gates?",
+      "clean_ready_requires": ["no_blocks_activation", "no_required_conflicts", "required_concurrence_satisfied"],
+      "may_be_ready_with_gaps": false
+    },
+    {
+      "id": "current_output_readiness",
+      "label": "Current Output Readiness",
+      "question": "Can current internal outputs be used for scoped team operations?",
+      "clean_ready_requires": ["no_blocks_current_output", "current_truth_or_scoped_not_required", "source_ref_present"],
+      "may_be_ready_with_gaps": "only_if_gap_has_no_current_output_blocking_effect"
+    },
+    {
+      "id": "final_output_readiness",
+      "label": "Final Output Readiness",
+      "question": "Can deliverable-grade or final downstream output rely on this state?",
+      "clean_ready_requires": ["no_blocks_final_output", "validated_or_concurred_current_state", "no_unresolved_conflicts"],
+      "may_be_ready_with_gaps": false
+    },
+    {
+      "id": "governance_readiness",
+      "label": "Governance Readiness",
+      "question": "Are gaps, conflicts, proposals, overrides, and archive/source needs visible and routed?",
+      "clean_ready_requires": ["all_unresolved_records_have_route", "authority_requirement_visible", "follow_up_required_when_needed"],
+      "may_be_ready_with_gaps": true
+    },
+    {
+      "id": "propagation_readiness",
+      "label": "Propagation Readiness",
+      "question": "May the field state propagate to dependent modules as current truth?",
+      "clean_ready_requires": ["human_concurrence_when_required", "dependency_edges_identified", "standing_metadata_present"],
+      "may_be_ready_with_gaps": false
+    }
+  ],
+  "readiness_state_values": [
+    {
+      "id": "ready",
+      "meaning": "All required scoped inputs are current, sourced, non-conflicted, non-blocking, and concurrence requirements are satisfied.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "qualified",
+      "meaning": "Usable for a scoped purpose with visible assumptions, deferred items, non-blocking gaps, or explicit limitations.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "pending_concurrence",
+      "meaning": "A candidate, proposal, validation, override, or propagation item is waiting on human concurrence before current-truth use.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "blocked",
+      "meaning": "A required field or transition blocks the scoped dimension due to missing, conflict, source, permission, scope, activation, output, or governance conditions.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "deferred",
+      "meaning": "The item is intentionally delayed for a scoped reason and is not currently blocking unless a dependency needs it now.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "not_required",
+      "meaning": "The item is explicitly outside the scoped use and has scope_of_use support.",
+      "authority_effect": "none"
+    },
+    {
+      "id": "unknown",
+      "meaning": "The dashboard lacks enough source, scope, truth state, or routing data to classify readiness honestly.",
+      "authority_effect": "none"
+    }
+  ],
+  "blocking_effect_to_readiness": [
+    {
+      "blocking_effect": "none",
+      "default_readiness": "ready",
+      "applies_to_dimensions": ["display_readiness", "current_output_readiness"],
+      "notes": "Only ready if truth/source/scope/concurrence checks also pass."
+    },
+    {
+      "blocking_effect": "blocks_activation",
+      "default_readiness": "blocked",
+      "applies_to_dimensions": ["activation_readiness", "propagation_readiness"],
+      "notes": "Activation remains blocked unless an explicit concurred override creates accepted coordination risk lineage."
+    },
+    {
+      "blocking_effect": "blocks_current_output",
+      "default_readiness": "blocked",
+      "applies_to_dimensions": ["current_output_readiness", "propagation_readiness"],
+      "notes": "Current operational output cannot rely on this field until resolved or scoped out."
+    },
+    {
+      "blocking_effect": "blocks_final_output",
+      "default_readiness": "blocked",
+      "applies_to_dimensions": ["final_output_readiness"],
+      "notes": "May still permit display or current internal use when visibly qualified."
+    },
+    {
+      "blocking_effect": "routing_only",
+      "default_readiness": "qualified",
+      "applies_to_dimensions": ["governance_readiness", "display_readiness"],
+      "notes": "Routing-only state should be visible but does not automatically block the work product."
+    },
+    {
+      "blocking_effect": "unknown",
+      "default_readiness": "unknown",
+      "applies_to_dimensions": ["display_readiness", "activation_readiness", "current_output_readiness", "final_output_readiness", "governance_readiness", "propagation_readiness"],
+      "notes": "Unknown blocking effect cannot be treated as ready for material use."
+    }
+  ],
+  "truth_state_to_readiness": [
+    {
+      "truth_state": "validated",
+      "default_readiness": "ready",
+      "requires": ["source_ref", "scope_of_use", "no_unresolved_conflict", "concurrence_if_current_truth_changes"]
+    },
+    {
+      "truth_state": "provided",
+      "default_readiness": "qualified",
+      "requires": ["source_ref", "scope_of_use"],
+      "notes": "Provided is not automatically validated; may support display before operational/final readiness."
+    },
+    {
+      "truth_state": "extracted",
+      "default_readiness": "pending_concurrence",
+      "requires": ["source_ref", "extraction_ref", "scope_of_use"],
+      "notes": "Extraction produces candidate state, not current truth."
+    },
+    {
+      "truth_state": "assumed",
+      "default_readiness": "qualified",
+      "requires": ["source_ref", "scope_of_use", "follow_up_required"],
+      "notes": "Assumptions must remain visible and cannot produce clean ready."
+    },
+    {
+      "truth_state": "missing",
+      "default_readiness": "blocked",
+      "requires": ["field_id", "scope_of_use", "blocking_effect", "follow_up_required"]
+    },
+    {
+      "truth_state": "conflict",
+      "default_readiness": "blocked",
+      "requires": ["conflict_record", "conflicting_refs", "scope_of_use", "resolution_route"]
+    },
+    {
+      "truth_state": "deferred",
+      "default_readiness": "deferred",
+      "requires": ["scope_of_use", "follow_up_required_or_defer_reason"],
+      "notes": "Deferred becomes blocked if a dependency needs the field for the current dimension."
+    },
+    {
+      "truth_state": "unknown",
+      "default_readiness": "unknown",
+      "requires": ["follow_up_required"]
+    },
+    {
+      "truth_state": "not_required",
+      "default_readiness": "not_required",
+      "requires": ["scope_of_use"],
+      "notes": "not_required is scoped, never universal."
+    }
+  ],
+  "transition_status_to_readiness": [
+    {
+      "transition_status": "candidate",
+      "default_readiness_effect": "warn_or_qualify",
+      "may_improve_current_readiness": false,
+      "notes": "Candidate state can expose possibilities or gaps but does not make current state ready."
+    },
+    {
+      "transition_status": "pending_concurrence",
+      "default_readiness_effect": "pending_concurrence",
+      "may_improve_current_readiness": false,
+      "notes": "Pending concurrence blocks propagation readiness and may block output readiness when required."
+    },
+    {
+      "transition_status": "concurred",
+      "default_readiness_effect": "eligible_for_propagation",
+      "may_improve_current_readiness": true,
+      "notes": "Concurred state may improve readiness only when source, scope, dependency, and conflict checks pass."
+    },
+    {
+      "transition_status": "propagated",
+      "default_readiness_effect": "update_dependent_rollups",
+      "may_improve_current_readiness": true,
+      "notes": "Propagation updates readiness in dependent module views with standing metadata."
+    },
+    {
+      "transition_status": "blocked",
+      "default_readiness_effect": "blocked",
+      "may_improve_current_readiness": false
+    },
+    {
+      "transition_status": "rejected",
+      "default_readiness_effect": "lineage_only",
+      "may_improve_current_readiness": false
+    },
+    {
+      "transition_status": "archived",
+      "default_readiness_effect": "source_available_only",
+      "may_improve_current_readiness": false,
+      "notes": "Archive can support display/source trace but is not interpretation or validation."
+    }
+  ],
+  "record_output_readiness_effects": [
+    {
+      "record_output": "candidate_field_state",
+      "default_effect": "candidate_overlay",
+      "readiness_state": "pending_concurrence",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "gap_record",
+      "default_effect": "visible_gap_or_blocker",
+      "readiness_state": "blocked",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "conflict_record",
+      "default_effect": "visible_conflict_blocker",
+      "readiness_state": "blocked",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "proposal_packet",
+      "default_effect": "review_queue_item",
+      "readiness_state": "pending_concurrence",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "concurrence_candidate",
+      "default_effect": "human_review_required",
+      "readiness_state": "pending_concurrence",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "archive_record_pointer",
+      "default_effect": "source_trace_available",
+      "readiness_state": "qualified",
+      "may_improve_current_readiness": false
+    },
+    {
+      "record_output": "propagation_event",
+      "default_effect": "dependent_rollup_update",
+      "readiness_state": "ready",
+      "may_improve_current_readiness": true,
+      "requires": ["concurrence_ref", "source_ref", "scope_of_use", "lineage_refs"]
+    }
+  ],
+  "module_readiness_profiles": [
+    {
+      "module_id": "project_origin",
+      "primary_dimensions": ["display_readiness", "governance_readiness"],
+      "strictness": "origin_display_with_validation_visibility",
+      "ready_when": ["origin fields are source-traceable", "origin_locked fields are not overwritten", "validation-required fields are visible"],
+      "blocked_when": ["required origin source is absent", "origin overwrite is attempted", "missing project identity prevents display"],
+      "special_rule": "Project Origin can be display-ready while downstream activation remains blocked."
+    },
+    {
+      "module_id": "activation_gates",
+      "primary_dimensions": ["activation_readiness", "governance_readiness", "propagation_readiness"],
+      "strictness": "blocking_by_default",
+      "ready_when": ["all activation blocking_effect fields are resolved or concurred", "required authorization/scope/fee/schedule/risk checks are satisfied", "overrides have accountable lineage"],
+      "blocked_when": ["any blocks_activation field is missing/conflict/unknown", "required concurrence is pending", "override lacks authority lineage"],
+      "special_rule": "Activation readiness is not inferred from display readiness."
+    },
+    {
+      "module_id": "scope",
+      "primary_dimensions": ["current_output_readiness", "governance_readiness"],
+      "strictness": "operational_with_origin_lineage",
+      "ready_when": ["scope-critical fields have usable current or scoped origin state", "overlay scope requirements are visible", "specialty scope signals are routed"],
+      "blocked_when": ["project_description/basic_services/additional_services conflict for current use", "scope_baseline_sufficiency blocks activation", "service_order_scope conflict affects contracts"],
+      "special_rule": "Later scope clarification must be downstream with lineage, not a rewrite of PAC origin narrative."
+    },
+    {
+      "module_id": "contracts",
+      "primary_dimensions": ["activation_readiness", "current_output_readiness", "final_output_readiness"],
+      "strictness": "contractual_control",
+      "ready_when": ["authorization and agreement path are source-traceable", "contractual dates/fee/scope states are not conflicted", "UHG overlay requirements are visible when applicable"],
+      "blocked_when": ["authorization is missing or pending", "contract/scope/fee conflict exists", "Service Order terms required but unresolved"],
+      "special_rule": "Contract readiness may block activation and downstream financial readiness."
+    },
+    {
+      "module_id": "budget",
+      "primary_dimensions": ["current_output_readiness", "propagation_readiness"],
+      "strictness": "transformation_requires_inputs",
+      "ready_when": ["fee/cost/schedule inputs are sourced and current enough for scoped use", "financial_model cites inputs", "blocking current-output gaps are absent"],
+      "blocked_when": ["professional_fee or fee_breakdown_by_phase blocks activation/current output", "billing_path_viability unresolved", "upstream schedule or compensation blocker is active"],
+      "special_rule": "Budget transforms approved inputs; it does not rewrite fee origin facts."
+    },
+    {
+      "module_id": "compensation",
+      "primary_dimensions": ["current_output_readiness", "final_output_readiness"],
+      "strictness": "fee_basis_visibility",
+      "ready_when": ["fee basis is classified as proposal-origin, contract-authorized, Service Order-derived, or visibly unresolved", "additional service fee implications are routed"],
+      "blocked_when": ["fee basis alignment blocks activation", "service_order_terms or schedule_e_f_logic required but unresolved", "professional_fee conflict exists"],
+      "special_rule": "Unresolved fee assumptions can only qualify readiness, not cleanly ready it."
+    },
+    {
+      "module_id": "schedule",
+      "primary_dimensions": ["current_output_readiness", "final_output_readiness"],
+      "strictness": "confidence_visible",
+      "ready_when": ["schedule confidence is classified", "milestones and owner dependencies are visible", "contractual vs illustrative dates are distinguished"],
+      "blocked_when": ["schedule_confidence_status blocks activation", "contractual_dates conflict affects contracts", "owner dependency blocks current output"],
+      "special_rule": "False precision should produce qualified or blocked readiness rather than ready."
+    },
+    {
+      "module_id": "team_responsibility",
+      "primary_dimensions": ["activation_readiness", "current_output_readiness"],
+      "strictness": "assignment_required_for_operations",
+      "ready_when": ["accountable owner/PIC/PM/PA responsibilities are assigned for scoped use", "follow-ups have owners", "consultant routing has responsibility"],
+      "blocked_when": ["accountable_project_owner or PM/PIC required but missing", "responsibility_assignments block current output", "consultant triggers are unrouted"],
+      "special_rule": "Responsibility readiness can satisfy activation ownership but does not change PAC contact/source facts."
+    },
+    {
+      "module_id": "consultants",
+      "primary_dimensions": ["current_output_readiness", "governance_readiness"],
+      "strictness": "coordination_dependency",
+      "ready_when": ["consultant triggers are identified, assigned, ruled out, or routed", "proposal requests are visible", "specialty scope signals are not hidden"],
+      "blocked_when": ["additional service or specialty signal requires consultant action and no route exists", "consultant_roles block activation", "proposal_requests are required but unknown"],
+      "special_rule": "Consultant readiness depends on scope signals and team responsibility assignments."
+    },
+    {
+      "module_id": "lcd_w_analysis",
+      "primary_dimensions": ["current_output_readiness", "final_output_readiness", "governance_readiness"],
+      "strictness": "overlay_requirements_visible",
+      "ready_when": ["generic LCD-W and UHG overlay requirements are separated", "required overlay fields are sourced or visibly routed", "project analysis fields cite extraction/source refs"],
+      "blocked_when": ["UHG required fields block current output", "Service Order scope/terms unresolved for UHG context", "overlay is incorrectly promoted into PAC core"],
+      "special_rule": "UHG overlay readiness does not redefine universal PAC readiness."
+    },
+    {
+      "module_id": "system_setup",
+      "primary_dimensions": ["activation_readiness", "current_output_readiness"],
+      "strictness": "setup_waits_on_activation",
+      "ready_when": ["activation identifier/project number path is usable", "folders/platforms/model environment/file locations are available for scoped use", "setup blockers are absent or routed"],
+      "blocked_when": ["authorization or activation identifier is unresolved", "setup_blockers block current output", "required file locations/platforms are missing"],
+      "special_rule": "System setup should record blockers instead of hiding them behind a generic not-started state."
+    },
+    {
+      "module_id": "risk_gaps",
+      "primary_dimensions": ["display_readiness", "governance_readiness"],
+      "strictness": "routing_health_not_gap_absence",
+      "ready_when": ["gaps/conflicts/overrides/archive needs are visible", "authority requirements and follow-ups are routed", "unresolved state is not hidden"],
+      "blocked_when": ["known gaps are unrouted", "conflicts lack conflict records", "authority requirement is unknown for an elevated item"],
+      "special_rule": "risk_gaps can be governance-ready while other modules are blocked."
+    }
+  ],
+  "dashboard_rollups": [
+    {
+      "id": "project_display_posture",
+      "dimension": "display_readiness",
+      "inputs": ["module_readiness_profiles", "truth_state_to_readiness", "source_ref"],
+      "rollup_rule": "Ready if core display modules can show source-traceable state; qualified if gaps are visible; unknown if source/scope metadata is missing."
+    },
+    {
+      "id": "project_activation_posture",
+      "dimension": "activation_readiness",
+      "inputs": ["activation_gates", "contracts", "scope", "team_responsibility", "consultants", "system_setup"],
+      "rollup_rule": "Blocked if any blocks_activation field is missing, conflict, unknown, or pending concurrence unless a concurred override explicitly accepts risk."
+    },
+    {
+      "id": "project_current_output_posture",
+      "dimension": "current_output_readiness",
+      "inputs": ["scope", "contracts", "budget", "compensation", "schedule", "team_responsibility", "consultants", "system_setup", "lcd_w_analysis"],
+      "rollup_rule": "Ready only for scoped outputs whose required fields are current and non-blocking; qualified when assumptions or non-blocking gaps remain visible."
+    },
+    {
+      "id": "project_final_output_posture",
+      "dimension": "final_output_readiness",
+      "inputs": ["contracts", "compensation", "schedule", "lcd_w_analysis"],
+      "rollup_rule": "Blocked by any unresolved final-output blocker, conflict, missing required overlay, or unconcurred field required for deliverable-grade output."
+    },
+    {
+      "id": "project_governance_posture",
+      "dimension": "governance_readiness",
+      "inputs": ["risk_gaps", "proposal_packet", "concurrence_candidate", "gap_record", "conflict_record", "archive_record_pointer"],
+      "rollup_rule": "Ready when unresolved state has visible records, routes, authority requirements, and follow-up; blocked when known unresolved state is hidden or unrouted."
+    },
+    {
+      "id": "project_propagation_posture",
+      "dimension": "propagation_readiness",
+      "inputs": ["propagation_event", "dependency-edges.seed.json", "module-field-map.seed.json"],
+      "rollup_rule": "Ready only after human concurrence and when affected dependency edges/modules can receive value plus standing metadata."
+    }
+  ],
+  "dependency_readiness_rules": [
+    {
+      "id": "upstream_blocker_degrades_downstream",
+      "trigger": "dependency edge shared field has blocked, conflict, missing, unknown, or pending_concurrence state",
+      "effect": "downstream module readiness for affected dimension becomes blocked or pending_concurrence",
+      "uses_dependency_edges": true
+    },
+    {
+      "id": "upstream_qualified_state_qualifies_downstream",
+      "trigger": "dependency edge shared field is assumed, provided-but-not-validated, or deferred-with-current-scope-impact",
+      "effect": "downstream module readiness cannot be cleaner than qualified for affected dimension",
+      "uses_dependency_edges": true
+    },
+    {
+      "id": "concurred_propagation_updates_rollup",
+      "trigger": "propagation_event status is propagated and includes concurrence_ref, source_ref, scope_of_use, and lineage_refs",
+      "effect": "dependent module readiness recomputes from propagated field state plus standing metadata",
+      "uses_dependency_edges": true
+    },
+    {
+      "id": "risk_gap_visibility_does_not_hide_source_blocker",
+      "trigger": "risk_gaps has a routed gap/conflict from another module",
+      "effect": "risk_gaps governance_readiness may be ready while originating module remains blocked",
+      "uses_dependency_edges": false
+    }
+  ],
+  "blocked_readiness_conditions": [
+    {
+      "id": "missing_source_for_material_use",
+      "condition": "required material field lacks source_ref",
+      "readiness_state": "blocked",
+      "affected_dimensions": ["activation_readiness", "current_output_readiness", "final_output_readiness", "propagation_readiness"]
+    },
+    {
+      "id": "missing_scope_for_scoped_state",
+      "condition": "validation, deferred, not_required, current output, or propagation state lacks scope_of_use",
+      "readiness_state": "blocked",
+      "affected_dimensions": ["current_output_readiness", "final_output_readiness", "propagation_readiness"]
+    },
+    {
+      "id": "unresolved_conflict",
+      "condition": "truth_state is conflict or conflict_record lacks resolution route",
+      "readiness_state": "blocked",
+      "affected_dimensions": ["activation_readiness", "current_output_readiness", "final_output_readiness", "propagation_readiness"]
+    },
+    {
+      "id": "required_concurrence_pending",
+      "condition": "requires_concurrence_for applies and no human concurrence event is recorded",
+      "readiness_state": "pending_concurrence",
+      "affected_dimensions": ["activation_readiness", "current_output_readiness", "final_output_readiness", "propagation_readiness"]
+    },
+    {
+      "id": "candidate_used_as_current_truth",
+      "condition": "candidate_field_state, extracted state, proposal_packet, or archive_record_pointer is used to improve current readiness before concurrence",
+      "readiness_state": "blocked",
+      "affected_dimensions": ["current_output_readiness", "final_output_readiness", "propagation_readiness"]
+    },
+    {
+      "id": "unrouted_known_gap",
+      "condition": "known missing/deferred/assumed/unknown state lacks gap_record, follow_up_required, or governance_route_state where needed",
+      "readiness_state": "blocked",
+      "affected_dimensions": ["governance_readiness"]
+    }
+  ],
+  "ui_implications": {
+    "display_badges": ["ready", "qualified", "pending_concurrence", "blocked", "deferred", "not_required", "unknown"],
+    "never_hide": ["truth_state", "blocking_effect", "scope_of_use", "source_ref", "authority_requirement", "follow_up_required", "governance_route_state"],
+    "operator_copy_rules": [
+      {
+        "state": "ready",
+        "copy": "Ready for scoped use",
+        "must_include": ["scope_of_use"]
+      },
+      {
+        "state": "qualified",
+        "copy": "Usable with visible qualifications",
+        "must_include": ["qualification_reason", "follow_up_required_if_any"]
+      },
+      {
+        "state": "pending_concurrence",
+        "copy": "Pending human concurrence before propagation/current-truth use",
+        "must_include": ["authority_requirement", "reviewer_needed"]
+      },
+      {
+        "state": "blocked",
+        "copy": "Blocked for scoped use",
+        "must_include": ["blocking_effect", "follow_up_required", "governance_route_state"]
+      }
+    ]
+  }
+}
