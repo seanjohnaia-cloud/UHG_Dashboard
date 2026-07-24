@@ -1,1088 +1,299 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pii Team Dashboard Prototype — Synthetic Fixture</title>
-  <style>
-    :root {
-      --bg: #090805;
-      --panel: rgba(28, 22, 13, 0.92);
-      --panel-2: rgba(44, 33, 17, 0.82);
-      --ink: #f8e9bf;
-      --muted: #a89368;
-      --amber: #ffb238;
-      --amber-2: #ff7a18;
-      --green: #7ce08a;
-      --red: #ff5d48;
-      --blue: #7ac7ff;
-      --violet: #c69cff;
-      --line: rgba(255, 178, 56, 0.28);
-      --glass: rgba(255, 178, 56, 0.07);
-      --shadow: 0 0 26px rgba(255, 139, 23, 0.16), inset 0 0 0 1px rgba(255, 178, 56, 0.18);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 20% 8%, rgba(255,178,56,.18), transparent 28rem),
-        radial-gradient(circle at 78% 20%, rgba(122,199,255,.10), transparent 24rem),
-        linear-gradient(135deg, #050503 0%, #11100b 48%, #070604 100%);
-      font-family: var(--sans);
-      letter-spacing: .01em;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image: linear-gradient(rgba(255,178,56,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,178,56,.025) 1px, transparent 1px);
-      background-size: 28px 28px;
-      mask-image: radial-gradient(circle at 50% 30%, black 0%, transparent 78%);
-    }
-    header {
-      display: grid;
-      grid-template-columns: 1.1fr auto;
-      gap: 1rem;
-      align-items: start;
-      padding: 24px 28px 16px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(30,22,11,.92), rgba(10,9,6,.66));
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      backdrop-filter: blur(14px);
-    }
-    h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.65rem); line-height: 1; text-transform: uppercase; letter-spacing: .09em; }
-    .subtitle { color: var(--muted); margin-top: .55rem; max-width: 78ch; }
-    .authority-banner {
-      border: 1px solid rgba(255,93,72,.55);
-      background: linear-gradient(135deg, rgba(255,93,72,.18), rgba(255,178,56,.08));
-      color: #ffd8cf;
-      padding: .85rem 1rem;
-      border-radius: 14px;
-      max-width: 34rem;
-      box-shadow: var(--shadow);
-      font-family: var(--mono);
-      font-size: .82rem;
-    }
-    main { padding: 22px 28px 32px; display: grid; grid-template-columns: minmax(520px, 1.25fr) minmax(360px, .75fr); gap: 20px; }
-    .panel { border: 1px solid var(--line); background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; }
-    .panel-title { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding: 14px 16px; border-bottom:1px solid var(--line); background: rgba(255,178,56,.06); }
-    .panel-title h2 { margin: 0; font-size: .9rem; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
-    .tiny { font-family: var(--mono); color: var(--muted); font-size: .72rem; }
-    .graph { position: relative; min-height: 620px; padding: 20px; overflow:hidden; }
-    .radar { position:absolute; inset: 22px; border-radius:50%; border: 1px dashed rgba(255,178,56,.22); opacity:.65; }
-    .radar::before, .radar::after { content:""; position:absolute; inset: 17%; border-radius:50%; border: 1px dashed rgba(255,178,56,.16); }
-    .radar::after { inset: 34%; }
-    .sweep { position:absolute; width: 46%; height: 46%; left:50%; top:50%; transform-origin: 0 0; background: conic-gradient(from -18deg, rgba(255,178,56,.22), transparent 34deg); animation: sweep 12s linear infinite; opacity:.42; }
-    @keyframes sweep { to { transform: rotate(360deg); } }
-    .nodes { position: relative; height: 580px; }
-    .node {
-      position: absolute;
-      width: 168px;
-      min-height: 92px;
-      padding: 12px;
-      border: 1px solid rgba(255,178,56,.30);
-      background: linear-gradient(145deg, rgba(33,25,14,.96), rgba(12,11,8,.92));
-      border-radius: 16px;
-      cursor: pointer;
-      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-    .node:hover, .node.active { transform: translateY(-3px) scale(1.02); border-color: var(--amber); box-shadow: 0 0 22px rgba(255,178,56,.28); }
-    .node-id { font-family: var(--mono); color: var(--muted); font-size: .62rem; margin-bottom: 7px; }
-    .node-label { font-size: .86rem; font-weight: 700; line-height: 1.1; }
-    .badges { display:flex; flex-wrap:wrap; gap: 5px; margin-top: 10px; }
-    .badge { border:1px solid rgba(255,178,56,.25); border-radius: 99px; padding: 3px 7px; font-family: var(--mono); font-size:.62rem; text-transform: uppercase; }
-    .ready { color: var(--green); border-color: rgba(124,224,138,.45); background: rgba(124,224,138,.08); }
-    .qualified { color: var(--amber); }
-    .blocked { color: var(--red); border-color: rgba(255,93,72,.45); background: rgba(255,93,72,.08); }
-    .pending_concurrence { color: var(--violet); border-color: rgba(198,156,255,.45); background: rgba(198,156,255,.08); }
-    .unknown, .deferred, .not_required { color: var(--blue); border-color: rgba(122,199,255,.38); background: rgba(122,199,255,.06); }
-    .detail { display:grid; gap: 16px; }
-    .module-detail { padding: 16px; }
-    .module-detail h3 { margin: 0 0 .45rem; color: var(--ink); font-size: 1.35rem; }
-    .module-detail p { color: var(--muted); margin: .35rem 0 .9rem; line-height: 1.5; }
-    .field-list, .record-list { display:grid; gap: 8px; }
-    .field, .record { border: 1px solid rgba(255,178,56,.17); background: var(--glass); border-radius: 13px; padding: 10px; }
-    .field-head, .record-head { display:flex; justify-content:space-between; gap:.75rem; align-items:start; }
-    .field-id, .record-id { font-family: var(--mono); color: var(--amber); font-size:.72rem; overflow-wrap:anywhere; }
-    .field-value, .record-body { color: #efd9a6; margin-top: 6px; font-size: .84rem; line-height:1.35; }
-    .strip { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 16px; }
-    .action { border: 1px solid rgba(255,178,56,.30); background: linear-gradient(180deg, rgba(255,178,56,.12), rgba(255,178,56,.04)); border-radius: 16px; padding: 12px; min-height: 110px; }
-    .action strong { display:block; color: var(--amber); text-transform: uppercase; letter-spacing:.14em; font-size:.78rem; }
-    .action span { display:block; color: var(--muted); font-size:.78rem; line-height:1.35; margin-top: 8px; }
-    .records-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; }
-    .record-section h3 { margin: 0 0 10px; font-size:.82rem; color: var(--amber); text-transform: uppercase; letter-spacing:.12em; }
-    .footer-note { margin: 0 28px 26px; color: var(--muted); font-family: var(--mono); font-size: .78rem; }
-    @media (max-width: 1050px) { main { grid-template-columns: 1fr; } header { grid-template-columns: 1fr; } .strip, .records-grid { grid-template-columns: 1fr; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pii Team Dashboard Prototype — Operational Console First Pass</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@500;600;700&display=swap');
+  :root{
+    --signal:#f8ffff;
+    --signal-dim:#9fa8aa;
+    --signal-faint:rgba(248,255,255,.10);
+    --signal-glow:rgba(248,255,255,.58);
+    --red:#ff1b12;
+    --red-glow:rgba(255,59,47,.45);
+    --cream:#f8ffff;
+    --cream-low:#cfd7d9;
+    --cream-glow:rgba(248,255,255,.62);
+    --ice:#f8ffff;
+    --ice-dim:rgba(248,255,255,.68);
+    --ice-glow:rgba(218,255,255,.76);
+    --army:#1b1d1e;
+    --army-dark:#070808;
+    --matrix:#f8ffff;
+    --matrix-glow:rgba(248,255,255,.92);
+    --deficient:#ff6f66;
+    --deficient-glow:rgba(255,111,102,.62);
+    --white-hot:#f8ffff;
+    --blue:#f8ffff;
+    --violet:#f8ffff;
+    --paper:#f8ffff;
+    --muted:#8f989a;
+    --steel:#090b0c;
+    --steel-2:#000;
+    --black:#000;
+    --line:rgba(248,255,255,.22);
+    --mono:'Share Tech Mono', ui-monospace, monospace;
+    --display:'Oswald', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:#000;
+    color:var(--paper);
+    font-family:var(--mono);
+    padding:24px;
+  }
+  .console{
+    max-width:1460px;
+    margin:0 auto;
+    min-height:calc(100vh - 48px);
+    background:#000;
+    border:3px solid #060707;
+    border-radius:16px;
+    box-shadow:inset 0 0 46px rgba(0,0,0,.72), 0 28px 70px rgba(0,0,0,.68);
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .console::before{
+    content:"";
+    position:absolute;
+    inset:9px;
+    border:1px solid rgba(248,255,255,.16);
+    border-radius:10px;
+    pointer-events:none;
+  }
+  .rivet{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#dce5e7,#060707);box-shadow:inset 0 0 2px #000;}
+  .r1{left:18px;top:18px}.r2{right:18px;top:18px}.r3{left:18px;bottom:18px}.r4{right:18px;bottom:18px}
+  header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:2px 8px 16px;border-bottom:1px solid rgba(248,255,255,.16);margin-bottom:18px;}
+  h1{font-family:var(--display);font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#f8ffff;text-shadow:0 0 8px var(--matrix-glow),0 0 22px rgba(248,255,255,.52);margin:0;line-height:1;}
+  .sub{font-size:11px;letter-spacing:2px;color:rgba(248,255,255,.68);margin-top:8px;text-transform:uppercase;text-shadow:0 0 10px rgba(248,255,255,.28);}
+  .authority{max-width:455px;border:1px solid rgba(248,255,255,.5);background:linear-gradient(135deg,rgba(248,255,255,.12),rgba(0,0,0,.56));border-radius:8px;padding:10px 12px;color:#f8ffff;font-size:11px;line-height:1.45;box-shadow:0 0 18px rgba(248,255,255,.12);text-shadow:0 0 8px rgba(248,255,255,.36);}
+  .layout{display:grid;grid-template-columns:minmax(230px,2fr) minmax(560px,5fr) minmax(345px,3fr);gap:18px;align-items:stretch;}
+  .panel{background:linear-gradient(180deg,var(--steel),var(--steel-2));border:1px solid rgba(248,255,255,.16);border-radius:9px;box-shadow:inset 0 0 22px rgba(0,0,0,.48);position:relative;}
+  .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(248,255,255,.16);padding:11px 13px;background:rgba(248,255,255,.035);}
+  .panel-title h2{font-family:var(--display);font-size:13px;letter-spacing:2px;margin:0;color:#f8ffff;text-transform:uppercase;text-shadow:0 0 8px rgba(248,255,255,.3);}
+  .tag{font-size:9px;color:rgba(248,255,255,.58);letter-spacing:1px;text-transform:uppercase;}
+
+  /* Left bank */
+  .lens-panel{display:flex;flex-direction:column;min-height:100%;background:#000;border-color:rgba(248,255,255,.26);box-shadow:inset 0 0 34px rgba(0,0,0,.9),0 0 18px rgba(248,255,255,.12);}
+  .lens-panel .panel-title{background:#000;border-bottom-color:rgba(248,255,255,.26);}
+  .lens-panel .panel-title h2{color:#ffffff;text-shadow:0 0 10px rgba(248,255,255,.42);}
+  .lens-panel .tag{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
+  .bank-body{padding:13px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .module-tabs{display:grid;gap:6px;margin-bottom:10px;}
+  .module-tab{border:1px solid rgba(248,255,255,.24);background:#000;color:var(--matrix);border-radius:6px;padding:7px 9px;font-family:var(--display);letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;text-align:left;box-shadow:inset 0 0 14px rgba(0,0,0,.92),0 0 18px rgba(248,255,255,.2),0 2px 0 #000;text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px var(--matrix-glow),0 0 42px rgba(248,255,255,.6);transition:.1s;}
+  .module-tab:hover{color:#ffffff;border-color:#ffffff;box-shadow:0 0 24px rgba(248,255,255,.45),inset 0 0 14px rgba(0,0,0,.92),0 2px 0 #000;}
+  .module-tab.active{background:#000;color:#ffffff;border-color:#ffffff;box-shadow:0 0 28px rgba(248,255,255,.58),inset 0 0 28px rgba(248,255,255,.12),0 2px 0 #000;}
+    .switch-row{display:flex;align-items:center;justify-content:space-between;margin:0;padding:7px;background:#000;border:1px solid rgba(218,255,255,.26);border-radius:7px;min-height:36px;box-shadow:inset 0 0 16px rgba(0,0,0,.9),0 0 10px rgba(218,255,255,.08);}
+  .switch-label{font-size:9px;line-height:1.1;color:rgba(248,255,255,.86);max-width:82px;text-shadow:0 0 8px rgba(218,255,255,.28);}
+  .toggle{position:relative;width:42px;height:22px;border-radius:14px;background:linear-gradient(180deg,#161a1a,#070909 58%,#000);border:1px solid rgba(218,255,255,.22);cursor:pointer;box-shadow:inset 0 1px 2px rgba(255,255,255,.10),inset 0 -6px 10px rgba(0,0,0,.9),0 0 8px rgba(218,255,255,.04);overflow:hidden;}
+  .toggle::before{content:"";position:absolute;inset:1px 2px 48%;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.04));opacity:.7;pointer-events:none;}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 28%,#666,#2d3131 58%,#0c0f0f 100%);box-shadow:inset 0 1px 4px rgba(255,255,255,.16),inset 0 -5px 7px rgba(0,0,0,.82),0 1px 3px rgba(0,0,0,.9);transition:.14s;}
+  .toggle.on{background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(228,255,255,.42) 50%,rgba(140,190,195,.22));border-color:rgba(248,255,255,.86);box-shadow:0 0 14px rgba(218,255,255,.72),0 0 28px rgba(218,255,255,.25),inset 0 1px 2px rgba(255,255,255,.9),inset 0 -5px 8px rgba(80,120,130,.38);}
+  .toggle.on::after{left:22px;background:radial-gradient(circle at 36% 28%,#ffffff,#e9ffff 46%,#9bc6c8 100%);box-shadow:0 0 14px var(--ice-glow),0 0 26px rgba(255,255,255,.42),inset 0 1px 4px rgba(255,255,255,.9),inset 0 -5px 8px rgba(120,160,170,.45);}
+  .knob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:0;padding-top:12px;border-top:1px solid rgba(248,255,255,.20);}
+  .knob-unit{text-align:center;}
+  .knob-control{position:relative;width:102px;height:50px;margin:0 auto;display:grid;place-items:center;}
+  .trim-btn{width:18px;height:22px;border:1px solid rgba(248,255,255,.24);background:#000;color:#f8ffff;border-radius:4px;font-family:var(--display);font-size:12px;line-height:1;cursor:pointer;box-shadow:inset 0 0 10px rgba(0,0,0,.82),0 0 12px rgba(248,255,255,.2);text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px rgba(248,255,255,.72);}
+  .knob-control .trim-btn{position:absolute;bottom:0;z-index:1;}
+  .knob-control .trim-btn:first-child{left:0px;}
+  .knob-control .trim-btn:last-child{right:0px;}
+  .trim-btn:hover{color:#ffffff;border-color:rgba(248,255,255,.66);box-shadow:0 0 8px rgba(248,255,255,.32),inset 0 0 8px rgba(0,0,0,.55);}
+  .knob{width:50px;height:50px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 36% 30%,#52524d,#252622 58%,#11120f 100%);border:2px solid #0f130d;position:relative;box-shadow:0 4px 8px rgba(0,0,0,.72),inset 0 0 10px rgba(0,0,0,.72),0 0 12px rgba(248,255,255,.12);}
+  .knob::after{content:"";position:absolute;top:5px;left:50%;width:2px;height:18px;background:var(--matrix);transform:translateX(-50%) rotate(var(--rot,28deg));transform-origin:bottom center;box-shadow:0 0 8px var(--matrix-glow);}
+  .knob-label{font-family:var(--display);font-size:9px;letter-spacing:1px;color:#f8ffff;margin-top:7px;text-transform:uppercase;line-height:1.1;text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px var(--matrix-glow),0 0 44px rgba(248,255,255,.58);}
+
+  /* Center monitor */
+  .center{display:grid;grid-template-rows:minmax(360px,1fr) auto auto;gap:14px;height:100%;padding:0;background:linear-gradient(90deg,rgba(18,20,21,.72) 0%,rgba(8,9,10,.82) 42%,rgba(0,0,0,.95) 100%),radial-gradient(circle at 70% 44%,rgba(248,255,255,.06),transparent 30%),repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 22px,rgba(0,0,0,.32) 22px 44px);border-radius:9px;}
+  .monitor-frame{background:linear-gradient(90deg,#161819 0%,#050607 38%,#020302 100%);border:7px solid #111416;border-right-color:#020303;border-radius:12px;box-shadow:inset 0 0 35px #000,0 0 0 2px #000;overflow:hidden;min-height:360px;}
+  .monitor{height:100%;min-height:360px;padding:18px 22px;position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(12,14,15,.92) 0%,rgba(3,4,5,.95) 42%,rgba(0,0,0,.99) 100%),radial-gradient(ellipse at 36% 18%,rgba(248,255,255,.08),transparent 48%);color:#f8ffff;}
+  .monitor::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(248,255,255,.045) 0 1px,transparent 1px 7px);pointer-events:none;}
+  .monitor::after{content:"";position:absolute;left:0;right:0;height:34px;background:linear-gradient(180deg,transparent,rgba(248,255,255,.075),transparent);animation:scan 6.5s linear infinite;pointer-events:none;}
+  @keyframes scan{from{top:-44px}to{top:100%}}
+  .screen-title{display:flex;justify-content:space-between;gap:14px;font-size:11px;letter-spacing:2px;color:rgba(248,255,255,.76);text-transform:uppercase;margin-bottom:14px;position:relative;z-index:1;text-shadow:0 0 10px rgba(248,255,255,.34);}
+  .readout{position:relative;z-index:1;display:grid;gap:7px;font-size:13px;line-height:1.42;}
+  .readout .big{font-family:var(--display);font-size:26px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;text-shadow:0 0 10px var(--matrix-glow),0 0 28px rgba(218,255,255,.34);line-height:1.05;margin-bottom:4px;}
+  .line{display:flex;gap:9px;align-items:flex-start;}
+  .prompt{color:var(--matrix);text-shadow:0 0 12px var(--matrix-glow);}
+  .warn{color:var(--red)}.ok{color:var(--ice)}.violet{color:var(--ice)}.blue{color:var(--ice)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--matrix);box-shadow:0 0 12px var(--matrix-glow);animation:blink 1s steps(1) infinite;vertical-align:-2px;margin-left:3px;}
+  @keyframes blink{50%{opacity:0}}
+  .gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .gauge{background:linear-gradient(180deg,#101314,#000 74%);border:1px solid rgba(248,255,255,.24);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:6px;aspect-ratio:1/1;box-shadow:inset 0 0 18px rgba(0,0,0,.6),0 0 12px rgba(248,255,255,.06);text-align:center;}
+  .dial{width:min(76%,150px);aspect-ratio:1/1;border-radius:50%;border:8px solid #0d0f10;display:grid;place-items:center;font-family:var(--display);font-size:30px;position:relative;flex:none;text-shadow:0 0 12px currentColor;}
+  .dial::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:6px solid var(--dial);clip-path:polygon(50% 50%,50% -20%,120% -20%,120% 50%);transform:rotate(var(--rot));filter:drop-shadow(0 0 5px var(--dial));}
+  .gmeta{font-size:10px;color:rgba(248,255,255,.66);line-height:1.2;}
+  .gmeta b{display:block;font-family:var(--display);font-size:13px;color:#ffffff;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;text-shadow:0 0 8px rgba(248,255,255,.25);}
+  .actions-log{display:grid;grid-template-columns:1fr;gap:8px;}
+  .actions{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+  .fn-btn{background:linear-gradient(180deg,#101314,#000 74%);border:1px solid #080a0b;border-top-color:rgba(248,255,255,.34);color:#f8ffff;border-radius:7px;padding:7px 8px;font-family:var(--display);font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 0 #000;transition:.08s;text-shadow:0 0 8px rgba(248,255,255,.34);}
+  .fn-btn:hover{color:var(--matrix);border-top-color:rgba(248,255,255,.62);box-shadow:0 0 12px rgba(248,255,255,.18),0 2px 0 #000;}
+  .fn-btn.active{background:linear-gradient(180deg,#202526,#020303 70%,#000);color:#ffffff;box-shadow:0 0 16px rgba(248,255,255,.42),0 2px 0 #000;}
+  .fn-sub{display:block;font-family:var(--mono);font-size:7px;letter-spacing:1px;color:rgba(248,255,255,.5);margin-top:2px;}
+  .log{height:92px;overflow:auto;background:linear-gradient(90deg,#11180e,#020402 70%,#000);border:1px solid rgba(248,255,255,.16);border-radius:8px;padding:7px 10px;font-size:10.5px;color:rgba(248,255,255,.74);line-height:1.35;}
+  .log div{margin-bottom:4px}.log .time{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
+  .input-row{border-top:1px solid rgba(248,255,255,.14);padding-top:4px;color:rgba(248,255,255,.58);}
+  .input-row .prompt{color:var(--matrix);}
+  .portal{height:112px;overflow:auto;background:linear-gradient(180deg,#080a0b,#000 78%);border:1px solid rgba(248,255,255,.20);border-radius:8px;padding:8px 10px;font-size:10.5px;color:rgba(248,255,255,.76);line-height:1.35;}
+  .portal div{margin-bottom:5px}.portal .time{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
+  .portal-field{display:grid;grid-template-columns:82px 1fr;gap:8px;border-top:1px solid rgba(248,255,255,.13);padding-top:5px;margin-top:5px;}
+  .portal-label{font-family:var(--display);letter-spacing:1px;text-transform:uppercase;color:#f8ffff;text-shadow:0 0 10px rgba(248,255,255,.5);}
+
+  /* HAL routing bay */
+  .hal{background:linear-gradient(135deg,#050707 0%,#000 42%,#030506 100%);border:1px solid rgba(222,255,255,.2);border-radius:10px;box-shadow:inset 0 0 42px #000,inset 0 1px 0 rgba(255,255,255,.08),0 0 24px rgba(218,255,255,.08);overflow:hidden;color:var(--ice);position:relative;}
+  .hal::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.035) 14%,transparent 36%,transparent 68%,rgba(218,255,255,.055) 100%);mix-blend-mode:screen;pointer-events:none;opacity:.58;}
+  .hal-head{padding:14px 14px 28px;border-bottom:1px solid rgba(222,255,255,.16);display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(180deg,rgba(12,15,15,.92),rgba(0,0,0,.98));position:relative;overflow:visible;}
+  .hal-title{font-family:var(--display);letter-spacing:2px;text-transform:uppercase;color:var(--ice);font-size:14px;text-shadow:0 0 10px var(--ice-glow);}
+  .hal .tag{color:rgba(248,255,255,.64);text-shadow:0 0 8px rgba(218,255,255,.28);}
+  .eye{width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#fff4ef 0 3%,#ff8f7e 7%,#ff1b12 20%,#c20008 47%,#4d0005 78%,#110000 100%);box-shadow:0 0 22px rgba(255,31,23,.9),0 0 48px rgba(255,31,23,.42),0 12px 26px rgba(0,0,0,.78),inset 0 8px 9px rgba(255,255,255,.34),inset 0 -14px 16px rgba(25,0,0,.9);position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);z-index:3;border:1px solid rgba(255,245,242,.34);filter:contrast(1.12) saturate(1.18);}
+  .eye::before{content:"";position:absolute;left:15px;top:10px;width:26px;height:13px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.08));filter:blur(.2px);transform:rotate(-18deg);}
+  .eye::after{content:"";position:absolute;inset:24px;border-radius:50%;background:#fff2ee;box-shadow:0 0 10px #fff,0 0 26px rgba(255,31,23,.95);opacity:.9;}
+  .bay-body{padding:42px 14px 14px;background:linear-gradient(145deg,#050707,#000 46%,#030505);position:relative;}
+  .bay-body::before{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.08),transparent 31%,transparent 68%,rgba(218,255,255,.045));pointer-events:none;}
+
+  .hal-switches{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px;padding:9px;background:linear-gradient(135deg,#050707,#000 54%,#030505);border:1px solid rgba(218,255,255,.16);border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 22px rgba(0,0,0,.84),0 0 18px rgba(218,255,255,.05);position:relative;}
+  .hal-switches .switch-row{min-height:32px;padding:5px 6px;border-color:rgba(218,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.42));}
+  .hal-switches .switch-label{font-size:7.5px;max-width:56px;color:rgba(248,255,255,.72);letter-spacing:.6px;text-transform:uppercase;}
+  .hal-switches .toggle{width:34px;height:18px;flex:0 0 auto;}
+  .hal-switches .toggle::after{width:12px;height:12px;}
+  .hal-switches .toggle.on::after{left:18px;}
+  .blade-bank{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;height:132px;margin-bottom:14px;padding:11px;background:linear-gradient(135deg,#070909,#000 54%,#030505);border:1px solid rgba(218,255,255,.12);border-radius:8px;align-items:stretch;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 24px rgba(0,0,0,.82),0 0 18px rgba(218,255,255,.04);position:relative;}
+  .blade{border:1px solid rgba(218,255,255,.14);border-radius:5px;background:linear-gradient(180deg,#0a0c0c,#010202);position:relative;cursor:pointer;overflow:hidden;transition:.14s;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -10px 16px rgba(0,0,0,.82),0 0 10px rgba(218,255,255,.035);}
+  .blade::before{content:"";position:absolute;inset:10px 8px;border-radius:3px;background:linear-gradient(90deg,rgba(140,160,160,.08),rgba(218,245,245,.14) 42%,rgba(120,130,130,.08));box-shadow:inset 2px 0 4px rgba(255,255,255,.08),inset -2px 0 4px rgba(218,255,255,.08),0 0 4px rgba(218,255,255,.04);opacity:.24;backdrop-filter:blur(.4px);}
+  .blade::after{content:attr(data-code);position:absolute;bottom:7px;left:0;right:0;text-align:center;font-family:var(--display);font-size:11px;letter-spacing:1px;color:rgba(235,255,255,.46);text-shadow:0 0 5px rgba(255,238,218,.18);}
+  .blade.active::before,
+  .blade.pending::before,
+  .blade.archive::before{background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(244,255,255,.72) 18%,rgba(255,255,255,.98) 48%,rgba(211,250,255,.74) 72%,rgba(255,255,255,.88));box-shadow:0 0 22px rgba(248,255,255,.94),0 0 46px rgba(218,255,255,.52),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);opacity:1;filter:brightness(1.18);}
+  .blade.active::after,
+  .blade.pending::after,
+  .blade.archive::after{color:#030909;text-shadow:0 0 4px rgba(255,255,255,.8);}
+  .blade.blocked::before{background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(244,255,255,.72) 18%,rgba(255,255,255,.98) 48%,rgba(211,250,255,.74) 72%,rgba(255,255,255,.88));box-shadow:0 0 20px rgba(248,255,255,.88),0 0 38px rgba(218,255,255,.42),0 0 18px rgba(255,31,23,.56),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);opacity:1;filter:brightness(1.14);}
+  .blade.blocked::after{color:#030909;text-shadow:0 0 4px rgba(255,255,255,.8);}
+  .blade.pending::before{animation:pulse 1.7s infinite;}
+  .blade.selected{outline:2px solid rgba(248,255,255,.92);outline-offset:2px;}
+  @keyframes pulse{50%{filter:brightness(1.35)}}
+  .blade-list{display:grid;gap:7px;}
+  .blade-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px;border:1px solid rgba(218,255,255,.14);background:linear-gradient(135deg,rgba(255,255,255,.032),rgba(0,0,0,.08));border-radius:6px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+  .mini{width:12px;height:26px;border-radius:3px;background:linear-gradient(90deg,rgba(120,130,130,.08),rgba(218,245,245,.13),rgba(110,120,120,.08));border:1px solid rgba(218,255,255,.14);justify-self:center;box-shadow:inset 1px 0 3px rgba(255,255,255,.07),inset -1px 0 3px rgba(218,255,255,.06),0 0 4px rgba(218,255,255,.03);opacity:.28;}
+  .blade-row.active .mini,
+  .blade-row.pending .mini,
+  .blade-row.archive .mini{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 18px rgba(248,255,255,.92),0 0 32px rgba(218,255,255,.42),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.2);}
+  .blade-row.blocked .mini{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 18px rgba(248,255,255,.88),0 0 28px rgba(218,255,255,.36),0 0 14px rgba(255,31,23,.46),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.16);}
+  .b-label{font-size:10.5px;color:rgba(248,255,255,.96);line-height:1.2;text-shadow:0 0 8px rgba(218,255,255,.22);}.b-label span{display:block;color:rgba(248,255,255,.52);font-size:8.5px;margin-top:2px}.b-state{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:rgba(248,255,255,.66);}
+  .route-note{margin-top:12px;padding:10px;border:1px solid rgba(218,255,255,.16);border-radius:6px;background:rgba(218,255,255,.035);font-size:10.5px;line-height:1.45;color:rgba(248,255,255,.82);text-shadow:0 0 8px rgba(218,255,255,.16);}
+  @media(max-width:1180px){.layout{grid-template-columns:1fr}.gauges{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
+<div class="console">
+  <div class="rivet r1"></div><div class="rivet r2"></div><div class="rivet r3"></div><div class="rivet r4"></div>
   <header>
     <div>
-      <h1>Pii Console // UHG Startup Spine Proof</h1>
-      <div class="subtitle">Grace/team-side command center prototype using synthetic fixture state. Readiness is rendered as dashboard posture over field truth, transitions, and routing — not as project authority.</div>
+      <h1>PII TEAM DASHBOARD — OPERATIONAL CONSOLE</h1>
+      <div class="sub">HAL black glass · faint white monitor scan · C-A Red alert lens · synthetic prototype state only</div>
     </div>
-    <div class="authority-banner">SYNTHETIC FIXTURE ONLY · NON-AUTHORITATIVE · NOT REAL UHG PROJECT STATE · READINESS IS DASHBOARD STATE, NOT AUTHORITY</div>
+    <div class="authority">SYNTHETIC PROTOTYPE ONLY · NON-AUTHORITATIVE · READINESS IS DASHBOARD/DISPLAY STATE, NOT AUTHORITY · HUMAN CONCURRENCE REQUIRED BEFORE CURRENT-TRUTH PROPAGATION</div>
   </header>
 
-  <main>
-    <section class="panel">
-      <div class="panel-title"><h2>Sonar Module Graph</h2><span class="tiny">12 stable module lenses · one shared fixture spine</span></div>
-      <div class="graph">
-        <div class="radar"></div><div class="sweep"></div>
-        <div class="nodes" id="nodes"></div>
+  <div class="layout">
+    <section class="panel lens-panel">
+      <div class="panel-title"><h2>Control Bank</h2><span class="tag">module + filters</span></div>
+      <div class="bank-body">
+        <div class="module-tabs" id="moduleTabs"></div>
+        <div class="knob-grid" aria-label="Tuning knobs">
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease scope tuning">−</button><div class="knob" style="--rot:-42deg"></div><button class="trim-btn" type="button" aria-label="Increase scope tuning">+</button></div><div class="knob-label">Scope</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease risk tuning">−</button><div class="knob" style="--rot:18deg"></div><button class="trim-btn" type="button" aria-label="Increase risk tuning">+</button></div><div class="knob-label">Risk</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease source tuning">−</button><div class="knob" style="--rot:64deg"></div><button class="trim-btn" type="button" aria-label="Increase source tuning">+</button></div><div class="knob-label">Source</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease readiness tuning">−</button><div class="knob" style="--rot:-16deg"></div><button class="trim-btn" type="button" aria-label="Increase readiness tuning">+</button></div><div class="knob-label">Readiness</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease concurrence tuning">−</button><div class="knob" style="--rot:38deg"></div><button class="trim-btn" type="button" aria-label="Increase concurrence tuning">+</button></div><div class="knob-label">Concur.</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease signal tuning">−</button><div class="knob" style="--rot:-72deg"></div><button class="trim-btn" type="button" aria-label="Increase signal tuning">+</button></div><div class="knob-label">Signal</div></div>
+        </div>
       </div>
     </section>
 
-    <aside class="detail">
-      <section class="panel module-detail" id="moduleDetail"></section>
-      <section class="panel">
-        <div class="panel-title"><h2>Action Strip</h2><span class="tiny">operator intent ≠ authority</span></div>
-        <div class="strip" id="actionStrip"></div>
-      </section>
+    <section class="center">
+      <div class="monitor-frame">
+        <div class="monitor">
+          <div class="screen-title"><span id="screenMode">Agent Output</span><span>UHG Startup Spine · synthetic</span></div>
+          <div class="readout" id="readout"></div>
+        </div>
+      </div>
+      <div class="gauges" id="gauges"></div>
+      <div class="actions-log">
+        <div class="actions" id="actions"></div>
+        <div class="portal" id="portal">
+          <div><span class="time">[00:00:01]</span> Operational console first pass initialized. Synthetic fixture posture loaded.</div>
+          <div><span class="time">[00:00:02]</span> HAL routing bay online. Controls select views and intent only; no authority created.</div>
+          <div class="portal-field"><span class="portal-label">Dialogue</span><span><span class="prompt">&gt;</span> operator note / question / proposed interpretation · synthetic only</span></div>
+          <div class="portal-field"><span class="portal-label">Artifact</span><span><span class="prompt">&gt;</span> source pointer / preserved context / Archive before extraction</span></div>
+          <div class="input-row"><span class="prompt">&gt;</span> no current-truth propagation from this portal</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="hal">
+      <div class="hal-head"><div><div class="hal-title">HAL Routing Bay</div><div class="tag" id="baySub">field-state blade rack</div></div><div class="eye"></div></div>
+      <div class="bay-body">
+        <div class="hal-switches" aria-label="HAL bar display toggles">
+          <div class="switch-row"><span class="switch-label">Activation</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Source</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Propagation</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Candidates</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Proposals</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Conflicts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Archive</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Authority Lock</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="blade-bank" id="bladeBank"></div>
+        <div class="blade-list" id="bladeList"></div>
+        <div class="route-note" id="routeNote">Fins, blades, and HAL toggles route display state only. Bright ice-white = included/active; dull glass = inactive. Agent Output updates only.</div>
+      </div>
     </aside>
-  </main>
+  </div>
+</div>
 
-  <section class="panel" style="margin: 0 28px 20px;">
-    <div class="panel-title"><h2>Active Governed Records</h2><span class="tiny">gaps · conflicts · proposals · concurrence candidates · archive pointers</span></div>
-    <div class="records-grid" id="recordsGrid"></div>
-  </section>
-
-  <p class="footer-note">Fixture source: pii_team_dashboard/fixtures/uhg-startup-state.sample.json · Client-facing dashboard files are outside this prototype scope.</p>
-
-  <script id="pii-seed-data" type="application/json">{
-  "fixture": {
-    "schema": "pii-team-dashboard.project-state.sample.v0",
-    "standing": {
-      "status": "sample_fixture",
-      "authority": "non_authoritative",
-      "admissibility": "test_fixture",
-      "verification": "synthetic_for_spine_testing"
-    },
-    "purpose": "Synthetic UHG startup-state fixture used to prove the Pii Team Dashboard spine can carry a mixed readiness condition without promoting sample data into project authority.",
-    "project_ref": {
-      "project_key": "fixture:uhg-startup-001",
-      "project_name": "UHG Sample Startup State",
-      "source_basis": "fixture_only",
-      "scope_of_use": "spine_testing_and_static_prototype"
-    },
-    "source_refs": [
-      {
-        "source_ref": "fixture:pac_sample",
-        "source_type": "synthetic_pac_record",
-        "standing": "fixture_only",
-        "notes": "Synthetic PAC-like origin record for display and origin-lock testing."
-      },
-      {
-        "source_ref": "fixture:uhg_overlay_sample",
-        "source_type": "synthetic_uhg_overlay_record",
-        "standing": "fixture_only",
-        "notes": "Synthetic UHG overlay record for Service Order / LCD-W overlay testing."
-      },
-      {
-        "source_ref": "fixture:startup_review_note",
-        "source_type": "synthetic_internal_review_note",
-        "standing": "fixture_only",
-        "notes": "Synthetic internal review note used to create gap/conflict/proposal records."
-      }
-    ],
-    "field_states": [
-      {
-        "field_id": "project_name",
-        "value": "UHG Sample Clinic Refresh",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "display_readiness",
-        "blocking_effect": "none",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "client_entity",
-        "value": "UnitedHealth Group fixture entity",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "display_readiness",
-        "blocking_effect": "none",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "project_description",
-        "value": "Synthetic interior refresh scope for startup-spine testing.",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "display_readiness_and_scope_review",
-        "blocking_effect": "none",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "professional_fee",
-        "value": "125000 USD fixture fee",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "budget_and_compensation_testing",
-        "blocking_effect": "none",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "fee_breakdown_by_phase",
-        "value": "SD 20%, DD 30%, CD 35%, CA 15% fixture split",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "budget_and_schedule_testing",
-        "blocking_effect": "none",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "project_schedule_by_phase",
-        "value": "Fixture draft: SD 3 weeks, DD 4 weeks, CD 6 weeks, CA TBD",
-        "truth_state": "provided",
-        "source_ref": "fixture:pac_sample",
-        "scope_of_use": "schedule_display_only",
-        "blocking_effect": "blocks_final_output",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "schedule_confidence_status",
-        "value": "illustrative_not_confirmed",
-        "truth_state": "assumed",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "current_internal_schedule_discussion",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Confirm owner/client dependencies and whether dates are contractual or illustrative.",
-        "lineage_refs": [
-          "fixture:pac_sample"
-        ]
-      },
-      {
-        "field_id": "acceptance_status",
-        "value": "verbally_accepted_pending_formal_confirmation",
-        "truth_state": "provided",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "activation_screening",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Attach formal acceptance/authorization source before activation-ready status.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "ntp_or_equivalent_authorization",
-        "value": null,
-        "truth_state": "missing",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "activation_readiness",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Request NTP or equivalent authorization evidence.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "activation_identifier",
-        "value": null,
-        "truth_state": "missing",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "system_setup_and_activation",
-        "blocking_effect": "blocks_current_output",
-        "follow_up_required": "Confirm activation identifier before setup can complete.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "project_number",
-        "value": null,
-        "truth_state": "missing",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "system_setup_and_billing",
-        "blocking_effect": "blocks_current_output",
-        "follow_up_required": "Assign or confirm project number.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "billing_path_viability",
-        "value": "unknown_until_project_number_and_authorization_confirmed",
-        "truth_state": "unknown",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "budget_current_output_readiness",
-        "blocking_effect": "blocks_current_output",
-        "follow_up_required": "Confirm billing path after authorization and project number are available.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "owner_dependencies",
-        "value": "owner fixture review dates assumed from startup conversation",
-        "truth_state": "assumed",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "schedule_current_output_readiness",
-        "blocking_effect": "routing_only",
-        "follow_up_required": "Validate owner review durations before final schedule output.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "service_order_terms",
-        "value": "fixture conflict: PAC suggests proposal agreement; UHG overlay suggests Service Order required",
-        "truth_state": "conflict",
-        "source_ref": "fixture:uhg_overlay_sample",
-        "scope_of_use": "contracts_and_lcd_w_analysis",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Resolve agreement path vs UHG Service Order requirement.",
-        "lineage_refs": [
-          "fixture:pac_sample",
-          "fixture:uhg_overlay_sample"
-        ]
-      },
-      {
-        "field_id": "fee_basis_alignment",
-        "value": "fixture conflict between proposal fee basis and service-order workflow",
-        "truth_state": "conflict",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "compensation_and_activation_readiness",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Confirm whether fee basis is proposal-origin, contract-authorized, or Service Order-derived.",
-        "lineage_refs": [
-          "fixture:pac_sample",
-          "fixture:uhg_overlay_sample"
-        ]
-      },
-      {
-        "field_id": "activation_override_record",
-        "value": "candidate override to begin limited setup while authorization is pending",
-        "truth_state": "extracted",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "activation_override_review_only",
-        "blocking_effect": "routing_only",
-        "follow_up_required": "Requires PM/PIC concurrence before any current-truth propagation.",
-        "lineage_refs": []
-      },
-      {
-        "field_id": "activation_gate_status",
-        "value": "blocked_pending_authorization_and_contract_resolution",
-        "truth_state": "extracted",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "activation_readiness",
-        "blocking_effect": "blocks_activation",
-        "follow_up_required": "Elevate activation status for concurrence only after blockers are resolved or accepted by override.",
-        "lineage_refs": [
-          "fixture:startup_review_note"
-        ]
-      },
-      {
-        "field_id": "archived_source_records",
-        "value": [
-          "fixture:pac_sample",
-          "fixture:uhg_overlay_sample",
-          "fixture:startup_review_note"
-        ],
-        "truth_state": "provided",
-        "source_ref": "fixture:startup_review_note",
-        "scope_of_use": "governance_readiness",
-        "blocking_effect": "routing_only",
-        "lineage_refs": []
-      }
-    ],
-    "active_records": {
-      "candidate_field_states": [
-        {
-          "candidate_id": "cand:activation-gate-status-001",
-          "field_id": "activation_gate_status",
-          "proposed_value": "blocked_pending_authorization_and_contract_resolution",
-          "proposed_truth_state": "extracted",
-          "source_ref": "fixture:startup_review_note",
-          "extraction_ref": "fixture:extract-startup-review-001",
-          "scope_of_use": "activation_readiness",
-          "initiating_action": "extract",
-          "initiating_module": "activation_gates",
-          "permission_used": "derive",
-          "status": "candidate",
-          "lineage_refs": [
-            "fixture:startup_review_note"
-          ],
-          "notes": "Synthetic candidate to test that extracted activation status does not become authority."
-        }
-      ],
-      "gap_records": [
-        {
-          "gap_id": "gap:ntp-001",
-          "field_id": "ntp_or_equivalent_authorization",
-          "gap_kind": "missing",
-          "truth_state": "missing",
-          "source_ref": "fixture:startup_review_note",
-          "scope_of_use": "activation_readiness",
-          "blocking_effect": "blocks_activation",
-          "follow_up_required": "Request NTP/equivalent authorization source.",
-          "initiating_action": "extract",
-          "initiating_module": "activation_gates",
-          "status": "routed",
-          "lineage_refs": [
-            "fixture:startup_review_note"
-          ],
-          "affected_modules": [
-            "activation_gates",
-            "contracts",
-            "system_setup"
-          ]
-        },
-        {
-          "gap_id": "gap:project-number-001",
-          "field_id": "project_number",
-          "gap_kind": "missing",
-          "truth_state": "missing",
-          "source_ref": "fixture:startup_review_note",
-          "scope_of_use": "system_setup_and_billing",
-          "blocking_effect": "blocks_current_output",
-          "follow_up_required": "Assign or confirm project number.",
-          "initiating_action": "extract",
-          "initiating_module": "system_setup",
-          "status": "routed",
-          "lineage_refs": [
-            "fixture:startup_review_note"
-          ],
-          "affected_modules": [
-            "system_setup",
-            "budget",
-            "contracts"
-          ]
-        }
-      ],
-      "conflict_records": [
-        {
-          "conflict_id": "conflict:service-order-terms-001",
-          "field_id": "service_order_terms",
-          "conflicting_refs": [
-            "fixture:pac_sample",
-            "fixture:uhg_overlay_sample"
-          ],
-          "conflict_summary": "Fixture conflict between proposal/agreement path and UHG Service Order requirement.",
-          "truth_state": "conflict",
-          "scope_of_use": "contracts_and_lcd_w_analysis",
-          "blocking_effect": "blocks_activation",
-          "initiating_action": "extract",
-          "initiating_module": "contracts",
-          "status": "routed",
-          "lineage_refs": [
-            "fixture:pac_sample",
-            "fixture:uhg_overlay_sample"
-          ],
-          "affected_modules": [
-            "contracts",
-            "lcd_w_analysis",
-            "activation_gates"
-          ],
-          "authority_requirement": "pm_concurrence_required"
-        },
-        {
-          "conflict_id": "conflict:fee-basis-001",
-          "field_id": "fee_basis_alignment",
-          "conflicting_refs": [
-            "fixture:pac_sample",
-            "fixture:uhg_overlay_sample"
-          ],
-          "conflict_summary": "Fixture conflict over whether fee basis is proposal-origin or Service Order-derived.",
-          "truth_state": "conflict",
-          "scope_of_use": "compensation_and_activation_readiness",
-          "blocking_effect": "blocks_activation",
-          "initiating_action": "extract",
-          "initiating_module": "compensation",
-          "status": "routed",
-          "lineage_refs": [
-            "fixture:pac_sample",
-            "fixture:uhg_overlay_sample"
-          ],
-          "affected_modules": [
-            "compensation",
-            "budget",
-            "activation_gates"
-          ],
-          "authority_requirement": "pm_concurrence_required"
-        }
-      ],
-      "proposal_packets": [
-        {
-          "proposal_id": "proposal:limited-setup-override-001",
-          "proposed_change": "Allow limited system setup preparation while activation remains blocked, without treating activation as ready.",
-          "source_ref": "fixture:startup_review_note",
-          "extraction_ref": "fixture:extract-startup-review-001",
-          "affected_fields": [
-            "activation_override_record",
-            "activation_gate_status",
-            "system_setup"
-          ],
-          "affected_modules": [
-            "activation_gates",
-            "system_setup",
-            "risk_gaps"
-          ],
-          "authority_requirement": "pm_concurrence_required",
-          "risk_or_blocking_effect": "blocks_activation remains; setup may proceed only as qualified internal preparation if concurred",
-          "requested_human_action": "review_and_concur_or_reject_limited_setup_override",
-          "initiating_action": "elevate",
-          "initiating_module": "activation_gates",
-          "status": "pending_concurrence",
-          "lineage_refs": [
-            "cand:activation-gate-status-001",
-            "gap:ntp-001"
-          ]
-        }
-      ],
-      "concurrence_candidates": [
-        {
-          "concurrence_candidate_id": "concur-candidate:limited-setup-override-001",
-          "field_id": "activation_override_record",
-          "current_state": "no_concurred_override",
-          "proposed_state": "limited_setup_preparation_allowed_without_activation_ready_status",
-          "lineage_refs": [
-            "proposal:limited-setup-override-001",
-            "fixture:startup_review_note"
-          ],
-          "reviewer_needed": "PM or PIC",
-          "reason": "Synthetic case tests that Elevate is proposal intake, not approval.",
-          "status": "pending_concurrence",
-          "proposal_id": "proposal:limited-setup-override-001",
-          "affected_modules": [
-            "activation_gates",
-            "system_setup",
-            "risk_gaps"
-          ],
-          "blocking_effect": "routing_only",
-          "authority_requirement": "pm_concurrence_required",
-          "scope_of_use": "limited_internal_setup_preparation"
-        }
-      ],
-      "archive_record_pointers": [
-        {
-          "archive_id": "archive:fixture-source-bundle-001",
-          "source_ref": "fixture:startup_review_note",
-          "source_type": "synthetic_internal_review_note",
-          "captured_by": "fixture_author",
-          "captured_on": "2026-07-23",
-          "scope": "spine_testing_and_static_prototype",
-          "standing": "fixture_only",
-          "initiating_action": "archive",
-          "initiating_module": "risk_gaps",
-          "status": "archived",
-          "lineage_refs": [
-            "fixture:pac_sample",
-            "fixture:uhg_overlay_sample"
-          ]
-        }
-      ],
-      "propagation_events": []
-    },
-    "expected_module_readiness": [
-      {
-        "module_id": "project_origin",
-        "display_readiness": "ready",
-        "governance_readiness": "qualified",
-        "reason": "Core origin fields are source-traceable, but downstream validation and activation issues remain visible."
-      },
-      {
-        "module_id": "activation_gates",
-        "activation_readiness": "blocked",
-        "governance_readiness": "pending_concurrence",
-        "propagation_readiness": "blocked",
-        "reason": "Authorization/NTP is missing, service-order and fee-basis conflicts block activation, and override is only pending concurrence."
-      },
-      {
-        "module_id": "scope",
-        "current_output_readiness": "qualified",
-        "governance_readiness": "qualified",
-        "reason": "Origin scope is source-traceable for display and internal discussion, but later UHG overlay and Service Order implications remain unresolved."
-      },
-      {
-        "module_id": "contracts",
-        "activation_readiness": "blocked",
-        "current_output_readiness": "blocked",
-        "final_output_readiness": "blocked",
-        "reason": "Service Order terms conflict and authorization path is unresolved."
-      },
-      {
-        "module_id": "budget",
-        "current_output_readiness": "blocked",
-        "propagation_readiness": "blocked",
-        "reason": "Professional fee is source-traceable, but fee basis and billing path remain unresolved."
-      },
-      {
-        "module_id": "compensation",
-        "current_output_readiness": "blocked",
-        "final_output_readiness": "blocked",
-        "reason": "Fee-basis alignment is conflicted and needs PM concurrence or source resolution."
-      },
-      {
-        "module_id": "schedule",
-        "current_output_readiness": "qualified",
-        "final_output_readiness": "blocked",
-        "reason": "Schedule is usable only as internal assumption; false precision is blocked from final output."
-      },
-      {
-        "module_id": "team_responsibility",
-        "activation_readiness": "unknown",
-        "current_output_readiness": "qualified",
-        "reason": "Accountable assignments are not fully represented in this fixture; follow-up should remain visible."
-      },
-      {
-        "module_id": "consultants",
-        "current_output_readiness": "qualified",
-        "governance_readiness": "qualified",
-        "reason": "Specialty/consultant implications are not final, but scope signals can be routed."
-      },
-      {
-        "module_id": "lcd_w_analysis",
-        "current_output_readiness": "blocked",
-        "final_output_readiness": "blocked",
-        "governance_readiness": "qualified",
-        "reason": "UHG overlay is visible but Service Order terms conflict blocks clean readiness."
-      },
-      {
-        "module_id": "system_setup",
-        "activation_readiness": "blocked",
-        "current_output_readiness": "blocked",
-        "reason": "Project number and activation identifier are missing."
-      },
-      {
-        "module_id": "risk_gaps",
-        "display_readiness": "ready",
-        "governance_readiness": "ready",
-        "reason": "Known gaps, conflicts, proposal, concurrence candidate, and archive pointer are visible and routed."
-      }
-    ]
-  },
-  "modules": [
-    {
-      "id": "project_origin",
-      "label": "Project Origin / PAC",
-      "category": "origin",
-      "primary_source_layer": "pac_core",
-      "description": "Known, approved, and structurally defined project-start origin data derived from PAC.",
-      "canonical_inputs": [
-        "proposal_date",
-        "client_entity",
-        "project_name",
-        "project_location",
-        "project_description",
-        "professional_fee",
-        "acceptance_status"
-      ],
-      "operator_questions": [
-        "What was known at origin?",
-        "What remains validation-required before startup?",
-        "What cannot be overwritten by later operations?"
-      ]
-    },
-    {
-      "id": "activation_gates",
-      "label": "Activation Gates",
-      "category": "startup_control",
-      "primary_source_layer": "pac_core",
-      "description": "Blocking-by-default startup sufficiency checks before project activation proceeds.",
-      "canonical_inputs": [
-        "acceptance_status",
-        "authorization_confirmation",
-        "scope_clarity_status",
-        "schedule_confidence_status",
-        "billing_schedule"
-      ],
-      "operator_questions": [
-        "Can this project start responsibly?",
-        "Which required startup facts are still gaps?",
-        "Which overrides create coordination risk?"
-      ]
-    },
-    {
-      "id": "scope",
-      "label": "Scope / Project Definition",
-      "category": "operations",
-      "primary_source_layer": "pac_core_plus_overlay",
-      "description": "Operational view of scope, project description, square footage, services, exclusions, and later scope clarification.",
-      "canonical_inputs": [
-        "project_description",
-        "estimated_gsf",
-        "basic_services",
-        "additional_services",
-        "scope_clarity_status"
-      ],
-      "operator_questions": [
-        "What is actually included?",
-        "Where is the proposal narrative incomplete or misaligned?",
-        "What scope signals trigger consultant or additional-service routing?"
-      ]
-    },
-    {
-      "id": "contracts",
-      "label": "Contracts / Authorization",
-      "category": "contractual_control",
-      "primary_source_layer": "pac_core_plus_uhg_overlay",
-      "description": "Agreement path, acceptance, authorization, Service Order logic, insurance, and contractual workflow constraints.",
-      "canonical_inputs": [
-        "form_of_agreement",
-        "acceptance_status",
-        "authorization_confirmation",
-        "insurance_requirements",
-        "service_order_terms"
-      ],
-      "operator_questions": [
-        "What authorizes the work?",
-        "Does the contract path match the work being performed?",
-        "Which UHG-specific contractual rules govern this project?"
-      ]
-    },
-    {
-      "id": "budget",
-      "label": "Budget / Financial Model",
-      "category": "financial_operations",
-      "primary_source_layer": "pac_transformation",
-      "description": "Transforms PAC fee and cost origin data into internal production budget and project financial controls.",
-      "canonical_inputs": [
-        "estimated_construction_cost",
-        "professional_fee",
-        "fee_breakdown_by_phase",
-        "billing_schedule"
-      ],
-      "operator_questions": [
-        "What is the approved fee basis?",
-        "How does fee transform into production budget?",
-        "Where does budget depend on contract or compensation data?"
-      ]
-    },
-    {
-      "id": "compensation",
-      "label": "Compensation / Fee",
-      "category": "financial_operations",
-      "primary_source_layer": "pac_core_plus_contract_overlay",
-      "description": "Professional fee, phase fee breakdown, reimbursables, additional services, and compensation assumptions.",
-      "canonical_inputs": [
-        "professional_fee",
-        "fee_breakdown_by_phase",
-        "reimbursable_expenses",
-        "additional_services"
-      ],
-      "operator_questions": [
-        "What is Grace being paid to do?",
-        "What fee data is origin truth vs. later transformation?",
-        "What additional services are unresolved?"
-      ]
-    },
-    {
-      "id": "schedule",
-      "label": "Schedule / Milestones",
-      "category": "time_operations",
-      "primary_source_layer": "pac_core_plus_overlay",
-      "description": "Project schedule by phase, schedule confidence, milestones, and owner/client-dependent timing constraints.",
-      "canonical_inputs": [
-        "project_schedule_by_phase",
-        "schedule_confidence_status",
-        "milestones",
-        "owner_dependencies"
-      ],
-      "operator_questions": [
-        "What schedule is contractual vs. illustrative?",
-        "Which milestones drive deliverables and billing?",
-        "Where is false precision being introduced?"
-      ]
-    },
-    {
-      "id": "team_responsibility",
-      "label": "Team + Responsibility",
-      "category": "operations",
-      "primary_source_layer": "lcw_section_b",
-      "description": "Internal, consultant, owner, and partner responsibilities that emerge after origin capture.",
-      "canonical_inputs": [
-        "pic",
-        "pm",
-        "pa",
-        "consultant_roles",
-        "owner_contacts",
-        "responsibility_assignments"
-      ],
-      "operator_questions": [
-        "Who owns each required action?",
-        "Which consultant/additional-service triggers remain unrouted?",
-        "What responsibilities are missing or ambiguous?"
-      ]
-    },
-    {
-      "id": "consultants",
-      "label": "Consultants / Partners",
-      "category": "coordination",
-      "primary_source_layer": "lcw_section_b_plus_scope_signals",
-      "description": "Consultant needs, partner assignments, proposal requests, scope mapping, and coordination status.",
-      "canonical_inputs": [
-        "additional_services",
-        "programming",
-        "record_drawings",
-        "consultant_roles",
-        "proposal_requests"
-      ],
-      "operator_questions": [
-        "Which consultants are required by scope?",
-        "Which consultant scopes are missing?",
-        "Which assignments affect schedule, fee, or risk?"
-      ]
-    },
-    {
-      "id": "lcd_w_analysis",
-      "label": "LCD-W / Project Analysis",
-      "category": "analysis_overlay",
-      "primary_source_layer": "generic_lcd_w_or_uhg_lcd_lcw",
-      "description": "Required project-analysis fields from the generic Grace LCD-W pattern or the UHG-specific contractual LCD/LCW overlay.",
-      "canonical_inputs": [
-        "lcd_required_fields",
-        "uhg_required_fields",
-        "project_analysis_fields",
-        "workflow_rules"
-      ],
-      "operator_questions": [
-        "Which project-analysis fields are required for this client/project?",
-        "Which are generic Grace needs vs. UHG contractual fields?",
-        "Which required fields remain incomplete?"
-      ]
-    },
-    {
-      "id": "system_setup",
-      "label": "System Setup",
-      "category": "operations",
-      "primary_source_layer": "lcw_section_e",
-      "description": "Operational configuration: folders, platforms, model environment, standards, and project setup requirements.",
-      "canonical_inputs": [
-        "platforms",
-        "folder_structure",
-        "model_environment",
-        "standards",
-        "file_locations"
-      ],
-      "operator_questions": [
-        "Is the project environment ready?",
-        "What setup requirements are blocked by missing data?",
-        "What setup facts need validation?"
-      ]
-    },
-    {
-      "id": "risk_gaps",
-      "label": "Risk / Gaps / Archive",
-      "category": "governance_routing",
-      "primary_source_layer": "governed_memory_pending_or_gap_records",
-      "description": "Visible worklist of missing, conflicting, uncertain, archived/source-preserved, or unresolved project facts. Quarantine is not a console function; unresolved material is carried by field truth/admissibility/verification/routing state.",
-      "canonical_inputs": [
-        "gap_records",
-        "conflict_records",
-        "validation_required_fields",
-        "archived_source_records",
-        "override_records"
-      ],
-      "operator_questions": [
-        "What do we not know?",
-        "What is blocked?",
-        "What source/dialogue needs archive preservation?",
-        "What needs human concurrence before propagation?"
-      ]
-    }
-  ],
-  "actions": [
-    {
-      "id": "extract",
-      "label": "Extract",
-      "operator_intent": "Glean field candidates, topics, gaps, conflicts, and state changes from preserved source material or dialogue without making them authoritative."
-    },
-    {
-      "id": "absorb",
-      "label": "Absorb",
-      "operator_intent": "Intake an externally created artifact, file, note, workbook, PDF, email, or generated artifact as source material for this project context."
-    },
-    {
-      "id": "elevate",
-      "label": "Elevate",
-      "operator_intent": "Propose a field/state/routing change for human review, concurrence, pending memory, or later decision. Elevate is proposal intake, not approval."
-    },
-    {
-      "id": "archive",
-      "label": "Archive",
-      "operator_intent": "Preserve source material, dialogue, or artifact context word-for-word or by pointer so later extraction/synthesis has provenance."
-    }
-  ],
-  "readinessStates": [
-    {
-      "id": "ready",
-      "meaning": "All required scoped inputs are current, sourced, non-conflicted, non-blocking, and concurrence requirements are satisfied.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "qualified",
-      "meaning": "Usable for a scoped purpose with visible assumptions, deferred items, non-blocking gaps, or explicit limitations.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "pending_concurrence",
-      "meaning": "A candidate, proposal, validation, override, or propagation item is waiting on human concurrence before current-truth use.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "blocked",
-      "meaning": "A required field or transition blocks the scoped dimension due to missing, conflict, source, permission, scope, activation, output, or governance conditions.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "deferred",
-      "meaning": "The item is intentionally delayed for a scoped reason and is not currently blocking unless a dependency needs it now.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "not_required",
-      "meaning": "The item is explicitly outside the scoped use and has scope_of_use support.",
-      "authority_effect": "none"
-    },
-    {
-      "id": "unknown",
-      "meaning": "The dashboard lacks enough source, scope, truth state, or routing data to classify readiness honestly.",
-      "authority_effect": "none"
-    }
-  ],
-  "readinessDimensions": [
-    {
-      "id": "display_readiness",
-      "label": "Display Readiness",
-      "question": "Can the dashboard honestly display known state for this module or project context?",
-      "clean_ready_requires": [
-        "source_ref_present",
-        "truth_state_not_unknown_for_required_display_fields"
-      ],
-      "may_be_ready_with_gaps": true
-    },
-    {
-      "id": "activation_readiness",
-      "label": "Activation Readiness",
-      "question": "Can the project responsibly proceed through activation/startup gates?",
-      "clean_ready_requires": [
-        "no_blocks_activation",
-        "no_required_conflicts",
-        "required_concurrence_satisfied"
-      ],
-      "may_be_ready_with_gaps": false
-    },
-    {
-      "id": "current_output_readiness",
-      "label": "Current Output Readiness",
-      "question": "Can current internal outputs be used for scoped team operations?",
-      "clean_ready_requires": [
-        "no_blocks_current_output",
-        "current_truth_or_scoped_not_required",
-        "source_ref_present"
-      ],
-      "may_be_ready_with_gaps": "only_if_gap_has_no_current_output_blocking_effect"
-    },
-    {
-      "id": "final_output_readiness",
-      "label": "Final Output Readiness",
-      "question": "Can deliverable-grade or final downstream output rely on this state?",
-      "clean_ready_requires": [
-        "no_blocks_final_output",
-        "validated_or_concurred_current_state",
-        "no_unresolved_conflicts"
-      ],
-      "may_be_ready_with_gaps": false
-    },
-    {
-      "id": "governance_readiness",
-      "label": "Governance Readiness",
-      "question": "Are gaps, conflicts, proposals, overrides, and archive/source needs visible and routed?",
-      "clean_ready_requires": [
-        "all_unresolved_records_have_route",
-        "authority_requirement_visible",
-        "follow_up_required_when_needed"
-      ],
-      "may_be_ready_with_gaps": true
-    },
-    {
-      "id": "propagation_readiness",
-      "label": "Propagation Readiness",
-      "question": "May the field state propagate to dependent modules as current truth?",
-      "clean_ready_requires": [
-        "human_concurrence_when_required",
-        "dependency_edges_identified",
-        "standing_metadata_present"
-      ],
-      "may_be_ready_with_gaps": false
-    }
-  ]
-}</script>
-  <script>
-    const DATA = JSON.parse(document.getElementById('pii-seed-data').textContent);
-    const fixture = DATA.fixture;
-    const readinessByModule = Object.fromEntries(fixture.expected_module_readiness.map(r => [r.module_id, r]));
-    const moduleById = Object.fromEntries(DATA.modules.map(m => [m.id, m]));
-    const fieldsByModule = (moduleId) => fixture.field_states.filter(f => {
-      const mod = moduleById[moduleId];
-      if (!mod) return false;
-      return (mod.canonical_inputs || []).includes(f.field_id) ||
-        (readinessByModule[moduleId]?.reason || '').toLowerCase().includes(f.field_id.replaceAll('_', ' ')) ||
-        (moduleId === 'risk_gaps' && ['activation_gate_status','archived_source_records','activation_override_record'].includes(f.field_id));
-    }).slice(0, 6);
-
-    const positions = [
-      [45, 28], [270, 22], [500, 42], [690, 140],
-      [704, 360], [520, 470], [300, 488], [72, 410],
-      [80, 180], [350, 255], [545, 260], [220, 320]
-    ];
-
-    function stateClass(state) { return (state || 'unknown').replace(/[^a-z0-9_]/g, '_'); }
-    function readinessBadges(moduleId) {
-      const r = readinessByModule[moduleId] || {};
-      return Object.entries(r)
-        .filter(([k]) => k.endsWith('_readiness'))
-        .map(([k, v]) => `<span class="badge ${stateClass(v)}">${k.replace('_readiness','')}: ${v}</span>`)
-        .join('');
-    }
-    function renderNodes(selected = 'activation_gates') {
-      const root = document.getElementById('nodes');
-      root.innerHTML = DATA.modules.map((m, i) => {
-        const [x, y] = positions[i];
-        return `<button class="node ${m.id === selected ? 'active' : ''}" data-module="${m.id}" style="left:${x}px; top:${y}px;" aria-label="${m.label}">
-          <div class="node-id">${m.id}</div>
-          <div class="node-label">${m.label}</div>
-          <div class="badges">${readinessBadges(m.id)}</div>
-        </button>`;
-      }).join('');
-      root.querySelectorAll('.node').forEach(el => el.addEventListener('click', () => selectModule(el.dataset.module)));
-    }
-    function fieldCard(f) {
-      return `<div class="field"><div class="field-head"><span class="field-id">${f.field_id}</span><span class="badge ${stateClass(f.truth_state)}">${f.truth_state}</span></div><div class="field-value">${String(f.value ?? 'null')}</div><div class="badges"><span class="badge ${stateClass(f.blocking_effect)}">${f.blocking_effect}</span><span class="badge">${f.scope_of_use}</span></div></div>`;
-    }
-    function selectModule(moduleId) {
-      renderNodes(moduleId);
-      const mod = moduleById[moduleId];
-      const ready = readinessByModule[moduleId] || {};
-      const fields = fieldsByModule(moduleId);
-      document.getElementById('moduleDetail').innerHTML = `
-        <div class="tiny">SELECTED MODULE · ${mod.id}</div>
-        <h3>${mod.label}</h3>
-        <p>${mod.description}</p>
-        <div class="badges">${readinessBadges(mod.id)}</div>
-        <p><strong>Readiness reason:</strong> ${ready.reason || 'No synthetic readiness reason provided.'}</p>
-        <div class="panel-title" style="margin: 14px -16px 12px;"><h2>Relevant Fixture Fields</h2><span class="tiny">synthetic/non-authoritative</span></div>
-        <div class="field-list">${fields.length ? fields.map(fieldCard).join('') : '<div class="field"><span class="field-id">No direct fixture fields selected for this module.</span></div>'}</div>`;
-    }
-    function renderActions() {
-      document.getElementById('actionStrip').innerHTML = DATA.actions.map(a => `<div class="action"><strong>${a.label}</strong><span>${a.operator_intent}</span></div>`).join('');
-    }
-    function recordSummary(rec) {
-      const id = rec.candidate_id || rec.gap_id || rec.conflict_id || rec.proposal_id || rec.concurrence_candidate_id || rec.archive_id || rec.propagation_id || 'record';
-      const body = rec.conflict_summary || rec.proposed_change || rec.reason || rec.follow_up_required || rec.notes || rec.source_type || rec.status || '';
-      const state = rec.status || rec.truth_state || 'routed';
-      return `<div class="record"><div class="record-head"><span class="record-id">${id}</span><span class="badge ${stateClass(state)}">${state}</span></div><div class="record-body">${body}</div></div>`;
-    }
-    function renderRecords() {
-      const labels = {
-        gap_records: 'Gap Records', conflict_records: 'Conflict Records', proposal_packets: 'Proposal Packets',
-        concurrence_candidates: 'Concurrence Candidates', archive_record_pointers: 'Archive Pointers', candidate_field_states: 'Candidate Field States', propagation_events: 'Propagation Events'
-      };
-      const order = ['gap_records','conflict_records','proposal_packets','concurrence_candidates','archive_record_pointers','candidate_field_states','propagation_events'];
-      document.getElementById('recordsGrid').innerHTML = order.map(key => {
-        const records = fixture.active_records[key] || [];
-        return `<div class="record-section"><h3>${labels[key]} · ${records.length}</h3><div class="record-list">${records.length ? records.map(recordSummary).join('') : '<div class="record"><span class="record-id">none before concurrence</span></div>'}</div></div>`;
-      }).join('');
-    }
-    renderActions();
-    renderRecords();
-    selectModule('activation_gates');
-  </script>
+<script>
+const modules = {
+  project_origin:{label:'Project Origin / PAC',posture:'source-traceable · origin locked',summary:'Origin fields are displayed as preserved startup source. Later validation may qualify use, but cannot overwrite PAC origin truth from the console.',gauges:[['SOURCE','86','traceable','#f8ffff','110deg'],['DISPLAY','94','ready','#f8ffff','124deg'],['CONFLICT','18','visible','#f8ffff','-18deg'],['AUTHORITY','00','none','#f8ffff','-135deg']],blades:[['A','source:pac-origin','Preserved origin record','active','source only'],['B','field:project-name','Display candidate from fixture','active','provided'],['C','field:client-entity','Display candidate from fixture','active','provided'],['D','scope-of-use','Display readiness only','pending','qualified use'],['E','origin-lock','Cannot be overwritten downstream','active','locked'],['F','archive:pointer','Source preservation pointer','archive','archive/source'],['G','validation-need','Later validation visible','pending','review required'],['H','authority-effect','No authority mutation','inactive','none']],route:'Route: PAC/source origin → module lenses. Archive preserves source; display does not promote accepted memory or current truth.'},
+  activation_gates:{label:'Activation Gates',posture:'blocked · pending concurrence',summary:'Authorization/NTP is missing; Service Order and fee-basis conflicts block activation. Limited setup override remains only a proposal.',gauges:[['ACTIVATION','18','blocked','#ff1b12','-12deg'],['GOVERNANCE','72','visible','#f8ffff','84deg'],['PROPAGATION','10','locked','#f8ffff','-28deg'],['DISPLAY','91','ready','#f8ffff','120deg']],blades:[['A','acceptance_status','Project Origin input','active','provided · blocks_activation'],['B','ntp_or_equivalent_authorization','Missing authorization evidence','blocked','missing · blocks_activation'],['C','service_order_terms','Contracts → Activation dependency','blocked','conflict · PM concurrence'],['D','activation_override_record','Proposal prepared, not approved','pending','pending concurrence'],['E','activation_gate_status','Derived candidate only','pending','candidate · not current truth'],['F','archive:fixture-source-bundle','Preserved source pointer','archive','archive/source only'],['G','project_number','Downstream setup blocker','blocked','missing · blocks_current_output'],['H','risk_gaps route','Visible gap/conflict routing','active','routed']],route:'Route: Project Origin + Contracts + Schedule → Activation Gates → System Setup / Risk-Gaps. Human concurrence remains required before propagation.'},
+  scope:{label:'Scope / Definition',posture:'qualified · source-scoped display',summary:'Scope can be read for internal orientation, while UHG overlay, exclusions, and downstream service-order implications remain visible as routed qualifications.',gauges:[['DISPLAY','82','qualified','#f8ffff','96deg'],['SOURCE','74','visible','#f8ffff','80deg'],['RISK','38','routed','#ff1b12','22deg'],['FINAL','24','blocked','#f8ffff','-8deg']],blades:[['A','project_description','PAC/source description','active','source-scoped'],['B','basic_services','Service scope candidate','pending','candidate'],['C','exclusions','Validation required','pending','needs review'],['D','uhg_overlay','Client overlay visible','active','overlay only'],['E','consultant_trigger','Route to consultants','pending','routing'],['F','archive:scope-source','Preserved source pointer','archive','not authority'],['G','final-output-lock','No final reliance yet','blocked','blocked'],['H','operator-question','Ask scope clarification','active','dialogue']],route:'Route: Origin + UHG overlay → Scope → Consultants / Schedule / Contracts. Qualifications stay visible.'},
+  contracts:{label:'Contracts / Authorization',posture:'blocked · contract path unresolved',summary:'Agreement path and UHG Service Order overlay are visible but conflicted. Contract readiness blocks activation and downstream compensation.',gauges:[['AUTH PATH','24','blocked','#ff1b12','5deg'],['UHG OVERLAY','55','qualified','#f8ffff','62deg'],['FINAL OUT','14','blocked','#ff1b12','-20deg'],['SOURCE','80','visible','#f8ffff','105deg']],blades:[['A','form_of_agreement','PAC origin cannot be overwritten','active','origin locked'],['B','authorization_confirmation','Required validation field','blocked','missing/pending'],['C','service_order_terms','UHG overlay conflict','blocked','conflict'],['D','fee_basis_alignment','Contracts → Compensation','blocked','conflict'],['E','uhg_required_fields','Client overlay requirement','active','overlay visible'],['F','conflict:service-order','Active conflict record','blocked','routed'],['G','archive pointer','Source preserved','archive','fixture only'],['H','PM review','Authority requirement visible','pending','concurrence required']],route:'Route: LCD-W Analysis → Contracts → Activation Gates / Compensation. UHG overlay is visible but does not redefine PAC core.'},
+  budget:{label:'Budget / Financial',posture:'blocked · fee basis conflict routed',summary:'Fee and billing posture are displayable only as synthetic internal posture; project number, billing path, and fee-basis conflict block current output.',gauges:[['FEE','68','source','#f8ffff','76deg'],['BILLING','12','blocked','#ff1b12','-18deg'],['CURRENT','20','blocked','#ff1b12','-6deg'],['ROUTE','77','visible','#f8ffff','92deg']],blades:[['A','professional_fee','PAC fee source visible','active','source-scoped'],['B','fee_basis_alignment','Conflict routed','blocked','PM concurrence'],['C','billing_path','Unknown until setup','blocked','missing'],['D','project_number','Required setup field','blocked','missing'],['E','budget_transform','Internal model candidate','pending','candidate only'],['F','archive:fee-source','Preserved source pointer','archive','not authority'],['G','current-output','Blocked from use','blocked','no propagation'],['H','elevate-review','Proposal path only','pending','operator intent']],route:'Route: PAC fee + Contracts + System Setup → Budget. Current output remains blocked before concurrence/source resolution.'},
+  schedule:{label:'Schedule / Milestones',posture:'qualified · false precision blocked',summary:'Schedule is visible as internal assumption only. Owner dependencies and contractual milestone status require validation before final output.',gauges:[['CURRENT','58','qualified','#f8ffff','68deg'],['FINAL','16','blocked','#ff1b12','-20deg'],['SOURCE','62','visible','#f8ffff','72deg'],['RISK','44','routed','#f8ffff','36deg']],blades:[['A','phase_schedule','Fixture schedule displayed','active','assumed'],['B','owner_dependencies','Needs validation','pending','follow-up'],['C','contractual_dates','Not confirmed','blocked','blocked final'],['D','milestone_route','Output dependency visible','active','routed'],['E','false_precision','Guardrail active','blocked','prevents final'],['F','archive:schedule-note','Source pointer preserved','archive','source only'],['G','question:dates','Dialogue prompt','pending','operator note'],['H','propagation-lock','No current truth update','inactive','locked']],route:'Route: Origin schedule + owner dependencies → Schedule / Billing / Deliverables. Assumptions remain marked.'},
+  team_responsibility:{label:'Team + Responsibility',posture:'qualified · assignment gaps visible',summary:'Team responsibility can be discussed as operational routing, while missing accountability remains visible and non-authoritative.',gauges:[['ASSIGN','52','qualified','#f8ffff','52deg'],['GAPS','48','visible','#ff1b12','42deg'],['SOURCE','50','thin','#f8ffff','50deg'],['DISPLAY','85','ready','#f8ffff','108deg']],blades:[['A','pm/pic-owner','Reviewer role needed','pending','PM/PIC'],['B','responsibility_map','Candidate assignment view','pending','candidate'],['C','consultant_roles','Coordination dependency','active','routed'],['D','follow_up','Gap visible','blocked','needs owner'],['E','artifact-intake','Input portal target','active','operator intent'],['F','archive:team-note','Preserved note pointer','archive','source only'],['G','concurrence-lock','No accepted state','pending','required'],['H','current-truth','Not updated','inactive','none']],route:'Route: Module blockers → Team responsibility → follow-up queue. Assignment state remains proposal/candidate until concurrence.'},
+  consultants:{label:'Consultants / Partners',posture:'qualified · scope triggers routed',summary:'Consultant needs are routed from scope and schedule signals but remain non-final until scope, fee, and responsibility records are validated.',gauges:[['TRIGGERS','64','visible','#f8ffff','74deg'],['SCOPE','50','qualified','#f8ffff','54deg'],['FEE','22','blocked','#ff1b12','-2deg'],['ROUTE','80','ready','#f8ffff','103deg']],blades:[['A','consultant_need','Candidate need','pending','candidate'],['B','scope_trigger','Scope dependency','active','routed'],['C','fee_dependency','Budget block','blocked','blocked'],['D','proposal_request','Operator intent only','pending','proposal'],['E','responsibility','Team route','active','routed'],['F','archive:consultant-source','Source preserved','archive','not approval'],['G','final-output','Blocked','blocked','no final'],['H','question:scope','Dialogue input','pending','ask']],route:'Route: Scope + Schedule + Budget → Consultants. No partner assignment becomes accepted from this UI.'},
+  lcd_w_analysis:{label:'LCD-W / Project Analysis',posture:'blocked · overlay requirements visible',summary:'Generic LCD-W and UHG-specific overlay requirements are visible as analysis inputs. UHG overlay does not redefine PAC core.',gauges:[['ANALYSIS','66','qualified','#f8ffff','76deg'],['OVERLAY','72','visible','#f8ffff','84deg'],['FINAL','18','blocked','#ff1b12','-16deg'],['GOV','70','visible','#f8ffff','80deg']],blades:[['A','generic_lcd_w','Common Grace pattern','active','reference'],['B','uhg_lcd_lcw','Client overlay visible','active','overlay'],['C','required_fields','Missing fields routed','blocked','incomplete'],['D','analysis_output','Candidate only','pending','candidate'],['E','contract_dependency','Service Order conflict','blocked','conflict'],['F','archive:analysis-source','Source pointer','archive','source only'],['G','authority-boundary','No authority created','inactive','none'],['H','elevate-gap','Proposal path','pending','review']],route:'Route: LCD-W/UHG overlay → Contracts / Scope / Risk-Gaps. Analysis is display state until reviewed.'},
+  system_setup:{label:'System Setup',posture:'blocked · setup identifiers missing',summary:'Project number and activation identifier are missing, so setup may be prepared only as a qualified internal proposal if humans concur.',gauges:[['SETUP','28','blocked','#ff1b12','12deg'],['PROJECT #','00','missing','#ff1b12','-135deg'],['PREP','45','qualified','#f8ffff','44deg'],['PROP','08','locked','#f8ffff','-48deg']],blades:[['A','project_number','Required setup field','blocked','missing'],['B','activation_identifier','Required activation field','blocked','missing'],['C','folder_structure','Prep candidate','pending','candidate'],['D','platforms','Setup checklist','pending','not active'],['E','limited_setup','Concurrence proposal','pending','proposal only'],['F','archive:setup-source','Source preserved','archive','not authority'],['G','billing_path','Downstream blocker','blocked','blocked'],['H','propagation','No current truth update','inactive','locked']],route:'Route: Activation Gates + Project Number → System Setup / Billing. UI cannot activate setup truth.'},
+  risk_gaps:{label:'Risk / Gaps / Archive',posture:'governance ready · unresolved state visible',summary:'Known gaps, conflicts, proposal packet, concurrence candidate, and archive pointer are visible. This module is healthy when unresolved state is routed, not hidden.',gauges:[['DISPLAY','96','ready','#f8ffff','126deg'],['GOVERNANCE','88','ready','#f8ffff','112deg'],['BLOCKERS','62','visible','#f8ffff','78deg'],['HIDDEN','00','clear','#f8ffff','-135deg']],blades:[['A','gap:ntp-001','Authorization gap routed','blocked','blocks_activation'],['B','gap:project-number-001','Setup/billing gap routed','blocked','blocks_current_output'],['C','conflict:service-order','Conflict remains visible','blocked','PM concurrence'],['D','proposal:limited-setup','Elevate packet only','pending','pending concurrence'],['E','concur-candidate:override','Human review required','pending','PM/PIC'],['F','archive:fixture-source','Source preserved','archive','not authority'],['G','candidate field state','Extracted candidate visible','pending','not current truth'],['H','propagation events','None before concurrence','inactive','no propagation']],route:'Route: All modules → Risk/Gaps/Archive. Archive preserves source; it does not validate, approve, or hide source material.'}
+};
+const actions=[['Extract','candidate fields'],['Absorb','source intake'],['Elevate','proposal only'],['Archive','preserve source']];
+let current='activation_gates';
+let selectedBlade=null;
+function time(){return new Date().toLocaleTimeString('en-US',{hour12:false});}
+function log(msg){const el=document.getElementById('portal');const div=document.createElement('div');div.innerHTML=`<span class="time">[${time()}]</span> ${msg}`;el.insertBefore(div, el.firstChild);}
+function renderTabs(){document.getElementById('moduleTabs').innerHTML=Object.entries(modules).map(([id,m])=>`<button class="module-tab ${id===current?'active':''}" onclick="selectModule('${id}')">${m.label}</button>`).join('');}
+function renderActions(){document.getElementById('actions').innerHTML=actions.map(([a,b],i)=>`<button class="fn-btn ${i===0?'active':''}" onclick="selectAction(this,'${a}')">${a}<span class="fn-sub">${b}</span></button>`).join('');}
+function selectAction(el,a){document.querySelectorAll('.fn-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');log(`FUNCTION PUSH: ${a}. Operator intent only; no approval, validation, or current-truth update.`);}
+function selectModule(id){current=id;selectedBlade=null;render();log(`MODULE SELECT: ${modules[id].label}. Agent Output monitor refreshed from synthetic display state.`);}
+function selectBlade(i){selectedBlade=i;render();const b=modules[current].blades[i];log(`HAL BLADE ${b[0]}: ${b[1]} selected · ${b[4]}. Read-only route detail.`);}
+function toggleControl(el,label){el.classList.toggle('on');log(`TOGGLE: ${label} ${el.classList.contains('on')?'included':'dimmed'} in display filter. No data mutation.`);}
+function trim(label,dir){log(`KNOB TRIM: ${label} ${dir>0?'increased':'decreased'} as display weighting only.`);}
+function renderReadout(){const m=modules[current];const blade=selectedBlade!==null?m.blades[selectedBlade]:null;document.getElementById('readout').innerHTML=`
+  <div class="big">Agent Output · ${m.label}</div>
+  <div class="line"><span class="prompt">&gt;</span><span>POSTURE: <span class="${m.posture.includes('blocked')?'warn':m.posture.includes('ready')?'ok':'violet'}">${m.posture}</span></span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>${m.summary}</span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>READINESS IS DASHBOARD STATE · SOURCE / CANDIDATE / PROPOSAL / CONCURRENCE / AUTHORITY STAY SEPARATE</span></div>
+  ${blade?`<div class="line"><span class="prompt">&gt;</span><span>BLADE ${blade[0]} SELECTED: <span class="blue">${blade[1]}</span></span></div><div class="line"><span class="prompt">&gt;</span><span>STATE: ${blade[4]} · ${blade[2]}</span></div>`:`<div class="line"><span class="prompt">&gt;</span><span>SELECT A HAL FIN / BLADE FOR FIELD-STATE ROUTING DETAIL<span class="cursor"></span></span></div>`}
+`;}
+function renderGauges(){const m=modules[current];document.getElementById('gauges').innerHTML=m.gauges.map(g=>`<div class="gauge"><div class="dial" style="--dial:${g[3]};--rot:${g[4]};color:${g[3]}">${g[1]}</div><div class="gmeta"><b>${g[0]}</b>${g[2]}</div></div>`).join('');}
+function renderBlades(){const m=modules[current];document.getElementById('baySub').textContent=m.label;document.getElementById('bladeBank').innerHTML=m.blades.map((b,i)=>`<div class="blade ${b[3]} ${i===selectedBlade?'selected':''}" data-code="${b[0]}" onclick="selectBlade(${i})" title="${b[1]}"></div>`).join('');document.getElementById('bladeList').innerHTML=m.blades.map((b,i)=>`<div class="blade-row ${b[3]}" onclick="selectBlade(${i})"><div class="mini"></div><div class="b-label">${b[1]}<span>${b[2]}</span></div><div class="b-state">${b[3]}</div></div>`).join('');document.getElementById('routeNote').textContent=m.route;}
+function wireControls(){document.querySelectorAll('.switch-row').forEach(row=>{const label=row.querySelector('.switch-label').textContent;const t=row.querySelector('.toggle');t.removeAttribute('onclick');t.addEventListener('click',()=>toggleControl(t,label));});document.querySelectorAll('.knob-unit').forEach(unit=>{const label=unit.querySelector('.knob-label').textContent;const btns=unit.querySelectorAll('.trim-btn');btns[0].addEventListener('click',()=>trim(label,-1));btns[1].addEventListener('click',()=>trim(label,1));});}
+function render(){renderTabs();renderReadout();renderGauges();renderBlades();}
+renderActions();render();wireControls();
+</script>
 </body>
 </html>
