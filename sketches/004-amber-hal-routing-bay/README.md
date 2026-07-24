@@ -1,12 +1,12 @@
-## Variant: Amber Console with HAL Routing Bay
+## Variant: Military Green Future Console with HAL Routing Bay
 
 ### Design stance
-A working module lens that keeps Amber Command as the primary console language while replacing the disliked modular patchbay with a Kubrick/HAL-style illuminated blade bay for dependencies, shared fields, and concurrence locks.
+A working module lens that drops the amber command language and pushes from a Cold War military command-center surface into a future-facing black dialogue field: drab military left bank, fluorescent Matrix/green-screen control language, a center column fading from army green into black, and an all-black HAL routing bay with ice-white blade logic.
 
 ### Key choices
-- Layout: 2-5-3 column ratio: left tactile perspective bank stretched to the routing bay height, dominant center amber CRT monitor stretched taller to match the right column, square readiness gauges below the monitor, larger right HAL-like routing blade bay, compact three-line operator log and governed action buttons.
-- Typography: condensed industrial labels plus monospace amber readout, preserving the command-console feel.
-- Color: black outer field and black console shell; HAL blades illuminate near-white cream by default, with deficient/blocking blades glowing a stronger light red.
+- Layout: 2-5-3 column ratio: left tactile perspective bank stretched to the routing bay height, dominant center green-to-black dialogue monitor stretched taller to match the right column, square readiness gauges below the monitor with enlarged dials, larger right HAL-like routing blade bay, thin governed action buttons, and bottom operator/input rows.
+- Typography: condensed industrial labels plus monospace fluorescent readout, preserving the command-console feel without retaining the older amber identity.
+- Color: black outer field and black console shell; left bank uses black control backgrounds with drab military framing and fluorescent Matrix-green text; tuning knobs are dark grey instead of black; center surfaces transition through army green / black-green camo into a black future dialogue field; HAL blade lights and text are ice-white, not cream; the all-seeing eye sits low at the routing-bay crown as a sharper, larger glossy candy-apple red lens.
 - Interaction: module tabs switch the active lens; seven uniform toggle rows and three rows of two tuning knobs shape the left bank; tiny minus/plus trim buttons sit at the lower sides of each knob for precise adjustment; blade clicks update the monitor and operator log; action buttons log Extract / Absorb / Elevate / Archive without implying authority.
 
 ### Trade-offs
