@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pii Console Sketch — Amber HAL Routing Bay</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@500;600;700&display=swap');
+  :root{
+    --amber:#ffb238;
+    --amber-dim:#7c5614;
+    --amber-faint:rgba(255,178,56,.12);
+    --amber-glow:rgba(255,178,56,.42);
+    --red:#ff3b2f;
+    --red-glow:rgba(255,59,47,.45);
+    --cream:#fffdf2;
+    --cream-low:#eee5cf;
+    --cream-glow:rgba(255,253,242,.62);
+    --deficient:#ff6f66;
+    --deficient-glow:rgba(255,111,102,.62);
+    --green:#67f08a;
+    --blue:#83cfff;
+    --violet:#c9a0ff;
+    --paper:#f7e7bd;
+    --muted:#9f8c65;
+    --steel:#24211c;
+    --steel-2:#171510;
+    --black:#050403;
+    --line:rgba(255,178,56,.25);
+    --mono:'Share Tech Mono', ui-monospace, monospace;
+    --display:'Oswald', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:#000;
+    color:var(--paper);
+    font-family:var(--mono);
+    padding:24px;
+  }
+  .console{
+    max-width:1460px;
+    margin:0 auto;
+    min-height:calc(100vh - 48px);
+    background:#000;
+    border:3px solid #070604;
+    border-radius:16px;
+    box-shadow:inset 0 0 46px rgba(0,0,0,.72), 0 28px 70px rgba(0,0,0,.68);
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .console::before{
+    content:"";
+    position:absolute;
+    inset:9px;
+    border:1px solid rgba(255,178,56,.18);
+    border-radius:10px;
+    pointer-events:none;
+  }
+  .rivet{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#777064,#15120d);box-shadow:inset 0 0 2px #000;}
+  .r1{left:18px;top:18px}.r2{right:18px;top:18px}.r3{left:18px;bottom:18px}.r4{right:18px;bottom:18px}
+  header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:2px 8px 16px;border-bottom:1px solid rgba(255,178,56,.18);margin-bottom:18px;}
+  h1{font-family:var(--display);font-size:26px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);text-shadow:0 0 12px var(--amber-glow);margin:0;line-height:1;}
+  .sub{font-size:11px;letter-spacing:2px;color:var(--muted);margin-top:8px;text-transform:uppercase;}
+  .authority{max-width:455px;border:1px solid rgba(255,59,47,.52);background:linear-gradient(135deg,rgba(255,59,47,.18),rgba(255,178,56,.08));border-radius:8px;padding:10px 12px;color:#ffd8d2;font-size:11px;line-height:1.45;box-shadow:0 0 18px rgba(255,59,47,.09);}
+  .layout{display:grid;grid-template-columns:minmax(230px,2fr) minmax(560px,5fr) minmax(345px,3fr);gap:18px;align-items:stretch;}
+  .panel{background:linear-gradient(180deg,var(--steel),var(--steel-2));border:1px solid #3c3528;border-radius:9px;box-shadow:inset 0 0 22px rgba(0,0,0,.48);position:relative;}
+  .panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #3c3528;padding:11px 13px;background:rgba(255,178,56,.045);}
+  .panel-title h2{font-family:var(--display);font-size:13px;letter-spacing:2px;margin:0;color:var(--amber);text-transform:uppercase;}
+  .tag{font-size:9px;color:#8c7d5f;letter-spacing:1px;text-transform:uppercase;}
+
+  /* Left bank */
+  .lens-panel{display:flex;flex-direction:column;min-height:100%;}
+  .bank-body{padding:13px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .module-tabs{display:grid;gap:8px;margin-bottom:14px;}
+  .module-tab{border:1px solid #322c22;background:#181610;color:#cbb98f;border-radius:6px;padding:9px 10px;font-family:var(--display);letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;text-align:left;box-shadow:0 2px 0 #060504;transition:.1s;}
+  .module-tab:hover{color:var(--amber);border-color:var(--amber-dim);}
+  .module-tab.active{background:linear-gradient(180deg,#493612,#201909);color:var(--amber);box-shadow:0 0 14px rgba(255,178,56,.2),0 2px 0 #060504;}
+  .toggle-stack{display:grid;grid-template-rows:repeat(7,42px);gap:8px;}
+  .switch-row{display:flex;align-items:center;justify-content:space-between;margin:0;padding:8px;background:#211e18;border:1px solid #342d22;border-radius:7px;min-height:42px;}
+  .switch-label{font-size:10px;line-height:1.25;color:#d7c799;max-width:128px;}
+  .toggle{position:relative;width:44px;height:23px;border-radius:14px;background:#090806;border:1px solid #000;cursor:pointer;box-shadow:inset 0 2px 4px rgba(0,0,0,.85);}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:linear-gradient(180deg,#5b5548,#242019);transition:.14s;}
+  .toggle.on{background:#261b07;}
+  .toggle.on::after{left:22px;background:linear-gradient(180deg,var(--amber),#a66d12);box-shadow:0 0 10px var(--amber-glow);}
+  .knob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 8px;margin-top:auto;padding-top:14px;border-top:1px solid #342d22;}
+  .knob-unit{text-align:center;}
+  .knob-control{display:grid;grid-template-columns:18px 1fr 18px;gap:4px;align-items:center;}
+  .trim-btn{width:18px;height:22px;border:1px solid #3b3327;background:#100e0a;color:#d8c692;border-radius:4px;font-family:var(--display);font-size:12px;line-height:1;cursor:pointer;box-shadow:inset 0 0 8px rgba(0,0,0,.55);}
+  .trim-btn:hover{color:var(--amber);border-color:var(--amber-dim);box-shadow:0 0 8px rgba(255,178,56,.16),inset 0 0 8px rgba(0,0,0,.55);}
+  .knob{width:50px;height:50px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 36% 30%,#50483a,#17130d);border:2px solid #080705;position:relative;box-shadow:0 4px 8px rgba(0,0,0,.6),inset 0 0 8px rgba(0,0,0,.75);}
+  .knob::after{content:"";position:absolute;top:5px;left:50%;width:2px;height:18px;background:var(--amber);transform:translateX(-50%) rotate(var(--rot,28deg));transform-origin:bottom center;box-shadow:0 0 8px var(--amber-glow);}
+  .knob-label{font-family:var(--display);font-size:9px;letter-spacing:1px;color:var(--amber);margin-top:7px;text-transform:uppercase;line-height:1.1;}
+
+  /* Center monitor */
+  .center{display:grid;grid-template-rows:minmax(520px,1fr) auto auto;gap:14px;height:100%;}
+  .monitor-frame{background:#080705;border:7px solid #1b1813;border-radius:12px;box-shadow:inset 0 0 35px #000,0 0 0 2px #050403;overflow:hidden;min-height:520px;}
+  .monitor{height:100%;min-height:520px;padding:22px 25px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 18%,#1f1607,#060403 72%);color:var(--amber);}
+  .monitor::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,178,56,.045) 0 1px,transparent 1px 4px);pointer-events:none;}
+  .monitor::after{content:"";position:absolute;left:0;right:0;height:44px;background:linear-gradient(180deg,transparent,rgba(255,178,56,.07),transparent);animation:scan 5.5s linear infinite;pointer-events:none;}
+  @keyframes scan{from{top:-44px}to{top:100%}}
+  .screen-title{display:flex;justify-content:space-between;gap:14px;font-size:11px;letter-spacing:2px;color:#b5852d;text-transform:uppercase;margin-bottom:14px;position:relative;z-index:1;}
+  .readout{position:relative;z-index:1;display:grid;gap:9px;font-size:14px;line-height:1.5;}
+  .readout .big{font-family:var(--display);font-size:30px;letter-spacing:2px;text-transform:uppercase;color:#ffd27a;text-shadow:0 0 10px var(--amber-glow);line-height:1.05;margin-bottom:4px;}
+  .line{display:flex;gap:9px;align-items:flex-start;}
+  .prompt{color:#8c6720;}
+  .warn{color:#ff725f}.ok{color:var(--green)}.violet{color:var(--violet)}.blue{color:var(--blue)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--amber);animation:blink 1s steps(1) infinite;vertical-align:-2px;margin-left:3px;}
+  @keyframes blink{50%{opacity:0}}
+  .gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .gauge{background:linear-gradient(180deg,#211e18,#14110d);border:1px solid #3c3528;border-radius:8px;padding:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;aspect-ratio:1/1;box-shadow:inset 0 0 18px rgba(0,0,0,.38);text-align:center;}
+  .dial{width:86px;height:86px;border-radius:50%;border:8px solid #2b261e;display:grid;place-items:center;font-family:var(--display);font-size:22px;position:relative;flex:none;}
+  .dial::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:6px solid var(--dial);clip-path:polygon(50% 50%,50% -20%,120% -20%,120% 50%);transform:rotate(var(--rot));filter:drop-shadow(0 0 5px var(--dial));}
+  .gmeta{font-size:10px;color:#c4b58c;line-height:1.2;}
+  .gmeta b{display:block;font-family:var(--display);font-size:13px;color:var(--paper);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+  .actions-log{display:grid;grid-template-columns:1fr;gap:10px;}
+  .actions{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+  .fn-btn{background:linear-gradient(180deg,#2b281f,#16130e);border:1px solid #080705;border-top-color:#554931;color:#d8c692;border-radius:7px;padding:13px 8px;font-family:var(--display);font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 3px 0 #050403;transition:.08s;}
+  .fn-btn:hover{color:var(--amber);border-top-color:var(--amber-dim);}
+  .fn-btn.active{background:linear-gradient(180deg,#513b12,#211808);color:var(--amber);box-shadow:0 0 14px var(--amber-glow),0 3px 0 #050403;}
+  .fn-sub{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1px;color:#8a7d5e;margin-top:4px;}
+  .log{height:62px;overflow:auto;background:#14110d;border:1px solid #3c3528;border-radius:8px;padding:7px 10px;font-size:10.5px;color:#b9a576;line-height:1.35;}
+  .log div{margin-bottom:4px}.log .time{color:var(--amber)}
+
+  /* HAL routing bay */
+  .hal{background:linear-gradient(180deg,#111,#050505);border:1px solid #28231c;border-radius:10px;box-shadow:inset 0 0 30px #000,0 0 20px rgba(255,59,47,.08);overflow:hidden;}
+  .hal-head{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#171717,#070707);}
+  .hal-title{font-family:var(--display);letter-spacing:2px;text-transform:uppercase;color:#f0e7d5;font-size:14px;}
+  .eye{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle,#ffd7c6 0 5%,#ff5a42 15%,#8d0e0a 42%,#260101 70%);box-shadow:0 0 22px var(--red-glow), inset 0 0 8px rgba(0,0,0,.75);position:relative;}
+  .eye::after{content:"";position:absolute;inset:13px;border-radius:50%;background:#ffefdf;box-shadow:0 0 12px #fff;opacity:.7;}
+  .bay-body{padding:14px;}
+  .blade-bank{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;height:168px;margin-bottom:14px;padding:11px;background:linear-gradient(180deg,#0a0a0a,#030303);border:1px solid rgba(255,255,255,.08);border-radius:8px;align-items:stretch;}
+  .blade{border:1px solid rgba(255,255,255,.09);border-radius:5px;background:linear-gradient(180deg,#111,#060606);position:relative;cursor:pointer;overflow:hidden;transition:.14s;}
+  .blade::before{content:"";position:absolute;inset:9px 7px;border-radius:3px;background:#191919;box-shadow:inset 0 0 8px #000;}
+  .blade::after{content:attr(data-code);position:absolute;bottom:7px;left:0;right:0;text-align:center;font-family:var(--display);font-size:11px;letter-spacing:1px;color:#555;}
+  .blade.active::before,
+  .blade.pending::before,
+  .blade.archive::before{background:linear-gradient(180deg,#ffffff,var(--cream) 56%,#b8ad92);box-shadow:0 0 20px var(--cream-glow), inset 0 0 7px rgba(255,255,255,.55);}
+  .blade.active::after,
+  .blade.pending::after,
+  .blade.archive::after{color:#20180a;}
+  .blade.blocked::before{background:linear-gradient(180deg,#ffd1cc,var(--deficient) 54%,#a3211b);box-shadow:0 0 22px var(--deficient-glow), inset 0 0 7px rgba(255,255,255,.34);}
+  .blade.blocked::after{color:#2b0906;}
+  .blade.pending::before{animation:pulse 1.7s infinite;}
+  .blade.selected{outline:2px solid #fff0c7;outline-offset:2px;}
+  @keyframes pulse{50%{filter:brightness(1.35)}}
+  .blade-list{display:grid;gap:7px;}
+  .blade-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);border-radius:6px;cursor:pointer;}
+  .mini{width:12px;height:30px;border-radius:3px;background:#181818;border:1px solid #333;justify-self:center;}
+  .blade-row.active .mini,
+  .blade-row.pending .mini,
+  .blade-row.archive .mini{background:var(--cream);box-shadow:0 0 10px var(--cream-glow)}
+  .blade-row.blocked .mini{background:var(--deficient);box-shadow:0 0 10px var(--deficient-glow)}
+  .b-label{font-size:10.5px;color:#ded6c4;line-height:1.2;}.b-label span{display:block;color:#7b756c;font-size:8.5px;margin-top:2px}.b-state{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:#8e877a;}
+  .route-note{margin-top:12px;padding:10px;border:1px solid rgba(255,178,56,.18);border-radius:6px;background:rgba(255,178,56,.045);font-size:10.5px;line-height:1.45;color:#c9b989;}
+  @media(max-width:1180px){.layout{grid-template-columns:1fr}.gauges{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="console">
+  <div class="rivet r1"></div><div class="rivet r2"></div><div class="rivet r3"></div><div class="rivet r4"></div>
+  <header>
+    <div>
+      <h1>PII COMMAND — MODULE LENS</h1>
+      <div class="sub">Amber working console · HAL routing bay sketch · synthetic display only</div>
+    </div>
+    <div class="authority">SYNTHETIC SKETCH ONLY · NON-AUTHORITATIVE · READINESS IS DASHBOARD STATE, NOT AUTHORITY · HUMAN CONCURRENCE REQUIRED BEFORE CURRENT-TRUTH PROPAGATION</div>
+  </header>
+
+  <div class="layout">
+    <section class="panel lens-panel">
+      <div class="panel-title"><h2>Lens Bank</h2><span class="tag">module select</span></div>
+      <div class="bank-body">
+        <div class="module-tabs" id="moduleTabs"></div>
+        <div class="toggle-stack">
+          <div class="switch-row"><span class="switch-label">Activation Readiness</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Governance Readiness</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Propagation View</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Current Output</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Final Output</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Conflict Trace</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="switch-row"><span class="switch-label">Archive Pointers</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="knob-grid" aria-label="Tuning knobs">
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease scope tuning">−</button><div class="knob" style="--rot:-42deg"></div><button class="trim-btn" type="button" aria-label="Increase scope tuning">+</button></div><div class="knob-label">Scope</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease risk tuning">−</button><div class="knob" style="--rot:18deg"></div><button class="trim-btn" type="button" aria-label="Increase risk tuning">+</button></div><div class="knob-label">Risk</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease source tuning">−</button><div class="knob" style="--rot:64deg"></div><button class="trim-btn" type="button" aria-label="Increase source tuning">+</button></div><div class="knob-label">Source</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease readiness tuning">−</button><div class="knob" style="--rot:-16deg"></div><button class="trim-btn" type="button" aria-label="Increase readiness tuning">+</button></div><div class="knob-label">Readiness</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease concurrence tuning">−</button><div class="knob" style="--rot:38deg"></div><button class="trim-btn" type="button" aria-label="Increase concurrence tuning">+</button></div><div class="knob-label">Concur.</div></div>
+          <div class="knob-unit"><div class="knob-control"><button class="trim-btn" type="button" aria-label="Decrease signal tuning">−</button><div class="knob" style="--rot:-72deg"></div><button class="trim-btn" type="button" aria-label="Increase signal tuning">+</button></div><div class="knob-label">Signal</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center">
+      <div class="monitor-frame">
+        <div class="monitor">
+          <div class="screen-title"><span id="screenMode">Module Readout</span><span>UHG Startup Spine</span></div>
+          <div class="readout" id="readout"></div>
+        </div>
+      </div>
+      <div class="gauges" id="gauges"></div>
+      <div class="actions-log">
+        <div class="actions" id="actions"></div>
+        <div class="log" id="log">
+          <div><span class="time">[00:00:01]</span> Console sketch initialized. Synthetic state loaded.</div>
+          <div><span class="time">[00:00:02]</span> Routing Bay online. Blade selection reads only; no authority created.</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="hal">
+      <div class="hal-head"><div><div class="hal-title">Routing Bay</div><div class="tag" id="baySub">HAL-style field logic rack</div></div><div class="eye"></div></div>
+      <div class="bay-body">
+        <div class="blade-bank" id="bladeBank"></div>
+        <div class="blade-list" id="bladeList"></div>
+        <div class="route-note" id="routeNote">Illuminated blades represent routed dependencies, blockers, concurrence locks, and archive/source pointers. Selecting a blade updates the monitor only.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const modules = {
+  activation_gates: {
+    label:'Activation Gates',
+    posture:'blocked · pending concurrence',
+    summary:'Authorization/NTP is missing; Service Order and fee-basis conflicts block activation. Limited setup override remains only a proposal.',
+    gauges:[['ACTIVATION','18','blocked','#ff3b2f','-12deg'],['GOVERNANCE','72','visible','#ffb238','84deg'],['PROPAGATION','10','locked','#c9a0ff','-28deg'],['DISPLAY','91','ready','#67f08a','120deg']],
+    blades:[
+      ['A','acceptance_status','Project Origin input','active','provided · blocks_activation'],
+      ['B','ntp_or_equivalent_authorization','Missing authorization evidence','blocked','missing · blocks_activation'],
+      ['C','service_order_terms','Contracts → Activation dependency','blocked','conflict · PM concurrence'],
+      ['D','activation_override_record','Proposal prepared, not approved','pending','pending concurrence'],
+      ['E','activation_gate_status','Derived candidate only','pending','candidate · not current truth'],
+      ['F','archive:fixture-source-bundle','Preserved source pointer','archive','archive/source only'],
+      ['G','project_number','Downstream setup blocker','blocked','missing · blocks_current_output'],
+      ['H','risk_gaps route','Visible gap/conflict routing','active','routed']
+    ],
+    route:'Route: Project Origin + Contracts + Schedule → Activation Gates → System Setup / Risk-Gaps. Human concurrence remains required before propagation.'
+  },
+  contracts: {
+    label:'Contracts / Authorization',
+    posture:'blocked · contract path unresolved',
+    summary:'Agreement path and UHG Service Order overlay are visible but conflicted. Contract readiness blocks activation and downstream compensation.',
+    gauges:[['AUTH PATH','24','blocked','#ff3b2f','5deg'],['UHG OVERLAY','55','qualified','#ffb238','62deg'],['FINAL OUT','14','blocked','#ff3b2f','-20deg'],['SOURCE','80','visible','#83cfff','105deg']],
+    blades:[
+      ['A','form_of_agreement','PAC origin cannot be overwritten','active','origin locked'],
+      ['B','authorization_confirmation','Required validation field','blocked','missing/pending'],
+      ['C','service_order_terms','UHG overlay conflict','blocked','conflict'],
+      ['D','fee_basis_alignment','Contracts → Compensation','blocked','conflict'],
+      ['E','uhg_required_fields','Client overlay requirement','active','overlay visible'],
+      ['F','conflict:service-order','Active conflict record','blocked','routed'],
+      ['G','archive pointer','Source preserved','archive','fixture only'],
+      ['H','PM review','Authority requirement visible','pending','concurrence required']
+    ],
+    route:'Route: LCD-W Analysis → Contracts → Activation Gates / Compensation. UHG overlay is visible but does not redefine PAC core.'
+  },
+  risk_gaps: {
+    label:'Risk / Gaps / Archive',
+    posture:'governance ready · unresolved state visible',
+    summary:'Known gaps, conflicts, proposal packet, concurrence candidate, and archive pointer are visible. This module is healthy when unresolved state is routed, not hidden.',
+    gauges:[['DISPLAY','96','ready','#67f08a','126deg'],['GOVERNANCE','88','ready','#67f08a','112deg'],['BLOCKERS','62','visible','#ffb238','78deg'],['HIDDEN','00','clear','#83cfff','-135deg']],
+    blades:[
+      ['A','gap:ntp-001','Authorization gap routed','blocked','blocks_activation'],
+      ['B','gap:project-number-001','Setup/billing gap routed','blocked','blocks_current_output'],
+      ['C','conflict:service-order','Conflict remains visible','blocked','PM concurrence'],
+      ['D','proposal:limited-setup','Elevate packet only','pending','pending concurrence'],
+      ['E','concur-candidate:override','Human review required','pending','PM/PIC'],
+      ['F','archive:fixture-source','Source preserved','archive','not authority'],
+      ['G','candidate field state','Extracted candidate visible','pending','not current truth'],
+      ['H','propagation events','None before concurrence','inactive','no propagation']
+    ],
+    route:'Route: All modules → Risk/Gaps/Archive. Archive preserves source; it does not validate, approve, or quarantine.'
+  }
+};
+const actions=[['Extract','candidate fields'],['Absorb','source intake'],['Elevate','proposal only'],['Archive','preserve source']];
+let current='activation_gates';
+let selectedBlade=null;
+function time(){return new Date().toLocaleTimeString('en-US',{hour12:false});}
+function log(msg){const el=document.getElementById('log');const div=document.createElement('div');div.innerHTML=`<span class="time">[${time()}]</span> ${msg}`;el.appendChild(div);el.scrollTop=el.scrollHeight;}
+function renderTabs(){document.getElementById('moduleTabs').innerHTML=Object.entries(modules).map(([id,m])=>`<button class="module-tab ${id===current?'active':''}" onclick="selectModule('${id}')">${m.label}</button>`).join('');}
+function renderActions(){document.getElementById('actions').innerHTML=actions.map(([a,b],i)=>`<button class="fn-btn ${i===0?'active':''}" onclick="selectAction(this,'${a}')">${a}<span class="fn-sub">${b}</span></button>`).join('');}
+function selectAction(el,a){document.querySelectorAll('.fn-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');log(`ACTION SELECTED: ${a}. Operator intent only; no authority created.`);}
+function selectModule(id){current=id;selectedBlade=null;render();log(`MODULE LENS SELECTED: ${modules[id].label}.`);}
+function selectBlade(i){selectedBlade=i;render();const b=modules[current].blades[i];log(`ROUTING BAY: ${b[1]} selected · ${b[4]}.`);}
+function renderReadout(){const m=modules[current];const blade=selectedBlade!==null?m.blades[selectedBlade]:null;document.getElementById('readout').innerHTML=`
+  <div class="big">${m.label}</div>
+  <div class="line"><span class="prompt">&gt;</span><span>POSTURE: <span class="${m.posture.includes('blocked')?'warn':m.posture.includes('ready')?'ok':'violet'}">${m.posture}</span></span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>${m.summary}</span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>READINESS IS DASHBOARD STATE · FIELD TRUTH REMAINS SOURCE-SCOPED</span></div>
+  ${blade?`<div class="line"><span class="prompt">&gt;</span><span>BLADE ${blade[0]} SELECTED: <span class="blue">${blade[1]}</span></span></div><div class="line"><span class="prompt">&gt;</span><span>STATE: ${blade[4]} · ${blade[2]}</span></div>`:`<div class="line"><span class="prompt">&gt;</span><span>SELECT A ROUTING BLADE FOR FIELD / DEPENDENCY DETAIL<span class="cursor"></span></span></div>`}
+`;}
+function renderGauges(){const m=modules[current];document.getElementById('gauges').innerHTML=m.gauges.map(g=>`<div class="gauge"><div class="dial" style="--dial:${g[3]};--rot:${g[4]};color:${g[3]}">${g[1]}</div><div class="gmeta"><b>${g[0]}</b>${g[2]}</div></div>`).join('');}
+function renderBlades(){const m=modules[current];document.getElementById('baySub').textContent=m.label;document.getElementById('bladeBank').innerHTML=m.blades.map((b,i)=>`<div class="blade ${b[3]} ${i===selectedBlade?'selected':''}" data-code="${b[0]}" onclick="selectBlade(${i})" title="${b[1]}"></div>`).join('');document.getElementById('bladeList').innerHTML=m.blades.map((b,i)=>`<div class="blade-row ${b[3]}" onclick="selectBlade(${i})"><div class="mini"></div><div class="b-label">${b[1]}<span>${b[2]}</span></div><div class="b-state">${b[3]}</div></div>`).join('');document.getElementById('routeNote').textContent=m.route;}
+function render(){renderTabs();renderReadout();renderGauges();renderBlades();}
+renderActions();render();
+</script>
+</body>
+</html>
