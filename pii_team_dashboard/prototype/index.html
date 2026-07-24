@@ -7,33 +7,38 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@500;600;700&display=swap');
   :root{
-    --signal:#f8ffff;
-    --signal-dim:#9fa8aa;
-    --signal-faint:rgba(248,255,255,.10);
-    --signal-glow:rgba(248,255,255,.58);
+    --aged:#e8dfc8;
+    --aged-dim:#b9b09b;
+    --aged-faint:rgba(232,223,200,.10);
+    --aged-line:rgba(232,223,200,.24);
+    --aged-strong:rgba(232,223,200,.52);
+    --signal:#e8dfc8;
+    --signal-dim:#b9b09b;
+    --signal-faint:rgba(232,223,200,.10);
+    --signal-glow:rgba(232,223,200,.50);
     --red:#ff1b12;
     --red-glow:rgba(255,59,47,.45);
-    --cream:#f8ffff;
-    --cream-low:#cfd7d9;
-    --cream-glow:rgba(248,255,255,.62);
-    --ice:#f8ffff;
-    --ice-dim:rgba(248,255,255,.68);
-    --ice-glow:rgba(218,255,255,.76);
+    --cream:#e8dfc8;
+    --cream-low:#b9b09b;
+    --cream-glow:rgba(232,223,200,.54);
+    --ice:#e8dfc8;
+    --ice-dim:rgba(232,223,200,.68);
+    --ice-glow:rgba(232,223,200,.70);
     --army:#1b1d1e;
     --army-dark:#070808;
-    --matrix:#f8ffff;
-    --matrix-glow:rgba(248,255,255,.92);
+    --matrix:#e8dfc8;
+    --matrix-glow:rgba(232,223,200,.84);
     --deficient:#ff6f66;
     --deficient-glow:rgba(255,111,102,.62);
-    --white-hot:#f8ffff;
-    --blue:#f8ffff;
-    --violet:#f8ffff;
-    --paper:#f8ffff;
+    --white-hot:#f5eedc;
+    --blue:#e8dfc8;
+    --violet:#e8dfc8;
+    --paper:#e8dfc8;
     --muted:#8f989a;
     --steel:#090b0c;
     --steel-2:#000;
     --black:#000;
-    --line:rgba(248,255,255,.22);
+    --line:rgba(232,223,200,.24);
     --mono:'Share Tech Mono', ui-monospace, monospace;
     --display:'Oswald', system-ui, sans-serif;
   }
@@ -81,19 +86,23 @@
   /* Left bank */
   .lens-panel{display:flex;flex-direction:column;min-height:100%;background:#000;border-color:rgba(248,255,255,.26);box-shadow:inset 0 0 34px rgba(0,0,0,.9),0 0 18px rgba(248,255,255,.12);}
   .lens-panel .panel-title{background:#000;border-bottom-color:rgba(248,255,255,.26);}
-  .lens-panel .panel-title h2{color:#ffffff;text-shadow:0 0 10px rgba(248,255,255,.42);}
-  .lens-panel .tag{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
+  .lens-panel .panel-title h2{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:5px;color:#ffffff;text-shadow:0 0 3px #fff,0 0 12px rgba(248,255,255,.64),0 0 28px rgba(218,255,255,.30);}
+  .lens-panel .tag{font-family:var(--mono);letter-spacing:3px;color:rgba(248,255,255,.82);text-shadow:0 0 3px #fff,0 0 12px rgba(248,255,255,.38);}
   .bank-body{padding:13px;display:flex;flex-direction:column;gap:12px;flex:1;}
   .module-tabs{display:grid;gap:6px;margin-bottom:10px;}
-  .module-tab{border:1px solid rgba(248,255,255,.24);background:#000;color:var(--matrix);border-radius:6px;padding:7px 9px;font-family:var(--display);letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;text-align:left;box-shadow:inset 0 0 14px rgba(0,0,0,.92),0 0 18px rgba(248,255,255,.2),0 2px 0 #000;text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px var(--matrix-glow),0 0 42px rgba(248,255,255,.6);transition:.1s;}
-  .module-tab:hover{color:#ffffff;border-color:#ffffff;box-shadow:0 0 24px rgba(248,255,255,.45),inset 0 0 14px rgba(0,0,0,.92),0 2px 0 #000;}
-  .module-tab.active{background:#000;color:#ffffff;border-color:#ffffff;box-shadow:0 0 28px rgba(248,255,255,.58),inset 0 0 28px rgba(248,255,255,.12),0 2px 0 #000;}
+  .module-tab{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:center;border:1px solid rgba(218,255,255,.14);background:linear-gradient(135deg,rgba(255,255,255,.032),rgba(0,0,0,.08));color:rgba(248,255,255,.96);border-radius:6px;padding:8px;font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:0;text-transform:none;line-height:1.2;cursor:pointer;text-align:left;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);text-shadow:0 0 8px rgba(218,255,255,.22);transition:.1s;}
+  .module-tab::before{content:"";width:12px;height:28px;border-radius:3px;background:linear-gradient(90deg,rgba(232,223,200,.16),rgba(245,238,220,.32) 18%,rgba(232,223,200,.14) 42%,rgba(130,122,104,.07) 58%,rgba(245,238,220,.22));border:1px solid rgba(232,223,200,.16);justify-self:center;box-shadow:inset 1px 0 3px rgba(245,238,220,.16),inset -1px 0 3px rgba(232,223,200,.08),0 0 8px rgba(232,223,200,.04);opacity:.70;filter:brightness(.86) saturate(.45);transition:.14s;}
+  .module-tab:hover{color:#ffffff;border-color:rgba(248,255,255,.36);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(0,0,0,.12));}
+  .module-tab.active{color:#ffffff;border-color:rgba(248,255,255,.48);background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(0,0,0,.10));}
+  .module-tab.lit{color:rgba(248,255,255,.96);text-shadow:0 0 8px rgba(218,255,255,.22);}
+  .module-tab.lit::before{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 16px rgba(248,255,255,.88),0 0 28px rgba(218,255,255,.34),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.18);}
+  .module-tab.unlit{color:rgba(248,255,255,.52);text-shadow:0 0 8px rgba(218,255,255,.12);}
     .switch-row{display:flex;align-items:center;justify-content:space-between;margin:0;padding:7px;background:#000;border:1px solid rgba(218,255,255,.26);border-radius:7px;min-height:36px;box-shadow:inset 0 0 16px rgba(0,0,0,.9),0 0 10px rgba(218,255,255,.08);}
   .switch-label{font-size:9px;line-height:1.1;color:rgba(248,255,255,.86);max-width:82px;text-shadow:0 0 8px rgba(218,255,255,.28);}
-  .toggle{position:relative;width:42px;height:22px;border-radius:14px;background:linear-gradient(180deg,#161a1a,#070909 58%,#000);border:1px solid rgba(218,255,255,.22);cursor:pointer;box-shadow:inset 0 1px 2px rgba(255,255,255,.10),inset 0 -6px 10px rgba(0,0,0,.9),0 0 8px rgba(218,255,255,.04);overflow:hidden;}
-  .toggle::before{content:"";position:absolute;inset:1px 2px 48%;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.04));opacity:.7;pointer-events:none;}
-  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 28%,#666,#2d3131 58%,#0c0f0f 100%);box-shadow:inset 0 1px 4px rgba(255,255,255,.16),inset 0 -5px 7px rgba(0,0,0,.82),0 1px 3px rgba(0,0,0,.9);transition:.14s;}
-  .toggle.on{background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(228,255,255,.42) 50%,rgba(140,190,195,.22));border-color:rgba(248,255,255,.86);box-shadow:0 0 14px rgba(218,255,255,.72),0 0 28px rgba(218,255,255,.25),inset 0 1px 2px rgba(255,255,255,.9),inset 0 -5px 8px rgba(80,120,130,.38);}
+  .toggle{position:relative;width:42px;height:22px;border-radius:14px;background:#232929;border:1px solid rgba(218,255,255,.22);cursor:pointer;box-shadow:inset 0 1px 2px rgba(255,255,255,.10),inset 0 -4px 8px rgba(0,0,0,.74);overflow:hidden;}
+  .toggle::before{content:"";position:absolute;inset:2px;border-radius:14px;background:rgba(255,255,255,.035);pointer-events:none;}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 28%,#5f6666,#2b3030 58%,#0c0f0f 100%);box-shadow:inset 0 1px 4px rgba(255,255,255,.14),inset 0 -5px 7px rgba(0,0,0,.82),0 1px 3px rgba(0,0,0,.9);transition:.14s;}
+  .toggle.on{background:#2a3030;border-color:rgba(218,255,255,.30);box-shadow:inset 0 1px 2px rgba(255,255,255,.12),inset 0 -4px 8px rgba(0,0,0,.72);}
   .toggle.on::after{left:22px;background:radial-gradient(circle at 36% 28%,#ffffff,#e9ffff 46%,#9bc6c8 100%);box-shadow:0 0 14px var(--ice-glow),0 0 26px rgba(255,255,255,.42),inset 0 1px 4px rgba(255,255,255,.9),inset 0 -5px 8px rgba(120,160,170,.45);}
   .knob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:0;padding-top:12px;border-top:1px solid rgba(248,255,255,.20);}
   .knob-unit{text-align:center;}
@@ -105,7 +114,7 @@
   .trim-btn:hover{color:#ffffff;border-color:rgba(248,255,255,.66);box-shadow:0 0 8px rgba(248,255,255,.32),inset 0 0 8px rgba(0,0,0,.55);}
   .knob{width:50px;height:50px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 36% 30%,#52524d,#252622 58%,#11120f 100%);border:2px solid #0f130d;position:relative;box-shadow:0 4px 8px rgba(0,0,0,.72),inset 0 0 10px rgba(0,0,0,.72),0 0 12px rgba(248,255,255,.12);}
   .knob::after{content:"";position:absolute;top:5px;left:50%;width:2px;height:18px;background:var(--matrix);transform:translateX(-50%) rotate(var(--rot,28deg));transform-origin:bottom center;box-shadow:0 0 8px var(--matrix-glow);}
-  .knob-label{font-family:var(--display);font-size:9px;letter-spacing:1px;color:#f8ffff;margin-top:7px;text-transform:uppercase;line-height:1.1;text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px var(--matrix-glow),0 0 44px rgba(248,255,255,.58);}
+  .knob-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;color:#f8ffff;margin-top:7px;text-transform:uppercase;line-height:1.1;text-shadow:0 0 3px #fff,0 0 12px var(--matrix-glow),0 0 28px var(--matrix-glow),0 0 44px rgba(248,255,255,.58);}
 
   /* Center monitor */
   .center{display:grid;grid-template-rows:minmax(360px,1fr) auto auto;gap:14px;height:100%;padding:0;background:linear-gradient(90deg,rgba(18,20,21,.72) 0%,rgba(8,9,10,.82) 42%,rgba(0,0,0,.95) 100%),radial-gradient(circle at 70% 44%,rgba(248,255,255,.06),transparent 30%),repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 22px,rgba(0,0,0,.32) 22px 44px);border-radius:9px;}
@@ -123,11 +132,12 @@
   .cursor{display:inline-block;width:8px;height:15px;background:var(--matrix);box-shadow:0 0 12px var(--matrix-glow);animation:blink 1s steps(1) infinite;vertical-align:-2px;margin-left:3px;}
   @keyframes blink{50%{opacity:0}}
   .gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-  .gauge{background:linear-gradient(180deg,#101314,#000 74%);border:1px solid rgba(248,255,255,.24);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:6px;aspect-ratio:1/1;box-shadow:inset 0 0 18px rgba(0,0,0,.6),0 0 12px rgba(248,255,255,.06);text-align:center;}
-  .dial{width:min(76%,150px);aspect-ratio:1/1;border-radius:50%;border:8px solid #0d0f10;display:grid;place-items:center;font-family:var(--display);font-size:30px;position:relative;flex:none;text-shadow:0 0 12px currentColor;}
-  .dial::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:6px solid var(--dial);clip-path:polygon(50% 50%,50% -20%,120% -20%,120% 50%);transform:rotate(var(--rot));filter:drop-shadow(0 0 5px var(--dial));}
-  .gmeta{font-size:10px;color:rgba(248,255,255,.66);line-height:1.2;}
-  .gmeta b{display:block;font-family:var(--display);font-size:13px;color:#ffffff;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;text-shadow:0 0 8px rgba(248,255,255,.25);}
+  .gauge{background:linear-gradient(180deg,#11100c,#030302 74%);border:1px solid var(--aged-line);padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:6px;aspect-ratio:1/1;box-shadow:inset 0 0 20px rgba(0,0,0,.72),inset 0 1px 0 rgba(232,223,200,.10),0 0 12px rgba(232,223,200,.05);text-align:center;}
+  .dial{width:92%;aspect-ratio:1.62/1;border:1px solid rgba(232,223,200,.34);display:grid;place-items:center;font-family:var(--mono);font-size:19px;letter-spacing:1px;position:relative;flex:none;color:rgba(65,52,36,.92);background:linear-gradient(180deg,rgba(245,238,220,.96),rgba(214,199,163,.86) 60%,rgba(164,144,102,.72)),repeating-linear-gradient(90deg,transparent 0 10px,rgba(68,48,28,.18) 10px 11px,transparent 11px 20px);box-shadow:0 0 18px rgba(232,223,200,.30),inset 0 0 20px rgba(255,248,225,.52),inset 0 -14px 24px rgba(76,52,20,.22);overflow:hidden;text-shadow:0 1px 0 rgba(255,250,235,.64);}
+  .dial::before{content:"";position:absolute;left:50%;bottom:12%;width:2px;height:44%;background:#d71912;transform:translateX(-50%) rotate(var(--needle));transform-origin:50% 100%;box-shadow:0 0 5px rgba(255,27,18,.72);z-index:2;}
+  .dial::after{content:"";position:absolute;left:50%;bottom:9%;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#3a1f18,#100909);box-shadow:0 0 6px rgba(0,0,0,.7);z-index:3;}
+  .gmeta{font-size:10px;color:rgba(232,223,200,.66);line-height:1.2;}
+  .gmeta b{display:block;font-family:var(--mono);font-size:11px;color:var(--aged);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;text-shadow:0 0 8px rgba(232,223,200,.25);}
   .actions-log{display:grid;grid-template-columns:1fr;gap:8px;}
   .actions{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
   .fn-btn{background:linear-gradient(180deg,#101314,#000 74%);border:1px solid #080a0b;border-top-color:rgba(248,255,255,.34);color:#f8ffff;border-radius:7px;padding:7px 8px;font-family:var(--display);font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 0 #000;transition:.08s;text-shadow:0 0 8px rgba(248,255,255,.34);}
@@ -138,10 +148,19 @@
   .log div{margin-bottom:4px}.log .time{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
   .input-row{border-top:1px solid rgba(248,255,255,.14);padding-top:4px;color:rgba(248,255,255,.58);}
   .input-row .prompt{color:var(--matrix);}
-  .portal{height:112px;overflow:auto;background:linear-gradient(180deg,#080a0b,#000 78%);border:1px solid rgba(248,255,255,.20);border-radius:8px;padding:8px 10px;font-size:10.5px;color:rgba(248,255,255,.76);line-height:1.35;}
+  .portal{min-height:156px;background:linear-gradient(180deg,#080a0b,#000 78%);border:1px solid rgba(248,255,255,.20);border-radius:8px;padding:8px 10px;font-size:10.5px;color:rgba(248,255,255,.76);line-height:1.35;}
   .portal div{margin-bottom:5px}.portal .time{color:var(--matrix);text-shadow:0 0 10px var(--matrix-glow);}
+  .event-log{height:64px;overflow:auto;border-bottom:1px solid rgba(248,255,255,.13);margin-bottom:7px;padding-bottom:5px;}
   .portal-field{display:grid;grid-template-columns:82px 1fr;gap:8px;border-top:1px solid rgba(248,255,255,.13);padding-top:5px;margin-top:5px;}
   .portal-label{font-family:var(--display);letter-spacing:1px;text-transform:uppercase;color:#f8ffff;text-shadow:0 0 10px rgba(248,255,255,.5);}
+  .intake-form{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:stretch;margin-top:7px;}
+  .intake-field{width:100%;min-height:44px;resize:vertical;background:#000;border:1px solid rgba(248,255,255,.24);border-radius:6px;color:#f8ffff;font-family:var(--mono);font-size:10px;padding:7px;box-shadow:inset 0 0 12px rgba(0,0,0,.86);}
+  .intake-field:focus{outline:1px solid rgba(248,255,255,.7);box-shadow:0 0 12px rgba(248,255,255,.22),inset 0 0 12px rgba(0,0,0,.86);}
+  .intake-actions{display:grid;grid-template-rows:1fr 1fr;gap:5px;}
+  .intake-btn{min-width:76px;background:linear-gradient(180deg,#101314,#000 74%);border:1px solid rgba(248,255,255,.24);color:#f8ffff;border-radius:6px;font-family:var(--display);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-shadow:0 0 8px rgba(248,255,255,.34);}
+  .intake-btn:hover{border-color:rgba(248,255,255,.62);box-shadow:0 0 12px rgba(248,255,255,.18);}
+  .focus-pill{display:inline-block;border:1px solid rgba(248,255,255,.2);border-radius:999px;padding:1px 6px;margin:0 3px 3px 0;color:rgba(248,255,255,.72);background:rgba(248,255,255,.045);}
+  .focus-pill.hot{color:#fff;border-color:rgba(248,255,255,.6);box-shadow:0 0 10px rgba(248,255,255,.18);}
 
   /* HAL routing bay */
   .hal{background:linear-gradient(135deg,#050707 0%,#000 42%,#030506 100%);border:1px solid rgba(222,255,255,.2);border-radius:10px;box-shadow:inset 0 0 42px #000,inset 0 1px 0 rgba(255,255,255,.08),0 0 24px rgba(218,255,255,.08);overflow:hidden;color:var(--ice);position:relative;}
@@ -162,29 +181,93 @@
   .hal-switches .toggle::after{width:12px;height:12px;}
   .hal-switches .toggle.on::after{left:18px;}
   .blade-bank{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;height:132px;margin-bottom:14px;padding:11px;background:linear-gradient(135deg,#070909,#000 54%,#030505);border:1px solid rgba(218,255,255,.12);border-radius:8px;align-items:stretch;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 24px rgba(0,0,0,.82),0 0 18px rgba(218,255,255,.04);position:relative;}
-  .blade{border:1px solid rgba(218,255,255,.14);border-radius:5px;background:linear-gradient(180deg,#0a0c0c,#010202);position:relative;cursor:pointer;overflow:hidden;transition:.14s;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -10px 16px rgba(0,0,0,.82),0 0 10px rgba(218,255,255,.035);}
-  .blade::before{content:"";position:absolute;inset:10px 8px;border-radius:3px;background:linear-gradient(90deg,rgba(140,160,160,.08),rgba(218,245,245,.14) 42%,rgba(120,130,130,.08));box-shadow:inset 2px 0 4px rgba(255,255,255,.08),inset -2px 0 4px rgba(218,255,255,.08),0 0 4px rgba(218,255,255,.04);opacity:.24;backdrop-filter:blur(.4px);}
-  .blade::after{content:attr(data-code);position:absolute;bottom:7px;left:0;right:0;text-align:center;font-family:var(--display);font-size:11px;letter-spacing:1px;color:rgba(235,255,255,.46);text-shadow:0 0 5px rgba(255,238,218,.18);}
-  .blade.active::before,
-  .blade.pending::before,
-  .blade.archive::before{background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(244,255,255,.72) 18%,rgba(255,255,255,.98) 48%,rgba(211,250,255,.74) 72%,rgba(255,255,255,.88));box-shadow:0 0 22px rgba(248,255,255,.94),0 0 46px rgba(218,255,255,.52),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);opacity:1;filter:brightness(1.18);}
-  .blade.active::after,
-  .blade.pending::after,
-  .blade.archive::after{color:#030909;text-shadow:0 0 4px rgba(255,255,255,.8);}
-  .blade.blocked::before{background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(244,255,255,.72) 18%,rgba(255,255,255,.98) 48%,rgba(211,250,255,.74) 72%,rgba(255,255,255,.88));box-shadow:0 0 20px rgba(248,255,255,.88),0 0 38px rgba(218,255,255,.42),0 0 18px rgba(255,31,23,.56),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);opacity:1;filter:brightness(1.14);}
-  .blade.blocked::after{color:#030909;text-shadow:0 0 4px rgba(255,255,255,.8);}
-  .blade.pending::before{animation:pulse 1.7s infinite;}
-  .blade.selected{outline:2px solid rgba(248,255,255,.92);outline-offset:2px;}
+  .blade{border:1px solid rgba(218,255,255,.13);border-radius:5px;background:linear-gradient(180deg,#050707,#010202);position:relative;cursor:pointer;overflow:hidden;transition:.14s;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 -10px 16px rgba(0,0,0,.84);}
+  .blade.filtered,.blade-row.filtered .b-label,.blade-row.filtered .b-state{opacity:.42;}
+  .blade::before{content:"";position:absolute;inset:10px 8px;border-radius:3px;background:linear-gradient(90deg,rgba(232,223,200,.18) 0%,rgba(245,238,220,.38) 18%,rgba(232,223,200,.18) 36%,rgba(130,122,104,.09) 54%,rgba(245,238,220,.28) 74%,rgba(130,122,104,.12) 100%);box-shadow:inset 2px 0 5px rgba(245,238,220,.18),inset -2px 0 5px rgba(232,223,200,.10),0 0 10px rgba(232,223,200,.05);opacity:.68;backdrop-filter:blur(.4px);transition:.14s;}
+  .blade::after{content:attr(data-code);position:absolute;bottom:7px;left:0;right:0;text-align:center;font-family:var(--display);font-size:11px;letter-spacing:1px;color:rgba(210,225,225,.50);text-shadow:0 1px 2px #000;}
+  .blade.lit::before{background:linear-gradient(90deg,rgba(255,255,255,.88),rgba(244,255,255,.74) 18%,rgba(255,255,255,.99) 48%,rgba(211,250,255,.75) 72%,rgba(255,255,255,.86));box-shadow:0 0 18px rgba(248,255,255,.82),0 0 34px rgba(218,255,255,.38),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);opacity:1;filter:brightness(1.2);}
+  .blade.lit.blocked::before{box-shadow:0 0 18px rgba(248,255,255,.76),0 0 26px rgba(218,255,255,.30),0 0 14px rgba(255,31,23,.38),inset 3px 0 9px rgba(255,255,255,.86),inset -4px 0 12px rgba(180,240,255,.58);}
+  .blade.lit::after{color:#020707;text-shadow:0 0 4px rgba(255,255,255,.82);}
+  .blade.unlit::before{background:linear-gradient(90deg,rgba(232,223,200,.16) 0%,rgba(245,238,220,.34) 14%,rgba(232,223,200,.15) 30%,rgba(130,122,104,.07) 51%,rgba(245,238,220,.24) 70%,rgba(130,122,104,.11) 100%);box-shadow:inset 2px 0 5px rgba(245,238,220,.18),inset -2px 0 5px rgba(232,223,200,.09),0 0 10px rgba(232,223,200,.045);opacity:.70;filter:brightness(.86) saturate(.42);}
+  .blade.unlit::after{color:rgba(232,223,200,.48);}
+  .blade.selected{border-color:rgba(248,255,255,.48);background:linear-gradient(180deg,#090c0c,#010202);}
   @keyframes pulse{50%{filter:brightness(1.35)}}
   .blade-list{display:grid;gap:7px;}
   .blade-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px;border:1px solid rgba(218,255,255,.14);background:linear-gradient(135deg,rgba(255,255,255,.032),rgba(0,0,0,.08));border-radius:6px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
-  .mini{width:12px;height:26px;border-radius:3px;background:linear-gradient(90deg,rgba(120,130,130,.08),rgba(218,245,245,.13),rgba(110,120,120,.08));border:1px solid rgba(218,255,255,.14);justify-self:center;box-shadow:inset 1px 0 3px rgba(255,255,255,.07),inset -1px 0 3px rgba(218,255,255,.06),0 0 4px rgba(218,255,255,.03);opacity:.28;}
-  .blade-row.active .mini,
-  .blade-row.pending .mini,
-  .blade-row.archive .mini{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 18px rgba(248,255,255,.92),0 0 32px rgba(218,255,255,.42),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.2);}
-  .blade-row.blocked .mini{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 18px rgba(248,255,255,.88),0 0 28px rgba(218,255,255,.36),0 0 14px rgba(255,31,23,.46),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.16);}
+  .blade-row.selected{border-color:rgba(248,255,255,.48);background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(0,0,0,.10));}
+  .mini{width:12px;height:26px;border-radius:3px;background:linear-gradient(90deg,rgba(232,223,200,.16),rgba(245,238,220,.34) 18%,rgba(232,223,200,.15) 42%,rgba(130,122,104,.07) 58%,rgba(245,238,220,.24));border:1px solid rgba(232,223,200,.16);justify-self:center;box-shadow:inset 1px 0 3px rgba(245,238,220,.18),inset -1px 0 3px rgba(232,223,200,.08),0 0 8px rgba(232,223,200,.04);opacity:.70;transition:.14s;filter:brightness(.86) saturate(.42);}
+  .blade-row.lit .mini{background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(244,255,255,.76) 20%,rgba(255,255,255,.98) 52%,rgba(211,250,255,.72));box-shadow:0 0 16px rgba(248,255,255,.88),0 0 28px rgba(218,255,255,.34),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);opacity:1;filter:brightness(1.18);}
+  .blade-row.lit.blocked .mini{box-shadow:0 0 16px rgba(248,255,255,.76),0 0 24px rgba(218,255,255,.30),0 0 12px rgba(255,31,23,.34),inset 2px 0 6px rgba(255,255,255,.88),inset -2px 0 7px rgba(180,240,255,.58);}
   .b-label{font-size:10.5px;color:rgba(248,255,255,.96);line-height:1.2;text-shadow:0 0 8px rgba(218,255,255,.22);}.b-label span{display:block;color:rgba(248,255,255,.52);font-size:8.5px;margin-top:2px}.b-state{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:rgba(248,255,255,.66);}
   .route-note{margin-top:12px;padding:10px;border:1px solid rgba(218,255,255,.16);border-radius:6px;background:rgba(218,255,255,.035);font-size:10.5px;line-height:1.45;color:rgba(248,255,255,.82);text-shadow:0 0 8px rgba(218,255,255,.16);}
+  .console,
+  .console::before,
+  .authority,
+  .panel,
+  .panel-title,
+  .module-tab,
+  .switch-row,
+  .center,
+  .monitor-frame,
+  .gauge,
+  .fn-btn,
+  .log,
+  .portal,
+  .event-log,
+  .intake-field,
+  .intake-btn,
+  .hal,
+  .hal-switches,
+  .blade-bank,
+  .blade,
+  .blade::before,
+  .blade-list,
+  .blade-row,
+  .mini,
+  .route-note{border-radius:0;}
+  .console::before,
+  header,
+  .authority,
+  .panel,
+  .panel-title,
+  .lens-panel,
+  .lens-panel .panel-title,
+  .module-tab,
+  .switch-row,
+  .knob-grid,
+  .trim-btn,
+  .gauge,
+  .fn-btn,
+  .log,
+  .portal,
+  .event-log,
+  .portal-field,
+  .intake-field,
+  .intake-btn,
+  .hal,
+  .hal-head,
+  .hal-switches,
+  .blade-bank,
+  .blade,
+  .blade-row,
+  .mini,
+  .route-note{border-color:var(--aged-line);}
+  .module-tab.active,
+  .module-tab:hover,
+  .blade.selected,
+  .blade-row.selected,
+  .focus-pill.hot{border-color:var(--aged-strong);}
+  h1,
+  .panel-title h2,
+  .lens-panel .panel-title h2,
+  .hal-title,
+  .screen-title,
+  .module-tab,
+  .b-label,
+  .gmeta b,
+  .fn-btn,
+  .portal-label,
+  .knob-label{color:var(--aged);}
   @media(max-width:1180px){.layout{grid-template-columns:1fr}.gauges{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -226,10 +309,19 @@
       <div class="actions-log">
         <div class="actions" id="actions"></div>
         <div class="portal" id="portal">
-          <div><span class="time">[00:00:01]</span> Operational console first pass initialized. Synthetic fixture posture loaded.</div>
-          <div><span class="time">[00:00:02]</span> HAL routing bay online. Controls select views and intent only; no authority created.</div>
+          <div class="event-log" id="eventLog" aria-live="polite">
+            <div><span class="time">[00:00:01]</span> Operational console first pass initialized. Synthetic fixture posture loaded.</div>
+            <div><span class="time">[00:00:02]</span> HAL routing bay online. Controls select views and intent only; no authority created.</div>
+          </div>
           <div class="portal-field"><span class="portal-label">Dialogue</span><span><span class="prompt">&gt;</span> operator note / question / proposed interpretation · synthetic only</span></div>
           <div class="portal-field"><span class="portal-label">Artifact</span><span><span class="prompt">&gt;</span> source pointer / preserved context / Archive before extraction</span></div>
+          <div class="intake-form">
+            <textarea class="intake-field" id="intakeText" aria-label="Synthetic dialogue or artifact intake" placeholder="Type synthetic dialogue or artifact pointer. Stored only in this prototype display state."></textarea>
+            <div class="intake-actions">
+              <button class="intake-btn" type="button" id="dialogueBtn">Dialogue</button>
+              <button class="intake-btn" type="button" id="artifactBtn">Artifact</button>
+            </div>
+          </div>
           <div class="input-row"><span class="prompt">&gt;</span> no current-truth propagation from this portal</div>
         </div>
       </div>
@@ -250,7 +342,7 @@
         </div>
         <div class="blade-bank" id="bladeBank"></div>
         <div class="blade-list" id="bladeList"></div>
-        <div class="route-note" id="routeNote">Fins, blades, and HAL toggles route display state only. Bright ice-white = included/active; dull glass = inactive. Agent Output updates only.</div>
+        <div class="route-note" id="routeNote">Fins and blades are push-on / push-off display lights. Lit blade = emphasized route detail; dull ambient blade = readable but deactivated. Agent Output updates only.</div>
       </div>
     </aside>
   </div>
@@ -270,30 +362,61 @@ const modules = {
   system_setup:{label:'System Setup',posture:'blocked · setup identifiers missing',summary:'Project number and activation identifier are missing, so setup may be prepared only as a qualified internal proposal if humans concur.',gauges:[['SETUP','28','blocked','#ff1b12','12deg'],['PROJECT #','00','missing','#ff1b12','-135deg'],['PREP','45','qualified','#f8ffff','44deg'],['PROP','08','locked','#f8ffff','-48deg']],blades:[['A','project_number','Required setup field','blocked','missing'],['B','activation_identifier','Required activation field','blocked','missing'],['C','folder_structure','Prep candidate','pending','candidate'],['D','platforms','Setup checklist','pending','not active'],['E','limited_setup','Concurrence proposal','pending','proposal only'],['F','archive:setup-source','Source preserved','archive','not authority'],['G','billing_path','Downstream blocker','blocked','blocked'],['H','propagation','No current truth update','inactive','locked']],route:'Route: Activation Gates + Project Number → System Setup / Billing. UI cannot activate setup truth.'},
   risk_gaps:{label:'Risk / Gaps / Archive',posture:'governance ready · unresolved state visible',summary:'Known gaps, conflicts, proposal packet, concurrence candidate, and archive pointer are visible. This module is healthy when unresolved state is routed, not hidden.',gauges:[['DISPLAY','96','ready','#f8ffff','126deg'],['GOVERNANCE','88','ready','#f8ffff','112deg'],['BLOCKERS','62','visible','#f8ffff','78deg'],['HIDDEN','00','clear','#f8ffff','-135deg']],blades:[['A','gap:ntp-001','Authorization gap routed','blocked','blocks_activation'],['B','gap:project-number-001','Setup/billing gap routed','blocked','blocks_current_output'],['C','conflict:service-order','Conflict remains visible','blocked','PM concurrence'],['D','proposal:limited-setup','Elevate packet only','pending','pending concurrence'],['E','concur-candidate:override','Human review required','pending','PM/PIC'],['F','archive:fixture-source','Source preserved','archive','not authority'],['G','candidate field state','Extracted candidate visible','pending','not current truth'],['H','propagation events','None before concurrence','inactive','no propagation']],route:'Route: All modules → Risk/Gaps/Archive. Archive preserves source; it does not validate, approve, or hide source material.'}
 };
-const actions=[['Extract','candidate fields'],['Absorb','source intake'],['Elevate','proposal only'],['Archive','preserve source']];
+const actions={
+  Extract:{sub:'candidate fields',detail:'Candidate fields/gaps from preserved source only. No approval or current truth is created.'},
+  Absorb:{sub:'source intake',detail:'Source/artifact intake marker only. Preserve before interpretation; no validation implied.'},
+  Elevate:{sub:'proposal only',detail:'Proposal/concurrence packet intent only. Human concurrence remains required before propagation.'},
+  Archive:{sub:'preserve source',detail:'Source preservation intent only. Archive does not validate, approve, hide, or quarantine.'}
+};
+const actionKeys=Object.keys(actions);
+const filterState={Activation:true,Source:true,Propagation:false,Candidates:true,Proposals:false,Conflicts:true,Archive:true,'Authority Lock':true};
+const focusState={Scope:2,Risk:5,Source:7,Readiness:3,'Concur.':6,Signal:1};
+const intakeState=[];
+const bladeLightState={};
+const moduleLightState={};
 let current='activation_gates';
 let selectedBlade=null;
+let selectedAction='Extract';
 function time(){return new Date().toLocaleTimeString('en-US',{hour12:false});}
-function log(msg){const el=document.getElementById('portal');const div=document.createElement('div');div.innerHTML=`<span class="time">[${time()}]</span> ${msg}`;el.insertBefore(div, el.firstChild);}
-function renderTabs(){document.getElementById('moduleTabs').innerHTML=Object.entries(modules).map(([id,m])=>`<button class="module-tab ${id===current?'active':''}" onclick="selectModule('${id}')">${m.label}</button>`).join('');}
-function renderActions(){document.getElementById('actions').innerHTML=actions.map(([a,b],i)=>`<button class="fn-btn ${i===0?'active':''}" onclick="selectAction(this,'${a}')">${a}<span class="fn-sub">${b}</span></button>`).join('');}
-function selectAction(el,a){document.querySelectorAll('.fn-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');log(`FUNCTION PUSH: ${a}. Operator intent only; no approval, validation, or current-truth update.`);}
-function selectModule(id){current=id;selectedBlade=null;render();log(`MODULE SELECT: ${modules[id].label}. Agent Output monitor refreshed from synthetic display state.`);}
-function selectBlade(i){selectedBlade=i;render();const b=modules[current].blades[i];log(`HAL BLADE ${b[0]}: ${b[1]} selected · ${b[4]}. Read-only route detail.`);}
-function toggleControl(el,label){el.classList.toggle('on');log(`TOGGLE: ${label} ${el.classList.contains('on')?'included':'dimmed'} in display filter. No data mutation.`);}
-function trim(label,dir){log(`KNOB TRIM: ${label} ${dir>0?'increased':'decreased'} as display weighting only.`);}
-function renderReadout(){const m=modules[current];const blade=selectedBlade!==null?m.blades[selectedBlade]:null;document.getElementById('readout').innerHTML=`
+function escapeHtml(value){return value.replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
+function log(msg){const el=document.getElementById('eventLog');const div=document.createElement('div');div.innerHTML=`<span class="time">[${time()}]</span> ${msg}`;el.insertBefore(div, el.firstChild);}
+function bladeFilterHits(b){const text=`${b[1]} ${b[2]} ${b[3]} ${b[4]}`.toLowerCase();return {
+  Activation:text.includes('activation'),
+  Source:text.includes('source')||text.includes('fixture')||text.includes('pac')||text.includes('archive'),
+  Propagation:text.includes('propagation')||text.includes('current truth')||text.includes('current-output'),
+  Candidates:text.includes('candidate')||text.includes('extract'),
+  Proposals:text.includes('proposal')||text.includes('concurrence')||text.includes('review'),
+  Conflicts:text.includes('conflict')||text.includes('blocked')||text.includes('missing')||text.includes('gap'),
+  Archive:text.includes('archive'),
+  'Authority Lock':text.includes('authority')||text.includes('locked')||text.includes('concurrence')||text.includes('no propagation')
+};}
+function initializeBladeLights(){Object.entries(modules).forEach(([id,m])=>{bladeLightState[id]=m.blades.map(b=>b[3]!=='inactive');});}
+function initializeModuleLights(){Object.keys(modules).forEach(id=>{moduleLightState[id]=true;});}
+function bladeClasses(b,i){const hits=bladeFilterHits(b);const matched=Object.entries(hits).some(([k,v])=>v&&filterState[k]);const filtered=Object.entries(hits).some(([k,v])=>v&&!filterState[k]);const lit=bladeLightState[current][i];return `${b[3]} ${lit?'lit':'unlit'} ${i===selectedBlade?'selected':''} ${filtered&&!matched?'filtered':''}`;}
+function focusHtml(){return Object.entries(focusState).map(([k,v])=>`<span class="focus-pill ${v>=6?'hot':''}">${k} ${v}</span>`).join('');}
+function renderTabs(){document.getElementById('moduleTabs').innerHTML=Object.entries(modules).map(([id,m])=>`<button class="module-tab ${id===current?'active':''} ${moduleLightState[id]?'lit':'unlit'}" onclick="selectModule('${id}')">${m.label}</button>`).join('');}
+function renderActions(){document.getElementById('actions').innerHTML=actionKeys.map(a=>`<button class="fn-btn ${a===selectedAction?'active':''}" onclick="selectAction('${a}')">${a}<span class="fn-sub">${actions[a].sub}</span></button>`).join('');}
+function selectAction(a){selectedAction=a;renderActions();renderReadout();log(`FUNCTION PUSH: ${a}. ${actions[a].detail} Synthetic/operator intent only.`);}
+function selectModule(id){current=id;selectedBlade=null;moduleLightState[id]=!moduleLightState[id];render();log(`MODULE BLADE: ${modules[id].label} light ${moduleLightState[id]?'ON':'OFF'}. Module selected; display state only.`);}
+function selectBlade(i){selectedBlade=i;bladeLightState[current][i]=!bladeLightState[current][i];render();const b=modules[current].blades[i];log(`HAL BLADE ${b[0]} / FIN ${i+1}: ${b[1]} light ${bladeLightState[current][i]?'ON':'OFF'} · ${b[4]}. Push-on/push-off display only; no data mutation.`);}
+function toggleControl(el,label){filterState[label]=!filterState[label];el.classList.toggle('on',filterState[label]);render();log(`TOGGLE: ${label} ${filterState[label]?'emphasized/included':'dimmed'} as display-layer filter only. Source/current truth unchanged.`);}
+function trim(label,dir){focusState[label]=Math.max(0,Math.min(9,focusState[label]+dir));document.querySelectorAll('.knob-unit').forEach(unit=>{if(unit.querySelector('.knob-label').textContent===label){unit.querySelector('.knob').style.setProperty('--rot',`${-72+(focusState[label]*18)}deg`);}});renderReadout();log(`KNOB TRIM: ${label} focus set to ${focusState[label]}/9 as display weighting only. No authority created.`);}
+function intake(kind){const field=document.getElementById('intakeText');const value=field.value.trim();if(!value){log(`INTAKE ${kind}: no text supplied. Prototype state unchanged.`);return;}const safe=escapeHtml(value).slice(0,180);intakeState.unshift({kind,value:safe,module:modules[current].label,action:selectedAction});field.value='';renderReadout();log(`INTAKE ${kind}: synthetic ${kind.toLowerCase()} captured for display under ${modules[current].label}; action context ${selectedAction}; no source/current-truth mutation.`);}
+function renderReadout(){const m=modules[current];const blade=selectedBlade!==null?m.blades[selectedBlade]:null;const latest=intakeState[0];document.getElementById('readout').innerHTML=`
   <div class="big">Agent Output · ${m.label}</div>
   <div class="line"><span class="prompt">&gt;</span><span>POSTURE: <span class="${m.posture.includes('blocked')?'warn':m.posture.includes('ready')?'ok':'violet'}">${m.posture}</span></span></div>
   <div class="line"><span class="prompt">&gt;</span><span>${m.summary}</span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>ACTION INTENT: <span class="ok">${selectedAction}</span> · ${actions[selectedAction].detail}</span></div>
+  <div class="line"><span class="prompt">&gt;</span><span>DISPLAY FOCUS: ${focusHtml()}</span></div>
   <div class="line"><span class="prompt">&gt;</span><span>READINESS IS DASHBOARD STATE · SOURCE / CANDIDATE / PROPOSAL / CONCURRENCE / AUTHORITY STAY SEPARATE</span></div>
-  ${blade?`<div class="line"><span class="prompt">&gt;</span><span>BLADE ${blade[0]} SELECTED: <span class="blue">${blade[1]}</span></span></div><div class="line"><span class="prompt">&gt;</span><span>STATE: ${blade[4]} · ${blade[2]}</span></div>`:`<div class="line"><span class="prompt">&gt;</span><span>SELECT A HAL FIN / BLADE FOR FIELD-STATE ROUTING DETAIL<span class="cursor"></span></span></div>`}
+  ${blade?`<div class="line"><span class="prompt">&gt;</span><span>BLADE ${blade[0]} / FIN ${selectedBlade+1}: <span class="blue">${blade[1]}</span> · LIGHT ${bladeLightState[current][selectedBlade]?'ON':'OFF'}</span></div><div class="line"><span class="prompt">&gt;</span><span>FIELD STATE: ${blade[4]} · ${blade[2]} · display light only, not authority</span></div>`:`<div class="line"><span class="prompt">&gt;</span><span>PUSH A HAL FIN / BLADE TO SWITCH ITS DISPLAY LIGHT ON OR OFF<span class="cursor"></span></span></div>`}
+  ${latest?`<div class="line"><span class="prompt">&gt;</span><span>LATEST ${latest.kind}: ${latest.value} · synthetic display intake only</span></div>`:''}
 `;}
-function renderGauges(){const m=modules[current];document.getElementById('gauges').innerHTML=m.gauges.map(g=>`<div class="gauge"><div class="dial" style="--dial:${g[3]};--rot:${g[4]};color:${g[3]}">${g[1]}</div><div class="gmeta"><b>${g[0]}</b>${g[2]}</div></div>`).join('');}
-function renderBlades(){const m=modules[current];document.getElementById('baySub').textContent=m.label;document.getElementById('bladeBank').innerHTML=m.blades.map((b,i)=>`<div class="blade ${b[3]} ${i===selectedBlade?'selected':''}" data-code="${b[0]}" onclick="selectBlade(${i})" title="${b[1]}"></div>`).join('');document.getElementById('bladeList').innerHTML=m.blades.map((b,i)=>`<div class="blade-row ${b[3]}" onclick="selectBlade(${i})"><div class="mini"></div><div class="b-label">${b[1]}<span>${b[2]}</span></div><div class="b-state">${b[3]}</div></div>`).join('');document.getElementById('routeNote').textContent=m.route;}
-function wireControls(){document.querySelectorAll('.switch-row').forEach(row=>{const label=row.querySelector('.switch-label').textContent;const t=row.querySelector('.toggle');t.removeAttribute('onclick');t.addEventListener('click',()=>toggleControl(t,label));});document.querySelectorAll('.knob-unit').forEach(unit=>{const label=unit.querySelector('.knob-label').textContent;const btns=unit.querySelectorAll('.trim-btn');btns[0].addEventListener('click',()=>trim(label,-1));btns[1].addEventListener('click',()=>trim(label,1));});}
-function render(){renderTabs();renderReadout();renderGauges();renderBlades();}
-renderActions();render();wireControls();
+function renderGauges(){const m=modules[current];document.getElementById('gauges').innerHTML=m.gauges.map(g=>`<div class="gauge"><div class="dial" style="--needle:${g[4]}">${g[1]}</div><div class="gmeta"><b>${g[0]}</b>${g[2]}</div></div>`).join('');}
+function renderBlades(){const m=modules[current];document.getElementById('baySub').textContent=m.label;document.getElementById('bladeBank').innerHTML=m.blades.map((b,i)=>`<div class="blade ${bladeClasses(b,i)}" data-code="${b[0]}" onclick="selectBlade(${i})" title="${b[1]}"></div>`).join('');document.getElementById('bladeList').innerHTML=m.blades.map((b,i)=>`<div class="blade-row ${bladeClasses(b,i)}" onclick="selectBlade(${i})"><div class="mini"></div><div class="b-label">${b[1]}<span>${b[2]}</span></div><div class="b-state">${b[3]}</div></div>`).join('');document.getElementById('routeNote').textContent=`${m.route} Push any blade/fin to switch its display light on or off; light state is visual only.`;}
+function wireControls(){document.querySelectorAll('.switch-row').forEach(row=>{const label=row.querySelector('.switch-label').textContent;const t=row.querySelector('.toggle');t.removeAttribute('onclick');t.classList.toggle('on',filterState[label]);t.addEventListener('click',()=>toggleControl(t,label));});document.querySelectorAll('.knob-unit').forEach(unit=>{const label=unit.querySelector('.knob-label').textContent;const btns=unit.querySelectorAll('.trim-btn');unit.querySelector('.knob').style.setProperty('--rot',`${-72+(focusState[label]*18)}deg`);btns[0].addEventListener('click',()=>trim(label,-1));btns[1].addEventListener('click',()=>trim(label,1));});document.getElementById('dialogueBtn').addEventListener('click',()=>intake('Dialogue'));document.getElementById('artifactBtn').addEventListener('click',()=>intake('Artifact'));}
+function render(){renderTabs();renderActions();renderReadout();renderGauges();renderBlades();}
+initializeBladeLights();initializeModuleLights();render();wireControls();
 </script>
 </body>
 </html>
