@@ -6,13 +6,14 @@ data/, fixtures/ -- unchanged) AND exposes:
 
   - read-only JSON GET endpoints over the real _governed/ layers (ledger/,
     memory/pending/, decisions/) via governed_reader.py.
-  - write JSON POST endpoints for the three non-concurrence-gated console actions
-    (Extract, Absorb, Archive) via governed_writer.py. These write ONLY to
-    _governed/raw/ and _governed/extractions/, and only ever create new files
-    (see governed_writer.py's append-only-by-construction note). Elevate
-    (memory/pending/ proposals) and any ledger/ write are explicitly out of scope
-    for this server -- ledger changes require human concurrence outside this API,
-    per the resident-context concurrence rule.
+  - write JSON POST endpoints for the four non-concurrence-gated console actions
+    (Extract, Absorb, Archive, Elevate) via governed_writer.py. These write ONLY to
+    _governed/raw/, _governed/extractions/, and (Elevate only) _governed/memory/pending/,
+    and only ever create new files (see governed_writer.py's append-only-by-construction
+    note). Elevate is proposal intake, never approval -- no route here, and no function
+    in governed_writer.py, can write to _governed/ledger/. Ledger changes require a
+    human concurrence event that happens outside this API, per the resident-context
+    concurrence rule.
 
 This server does not modify prototype/index.html; that page's fetch calls still
 point at data/*.seed.json and fixtures/*.json exactly as before. Wiring the
@@ -34,6 +35,9 @@ Then:
     POST http://localhost:8765/api/actions/extract  {"title": "...", "source_text": "...", "context": "...", "topics": [...]}
     POST http://localhost:8765/api/actions/absorb   {"title": "...", "artifact_text": "...", "received_from": "..."}
     POST http://localhost:8765/api/actions/archive  {"title": "...", "dialogue_text": "..."}
+    POST http://localhost:8765/api/actions/elevate  {"title": "...", "proposed_change": "...", "source": ["..."],
+                                                       "confidence": "high|medium|low|contested",
+                                                       "uncertainty": "...", "review_after": "YYYY-MM-DD"}
 """
 from __future__ import annotations
 
@@ -59,6 +63,7 @@ ACTION_ROUTES = {
     "/api/actions/extract": gw.extract,
     "/api/actions/absorb": gw.absorb,
     "/api/actions/archive": gw.archive,
+    "/api/actions/elevate": gw.elevate,
 }
 
 
