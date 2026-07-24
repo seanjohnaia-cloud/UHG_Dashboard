@@ -32,7 +32,7 @@ Then:
     http://localhost:8765/api/pending
     http://localhost:8765/api/decisions
 
-    POST http://localhost:8765/api/actions/extract  {"title": "...", "source_text": "...", "context": "...", "topics": [...]}
+    POST http://localhost:8765/api/actions/extract  {"title": "...", "source_text": "...", "existing_raw_refs": ["..."], "context": "...", "topics": [...]}
     POST http://localhost:8765/api/actions/absorb   {"title": "...", "artifact_text": "...", "received_from": "..."}
     POST http://localhost:8765/api/actions/archive  {"title": "...", "dialogue_text": "..."}
     POST http://localhost:8765/api/actions/elevate  {"title": "...", "proposed_change": "...", "source": ["..."],

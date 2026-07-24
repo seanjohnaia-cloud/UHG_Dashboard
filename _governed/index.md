@@ -47,7 +47,7 @@ Pages listed in this index are classified for context loading per `decisions/202
 
 ## Pending memory proposals
 
-- *(none — queue cleared at the 2026-07-22 review window)*
+- *(none — queue cleared at the 2026-07-24 review window; see `memory/superseded/2026-07-24-generic-extraction-frontmatter-schema-pending-draft.md` for the one proposal filed and resolved since the prior clearing)*
 
 ## Decision records
 
@@ -55,3 +55,8 @@ Pages listed in this index are classified for context loading per `decisions/202
 - `decisions/2026-07-22-resident-context-concurrence-rule.md` — **accepted**.
 - `decisions/2026-07-22-tiered-context-control-system-pattern.md` — **accepted (narrowed)**.
 - `decisions/2026-07-22-ratify-exchange-development-extraction.md` — **accepted**.
+- `decisions/2026-07-24-ratify-generic-extraction-schema.md` — **accepted** (review window of 2026-07-24): ratifies the `topic-glean` extraction sub-type for plain Extract-action output — frontmatter schema, three-value `status` (`draft | reviewed | superseded`, mechanism not yet specified), and multi-source `source` citation. Pending draft preserved in `memory/superseded/`.
+
+## Extraction sub-types in use (addendum)
+
+- **Topic-Glean Extraction** — **ratified standing artifact class** per `decisions/2026-07-24-ratify-generic-extraction-schema.md`. Lighter-weight sibling to Exchange Development Extraction, for routine Extract-action captures (topics/concepts with context) rather than reciprocal architectural development. Produced by `pii_team_dashboard/server/governed_writer.py::write_extraction()`.

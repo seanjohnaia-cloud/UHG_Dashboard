@@ -23,9 +23,10 @@ equally-identifiable naming convention.
 
 Governed mapping (per decisions/2026-07-22-candidate-operational-data-layer-wikillm-pattern.md,
 "RESOLVED 2026-07-22: the function strip"):
-  - Extract  -- gleans topics/concepts *with context* from pasted chat or an already-
-                captured artifact. Produces a raw/ record (only if the source wasn't
-                already captured) plus an extractions/ record referencing it.
+  - Extract  -- gleans topics/concepts *with context* from pasted chat or one or more
+                already-captured artifacts. Produces a raw/ record (only if fresh source
+                text was given) plus a `topic-glean` extractions/ record referencing all
+                cited raw sources (multi-source, per the ratified schema below).
   - Absorb   -- admits an externally-created artifact into raw/, with provenance
                 disclosing external origin. Admission, not endorsement -- it does NOT
                 also extract; that is a separate, later Extract call.
@@ -38,22 +39,21 @@ Governed mapping (per decisions/2026-07-22-candidate-operational-data-layer-wiki
                 Elevate is proposal, never approval; this function cannot and does not
                 touch ledger/.
 
-Open, unratified items (tracked in pii_team_dashboard/open-questions.md -- read that
-file before adding a third one):
-  1. No decision record ratifies a frontmatter schema for *generic* extraction records
-     (only the exchange-development sub-type is ratified). `extraction_type: general`
-     below is this module's own reasonable inference, not a cited standard. A candidate
-     proposal ratifying exactly this schema is now filed at
-     `_governed/memory/pending/2026-07-24-generic-extraction-frontmatter-schema.md`,
-     awaiting human review (no `.review-open` window is currently open) -- this function
-     still runs on the schema as documented-but-unratified until that proposal is
-     accepted or revised.
-  2. Elevate's proposal-specific content (proposed change, affected fields/modules,
+The `topic-glean` extraction schema (extraction_type, three-value status, multi-source
+`source`) is ratified by `_governed/decisions/2026-07-24-ratify-generic-extraction-schema.md`
+(accepted 2026-07-24, decided_by: Sean Johnson). `write_extraction()` produces exactly
+that schema. Note: that decision ratifies the *vocabulary* only -- nothing in this
+module transitions a record's `status` from `draft` to `reviewed`/`superseded`; the
+decision explicitly leaves that mechanism unspecified as future work.
+
+Remaining open, unratified item (tracked in pii_team_dashboard/open-questions.md --
+read that file before adding a second one):
+  1. Elevate's proposal-specific content (proposed change, affected fields/modules,
      authority requirement, requested human action) is deliberately kept in the
-     markdown BODY rather than added as new frontmatter keys, specifically to avoid
-     inventing a second unratified schema on top of item 1. If Elevate proposals need
-     to be machine-queryable by those fields later, that's a decision-record-worthy
-     schema question, not something to back into via additive frontmatter here.
+     markdown BODY rather than added as new frontmatter keys, to avoid inventing an
+     unratified schema. If Elevate proposals need to be machine-queryable by those
+     fields later, that's a decision-record-worthy schema question, not something to
+     back into via additive frontmatter here.
 """
 from __future__ import annotations
 
@@ -145,29 +145,35 @@ def write_raw(
 def write_extraction(
     *,
     title: str,
-    raw_ref: str,
+    raw_refs: list[str],
     topics: list[str] | None = None,
     notes: str | None = None,
     captured_by: str = DEFAULT_CAPTURED_BY,
     captured_at: str | None = None,
     governed_root: Path | None = None,
 ) -> dict[str, Any]:
+    """Writes the `topic-glean` extraction schema ratified by
+    `_governed/decisions/2026-07-24-ratify-generic-extraction-schema.md`.
+    `raw_refs` may cite more than one raw/ record (multi-source, per that decision)."""
+    if not raw_refs:
+        raise ValueError("write_extraction requires at least one raw_ref in raw_refs -- an extraction must cite its source(s)")
     governed_root = governed_root or DEFAULT_GOVERNED_ROOT
     repo_root = governed_root.parent
     captured_at = captured_at or datetime.date.today().isoformat()
 
     frontmatter: dict[str, Any] = {
         "layer": "extraction",
-        "extraction_type": "general",
+        "extraction_type": "topic-glean",
         "status": "draft",
-        "source": [raw_ref],
+        "source": list(raw_refs),
         "captured_by": captured_by,
         "captured_at": captured_at,
         "admissibility": "initiating",
         "verification": {"status": "unverified", "verified_by": None, "verified_on": None, "method": None},
     }
 
-    body_parts = [f"Extracted from: `{raw_ref}`", ""]
+    refs_text = ", ".join(f"`{r}`" for r in raw_refs)
+    body_parts = [f"Extracted from: {refs_text}", ""]
     if topics:
         body_parts.append("## Topics / concepts")
         body_parts.append("")
@@ -180,9 +186,8 @@ def write_extraction(
         body_parts.append(notes)
         body_parts.append("")
     body_parts.append(
-        "> Preservation record only (Authority Rule 9-equivalent for generic extractions): "
-        "citable as source evidence for later synthesis or decision records; does not itself "
-        "decide anything."
+        "> Preservation record only (Authority Rule 9): citable as source evidence for "
+        "later synthesis or decision records; does not itself decide anything."
     )
 
     stem = f"{captured_at}-extract-{_slugify(title)}"
@@ -198,18 +203,21 @@ def extract(
     title: str,
     context: str | None = None,
     source_text: str | None = None,
-    existing_raw_ref: str | None = None,
+    existing_raw_refs: list[str] | None = None,
     topics: list[str] | None = None,
     captured_by: str = DEFAULT_CAPTURED_BY,
     governed_root: Path | None = None,
 ) -> dict[str, Any]:
-    if not existing_raw_ref and not source_text:
-        raise ValueError("extract requires either existing_raw_ref (already-captured source) or source_text (fresh pasted material)")
+    """`existing_raw_refs` may name more than one already-captured raw/ record --
+    multi-source extraction, per the ratified topic-glean schema. Combined with
+    `source_text` (a fresh capture) if both are given; at least one is required."""
+    existing_raw_refs = list(existing_raw_refs or [])
+    if not existing_raw_refs and not source_text:
+        raise ValueError("extract requires source_text (fresh pasted material) and/or existing_raw_refs (already-captured sources)")
 
     raw_result = None
-    if existing_raw_ref:
-        raw_ref = existing_raw_ref
-    else:
+    raw_refs = list(existing_raw_refs)
+    if source_text:
         raw_result = write_raw(
             source_type="session",
             source_ref="pasted chat/artifact supplied directly to Extract",
@@ -218,11 +226,11 @@ def extract(
             captured_by=captured_by,
             governed_root=governed_root,
         )
-        raw_ref = raw_result["path"]
+        raw_refs.append(raw_result["path"])
 
     extraction_result = write_extraction(
         title=title,
-        raw_ref=raw_ref,
+        raw_refs=raw_refs,
         topics=topics,
         notes=context,
         captured_by=captured_by,

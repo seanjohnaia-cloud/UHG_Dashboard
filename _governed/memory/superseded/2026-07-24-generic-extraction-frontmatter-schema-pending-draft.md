@@ -1,6 +1,6 @@
 ---
 layer: memory
-status: proposed
+status: superseded
 proposal_type: extraction_schema_candidate
 target_layer: decisions
 source:
@@ -18,6 +18,9 @@ verification:
   verified_on: null
   method: null
 supersedes: null
+superseded_by: "_governed/decisions/2026-07-24-ratify-generic-extraction-schema.md"
+superseded_on: 2026-07-24
+superseded_reason: "Promoted to accepted decision via _governed/decisions/2026-07-24-ratify-generic-extraction-schema.md under open review window; all three open sub-questions resolved by the decider."
 review_after: 2026-08-24
 ---
 
