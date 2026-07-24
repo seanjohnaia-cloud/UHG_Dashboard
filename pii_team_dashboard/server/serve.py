@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local dev server for the Pii Team Dashboard -- Checkpoint 1 (read-side wiring).
+"""Local dev server for the Pii Team Dashboard -- read + write governed-layer API.
 
 Serves this project's pii_team_dashboard/ directory as static files (prototype/,
 data/, fixtures/ -- unchanged) AND exposes:
@@ -77,7 +77,7 @@ class Handler(SimpleHTTPRequestHandler):
             self._serve_api(route)
             return
         if route.startswith("/api/"):
-            self.send_error(404, f"Unknown API route: {route}")
+            self._send_error_json(404, f"Unknown API route: {route}")
             return
         super().do_GET()
 
@@ -85,14 +85,14 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             payload = API_ROUTES[route]()
         except Exception as exc:  # surface the real failure, don't swallow it
-            self.send_error(500, f"Governed read failed: {exc.__class__.__name__}: {exc}")
+            self._send_error_json(500, f"Governed read failed: {exc.__class__.__name__}: {exc}")
             return
         self._send_json(200, payload)
 
     def do_POST(self):  # noqa: N802 (stdlib method name)
         route = self.path.split("?", 1)[0]
         if route not in ACTION_ROUTES:
-            self.send_error(404, f"Unknown action route: {route}")
+            self._send_error_json(404, f"Unknown action route: {route}")
             return
         length = int(self.headers.get("Content-Length", 0) or 0)
         raw_body = self.rfile.read(length) if length else b"{}"
@@ -101,18 +101,18 @@ class Handler(SimpleHTTPRequestHandler):
             if not isinstance(payload, dict):
                 raise ValueError("request body must be a JSON object")
         except (json.JSONDecodeError, ValueError) as exc:
-            self.send_error(400, f"Invalid JSON body: {exc}")
+            self._send_error_json(400, f"Invalid JSON body: {exc}")
             return
         try:
             result = ACTION_ROUTES[route](**payload)
         except TypeError as exc:
-            self.send_error(400, f"Bad request for {route}: {exc}")
+            self._send_error_json(400, f"Bad request for {route}: {exc}")
             return
         except ValueError as exc:
-            self.send_error(400, str(exc))
+            self._send_error_json(400, str(exc))
             return
         except Exception as exc:  # surface the real failure, don't swallow it
-            self.send_error(500, f"Write failed: {exc.__class__.__name__}: {exc}")
+            self._send_error_json(500, f"Write failed: {exc.__class__.__name__}: {exc}")
             return
         self._send_json(201, result)
 
@@ -124,6 +124,11 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
+
+    def _send_error_json(self, status: int, message: str) -> None:
+        """JSON error body instead of http.server's default HTML page -- the console's
+        JS client reads `error` out of the response body to log the real failure reason."""
+        self._send_json(status, {"error": message})
 
     def log_message(self, fmt: str, *args) -> None:  # quieter, prefixed
         sys.stderr.write(f"[serve] {self.address_string()} {fmt % args}\n")

@@ -42,7 +42,12 @@ Open, unratified items (tracked in pii_team_dashboard/open-questions.md -- read 
 file before adding a third one):
   1. No decision record ratifies a frontmatter schema for *generic* extraction records
      (only the exchange-development sub-type is ratified). `extraction_type: general`
-     below is this module's own reasonable inference, not a cited standard.
+     below is this module's own reasonable inference, not a cited standard. A candidate
+     proposal ratifying exactly this schema is now filed at
+     `_governed/memory/pending/2026-07-24-generic-extraction-frontmatter-schema.md`,
+     awaiting human review (no `.review-open` window is currently open) -- this function
+     still runs on the schema as documented-but-unratified until that proposal is
+     accepted or revised.
   2. Elevate's proposal-specific content (proposed change, affected fields/modules,
      authority requirement, requested human action) is deliberately kept in the
      markdown BODY rather than added as new frontmatter keys, specifically to avoid
