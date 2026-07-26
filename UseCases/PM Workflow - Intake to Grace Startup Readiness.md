@@ -59,33 +59,45 @@ Once enough of the LCD-W is populated to say something coherent, synthesize a **
 - the **client-facing** "current statement of understanding" (what `05_Dashboard`'s Overview page renders — polished, external-facing);
 - the **field-level truth record** (the LCD field map — structured, internal, granular).
 
-The base SoU is the PM-facing synthesis in between: "here is the project as we currently understand it, here's what's still open." It should read like `reconstructed_context()` in the dashboard code, but produced earlier, internally, and explicitly re-generated as Stage 1 fields move from `developmental` to `final`.
+**Per Sean's direction (2026-07-26): the SoU is not a scratch artifact — it becomes the project record.** It has its own dedicated location, is revised in place rather than replaced, and carries a revision log (date, author, what changed) plus tracked metrics (count of fields at each Stage from Stage 1, count of open items, current fee/negotiation status). Location: `06_Statement of Understanding/<use-case>/<project>/SoU-<project>.md` — see `06_Statement of Understanding/UC-001 Incomplete Fee Proposal/Muncie/SoU-Muncie.md` and the parallel Russiaville file as the working examples.
 
-**Output of this stage:** a short narrative artifact the PM can use to align the team, or to sanity-check before advancing to Stage 4.
+The SoU is re-revised (new revision-log row, not a silent edit) whenever a Stage 1 field moves between Stages, or whenever new source material changes the picture — not on a schedule.
+
+**Output of this stage:** a versioned narrative project record, distinct from both the client-facing dashboard summary and the raw field map, that the PM can point to as "the current understanding," with a visible history of how that understanding changed.
 
 ## Stage 3 — PM best practices (lens across all stages)
 
-From the framework image provided 2026-07-26 — **source document not yet identified; the labels below are exactly what's visible, not elaborated beyond that.**
+Source: Grace's own **PM Academy** curriculum — Module 1 "The Role of the Project Manager" and the Onsite #1 "Leadership Outcomes" / "PM Responsibilities" maps, preserved 2026-07-26 at `00_Source/PM Academy/`.
 
-Three core behaviors:
+**Who the PM is:** the Accountable Owner — the one person answerable for the outcome, not just the tasks. Growing past three habits: the Coordinator (tracks tasks), the Designer (chases the drawing), the Pleaser (says yes to everything).
 
-- Establishing Clarity
-- Controlling Advancement
-- Protecting Integrity
-
-Five target outcomes these compound into:
+**Why the role exists:**
 
 ```text
-Defined scope & aligned commitments
-→ Controlled, predictable delivery
-→ Protected design & technical integrity
-→ Sustained financial health
-→ Developed teams & leadership
+VALUE = PERFORMANCE × EXPERIENCE
 ```
 
-Carried by one identity: **the Accountable Owner** (maps to PAC Section A's "PIC/PM or accountable owner").
+It multiplies, not adds. Performance = did we do the work well (technical quality, value for scope/fees, schedule adherence). Experience = what was it like to work with us (responsiveness, proactiveness, clear communication). Three roles overlap at the PM's position: PA owns the discipline answer ("makes it great"), PIC owns the client relationship and firm's risk, PM owns whether it all comes together ("you make it real").
 
-**This stage needs a real source document before it can be more than labels.** Once identified, it should be preserved (`00_Source/`) and extracted the same way the Proposal Templates were, so this workflow can cite specifics rather than a summary image.
+**Three core behaviors, each triggered by a specific failure mode:**
+
+| Trigger | Behavior | What it means | Concentration |
+|---|---|---|---|
+| People get out of sync | **Establish Clarity** | Define scope, fee, schedule & contract. Run the kickoff. Nothing advances on assumption. | Front of project |
+| Work races ahead of decisions | **Control Advancement** | Manage coordination, budget & schedule. Surface variances early — not at the deadline. | Through the middle |
+| Important things get sacrificed under pressure | **Protect Integrity** | Hold QA gates, price every change, protect quality and the fee. | Throughout |
+
+**Five outcomes these compound into** (not additive):
+
+1. Defined Scope & Aligned Commitments — scope, fee, schedule & contract settled before the team starts.
+2. Controlled, Predictable Delivery — budgets, schedules & assignments actively managed; variances surfaced early.
+3. Protected Design & Technical Integrity — code, coordination, BIM, constructability & QA guarded.
+4. Sustained Financial Health — utilization & efficient execution protected.
+5. Developed Teams & Collaborative Leadership — leads the workflow, leverages SMEs, delegates & grows others.
+
+**The full operational checklist** behind these outcomes — every item a PM owns before a phase can close, by phase and by stream (Client Experience / Team Leadership / Business Management) — is preserved at `00_Source/PM Academy/Onsite 1 - PM Responsibilities Map/`. This is the concrete content behind Stages 0–4 of this workflow: e.g. its Pursuit & Contracting / Business Management items ("Fee estimate completed," "Proposal submitted," "Contract executed," "Go/No-Go completed & logged," "Project number opened") are the same ground this session's real Muncie/Russiaville work has been walking manually.
+
+**Closing prompt, worth carrying into every stage above:** "Is there a decision my project depends on that nobody owns? That's your work."
 
 ## Stage 4 — PAC / Grace Startup A–F readiness
 
@@ -108,10 +120,9 @@ PAC's rule applies throughout: **origin data captured once, never silently overw
 
 ## Applied to Muncie / Russiaville right now
 
-Both projects are currently mid-Stage-1/2: LCD field maps exist and are being actively reconciled (`lcd-field-map-muncie-2026-07-26-update.md`, `lcd-field-map-russiaville.md`), a clarification draft is ready to send, but the base Statement of Understanding hasn't been formally produced yet, and Stage 4 (PAC/A–F) hasn't started — Section A alone needs a Project Number, which is still an open gap in both field maps.
+Both projects have completed Stage 0–2: LCD field maps exist and are actively reconciled (`lcd-field-map-muncie-2026-07-26-update.md`, `lcd-field-map-russiaville.md`), a clarification draft is ready to send, and both now have a Revision 1 Statement of Understanding on file (`06_Statement of Understanding/UC-001 Incomplete Fee Proposal/`). Stage 4 (PAC/A–F) hasn't started — Section A alone needs a Project Number, which is still an open gap in both field maps and both SoUs.
 
 ## Open questions
 
-- What is the source document for Stage 3's framework? Needs identification and preservation before this stage can be more than four labels.
-- Does the base Statement of Understanding (Stage 2) get its own file per project, or does it live inside the LCD field map as a rendered summary?
 - Where does Stage 4 (PAC/A–F) actually get tracked for a real project — a new record type, or an extension of the existing field-map pattern?
+- Does every SoU revision need its own dated file (matching this session's pattern for SO Matrix updates), or is in-place revision with a log table sufficient? Currently using in-place revision per Sean's direction; revisit if revision history gets long enough to make diffing hard.
