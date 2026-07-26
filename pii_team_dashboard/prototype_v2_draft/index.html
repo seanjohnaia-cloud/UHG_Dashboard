@@ -100,10 +100,11 @@
   .rivet{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#dce5e7,#060707);box-shadow:inset 0 0 2px #000;}
   .r1{left:18px;top:18px}.r2{right:18px;top:18px}.r3{left:18px;bottom:18px}.r4{right:18px;bottom:18px}
   header{display:flex;justify-content:flex-start;align-items:flex-start;gap:18px;padding:12px 16px;margin:0 0 12px;border:1px solid rgba(0,0,0,.55);border-radius:0;flex:none;position:relative;background:
-      repeating-linear-gradient(97deg,rgba(255,255,255,.55) 0 1px,rgba(255,255,255,0) 1px 3px,rgba(0,0,0,.05) 3px 4px),
-      linear-gradient(180deg,#eef0f0 0%,#d7dadb 22%,#aeb3b4 48%,#c7cacb 64%,#9a9fa1 82%,#7f8486 100%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(0,0,0,.35),0 3px 8px rgba(0,0,0,.55);}
-  header::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.32) 0%,transparent 30%,transparent 70%,rgba(255,255,255,.14) 100%);mix-blend-mode:screen;pointer-events:none;}
+        repeating-linear-gradient(97deg,rgba(255,255,255,.55) 0 1px,rgba(255,255,255,0) 1px 3px,rgba(0,0,0,.05) 3px 4px),
+        linear-gradient(180deg,#f5f7f8 0%,#e8ebed 12%,#c9cdd1 28%,#d5d9dd 42%,#b8bdc3 55%,#c5c9cf 68%,#a3a8ae 82%,#8d9298 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.6),inset 0 -3px 4px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.15);}
+    header::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.45) 0%,transparent 28%,transparent 72%,rgba(255,255,255,.25) 100%);mix-blend-mode:screen;pointer-events:none;}
+    header::before{content:"";position:absolute;left:50%;top:4px;width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),rgba(0,0,0,.15),transparent);transform:translateX(-50%);pointer-events:none;mix-blend-mode:overlay;opacity:.7;}
   h1{font-family:var(--display);font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#0a0a0a;text-shadow:0 1px 0 rgba(255,255,255,.4);margin:0;line-height:1;position:relative;z-index:1;}
   .sub{font-size:10px;letter-spacing:2px;color:#222;margin-top:6px;text-transform:uppercase;text-shadow:0 1px 0 rgba(255,255,255,.3);position:relative;z-index:1;}
   .layout{display:grid;grid-template-columns:minmax(245px,1.5fr) minmax(760px,5.7fr) minmax(470px,3.45fr);grid-auto-rows:minmax(0,1fr);gap:12px;align-items:stretch;flex:1;min-height:0;}
@@ -213,9 +214,9 @@
   .hal-head{padding:9px 10px 6px;border-bottom:1px solid rgba(222,255,255,.16);display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(180deg,rgba(12,15,15,.92),rgba(0,0,0,.98));position:relative;overflow:visible;min-height:74px;}
   .hal-title{font-family:var(--display);letter-spacing:2px;text-transform:uppercase;color:var(--ice);font-size:14px;text-shadow:0 0 10px var(--ice-glow);}
   .hal .tag{color:rgba(248,255,255,.64);text-shadow:0 0 8px rgba(218,255,255,.28);}
-  .eye{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#fff4ef 0 3%,#ff8f7e 7%,#ff1b12 20%,#c20008 47%,#4d0005 78%,#110000 100%);box-shadow:0 0 30px rgba(255,31,23,.94),0 0 68px rgba(255,31,23,.48),0 14px 30px rgba(0,0,0,.8),inset 0 11px 13px rgba(255,255,255,.34),inset 0 -18px 20px rgba(25,0,0,.9);position:absolute;left:0;top:0;transform:translate(-50%,-50%);z-index:20;border:1px solid rgba(255,245,242,.34);filter:contrast(1.12) saturate(1.18);pointer-events:none;}
-  .eye::before{content:"";position:absolute;left:23px;top:15px;width:40px;height:19px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.08));filter:blur(.2px);transform:rotate(-18deg);}
-  .eye::after{content:"";position:absolute;inset:31px;border-radius:50%;background:#fff2ee;box-shadow:0 0 13px #fff,0 0 36px rgba(255,31,23,.95);opacity:.9;}
+  .eye{width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#fff8f6 0 2%,#ffa89c 4%,#ff3d2e 10%,#e01a0d 22%,#8b0a08 40%,#3d0403 65%,#180101 100%);box-shadow:0 0 36px rgba(255,45,30,.95),0 0 80px rgba(255,45,30,.55),0 18px 36px rgba(0,0,0,.85),inset 0 10px 18px rgba(255,255,255,.25),inset 0 -20px 28px rgba(20,0,0,.95),inset 0 0 40px rgba(255,0,0,.3);position:absolute;left:50%;top:2px;transform:translateX(-50%);z-index:5;border:1px solid rgba(255,245,242,.4);filter:contrast(1.15) saturate(1.2);}
+    .eye::before{content:"";position:absolute;left:17px;top:11px;width:29px;height:14px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.05));filter:blur(.2px);transform:rotate(-18deg);mix-blend-mode:screen;}
+    .eye::after{content:"";position:absolute;inset:23px;border-radius:50%;background:#fff5f0;box-shadow:0 0 14px #fff,0 0 36px rgba(255,45,30,.95);opacity:.9;}
   .bay-body{padding:7px 10px 10px;background:linear-gradient(145deg,#050707,#000 46%,#030505);position:relative;flex:1;display:flex;flex-direction:column;min-height:0;overflow-y:auto;}
   .bay-body::before{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.08),transparent 31%,transparent 68%,rgba(218,255,255,.045));pointer-events:none;}
 
@@ -326,9 +327,9 @@
       <div class="sub">HAL black glass · faint white monitor scan · C-A Red alert lens · synthetic prototype state only</div>
     </div>
   </header>
-  <div class="eye" id="halEye"></div>
+    <div class="eye" id="halEye"></div>
 
-  <div class="layout">
+    <div class="layout">
     <section class="panel lens-panel">
       <div class="panel-title"><h2>Modules</h2></div>
       <div class="bank-body">
@@ -372,7 +373,7 @@
     </section>
 
     <aside class="hal">
-      <div class="hal-head"><div><div class="hal-title">HAL Routing Bay</div><div class="tag" id="baySub">field-state blade rack</div></div></div>
+          <div class="hal-head"><div><div class="hal-title">HAL Routing Bay</div><div class="tag" id="baySub">field-state blade rack</div></div><div class="eye" id="halEye"></div></div>
       <div class="bay-body">
         <div class="hal-switches" aria-label="HAL bar display toggles">
           <div class="switch-row"><span class="switch-label">Activation</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
@@ -716,26 +717,7 @@ function bladeLevel(b,i){const levels={active:8,pending:5,archive:7,blocked:3,in
 function bladeStack(b,i){const level=bladeLevel(b,i);return `<span class="blade-stack">${Array.from({length:10},(_,n)=>`<span class="blade-seg ${n<level?'on':''}"></span>`).join('')}</span>`;}
 function renderBlades(){const m=modules[current];document.getElementById('baySub').textContent=m.label;document.getElementById('bladeBank').innerHTML=m.blades.map((b,i)=>`<div class="blade ${bladeClasses(b,i)}" data-code="${b[0]}" onclick="selectBlade(${i})" title="${b[1]} · level ${bladeLevel(b,i)}/10">${bladeStack(b,i)}</div>`).join('');document.getElementById('bladeList').innerHTML=m.blades.map((b,i)=>`<div class="blade-row ${bladeClasses(b,i)}" onclick="selectBlade(${i})"><div class="mini"></div><div class="b-label">${b[1]}<span>${b[2]}</span></div><div class="b-state">${b[3]}</div></div>`).join('');}
 function wireControls(){document.querySelectorAll('.switch-row').forEach(row=>{const label=row.querySelector('.switch-label').textContent;const t=row.querySelector('.toggle');t.removeAttribute('onclick');t.classList.toggle('on',filterState[label]);t.addEventListener('click',()=>toggleControl(t,label));});document.querySelectorAll('.knob-unit').forEach(unit=>{const label=unit.querySelector('.knob-label').textContent;const btns=unit.querySelectorAll('.trim-btn');unit.querySelector('.knob').style.setProperty('--rot',`${-72+(focusState[label]*18)}deg`);btns[0].addEventListener('click',()=>trim(label,-1));btns[1].addEventListener('click',()=>trim(label,1));});document.getElementById('dialogueBtn').addEventListener('click',()=>intake('Dialogue'));document.getElementById('artifactBtn').addEventListener('click',()=>intake('Artifact'));}
-function render(){renderTabs();renderActions();renderReadout();renderGauges();renderBlades();positionEye();}
-function positionEye(){
-  const eye=document.getElementById('halEye');
-  const hal=document.querySelector('.hal');
-  const header=document.querySelector('header');
-  const layout=document.querySelector('.layout');
-  const consoleEl=document.querySelector('.console');
-  if(!eye||!hal||!header||!layout||!consoleEl)return;
-  const halR=hal.getBoundingClientRect(),headerR=header.getBoundingClientRect(),consoleR=consoleEl.getBoundingClientRect();
-  const cx=halR.left+halR.width/2;
-  const cy=headerR.bottom;
-  const radius=eye.offsetWidth/2||48;
-  eye.style.left=`${cx-consoleR.left}px`;
-  eye.style.top=`${cy-consoleR.top}px`;
-  const maskX=cx-headerR.left,maskY=cy-headerR.top;
-  const mask=`radial-gradient(circle ${radius}px at ${maskX}px ${maskY}px, transparent 99%, black 100%)`;
-  header.style.maskImage=mask;
-  header.style.webkitMaskImage=mask;
-}
-window.addEventListener('resize',positionEye);
+function render(){renderTabs();renderActions();renderReadout();renderGauges();renderBlades();}
 boot();
 </script>
 </body>
