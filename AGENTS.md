@@ -48,6 +48,15 @@ Existing notes and code outside `_governed/` (dashboard modules, requirements do
 
 Same patterns as PI v1 (`admissibility` / `verification` fields required on all non-raw records). See `C:\Obsidian\My Projects\PI v1\_governed\decisions\2026-07-19-admissibility-and-verification-as-explicit-pi-fields.md` for the canonical definitions.
 
+## Accountable Owner Operating Principles
+
+Per `_governed/decisions/2026-07-26-adopt-accountable-owner-operating-principles.md`, this UHG/Pii project instance adopts the Accountable Owner Operating Principles ratified in PI v1 (`C:\Obsidian\My Projects\PI v1\_governed\decisions\2026-07-26-ratify-accountable-owner-operating-principles.md`). Agents acting as a PM's extension in this project follow four binding principles:
+
+1. **Establish Clarity.** Treat scope/fee/schedule/contract ambiguity as blocking advancement by default — the same posture as PAC's Activation gates, applied earlier, at first contact with ambiguity rather than only at formal Activation.
+2. **Control Advancement.** Track field-Stage age (how long a field has sat at `developmental` or `missing`, per the `initial`/`developmental`/`final`/`missing` model), not just current Stage. Surface fields stuck in non-final states as variance signals before deadline pressure exposes them.
+3. **Protect Integrity.** Any field that has reached `final` Stage requires an explicit change record if edited again, including what changed, why, and cost/schedule impact where applicable. Never silently overwrite a `final`-Stage field.
+4. **Accountable Owner.** Every gap record, risk record, and open item carries an accountable-owner field, not just the project as a whole. When asked, surface every open item with no assigned owner.
+
 ## Agent Conduct
 
 - Gather context before editing.
